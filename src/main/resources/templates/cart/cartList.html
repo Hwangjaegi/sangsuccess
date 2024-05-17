@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>장바구니</title>
+<link rel="stylesheet" th:href="@{/css/cart.css}">
+<style type="text/css">
+.selectAc_Delete{
+	padding: 10px; 
+	color: black; 
+	border: 1px solid gray; 
+	position: relative;
+	top: 30px; 
+	text-decoration: none;
+}
+.selectAc_Delete:hover{
+	background: blue;
+	text-decoration: none;
+	color: white;
+}
+.paddingBox{
+	padding: 100px;
+}
+.OrderBtn{
+	padding: 10px; 
+	border: 1px solid black; 
+	background: blue; 
+	color:white; 
+	text-decoration: none;
+}
+.updateCartCountDown:hover{
+	cursor: pointer;
+}
+.updateCartCountUp:hover{
+	cursor: pointer;
+}
+.no_cart {
+	text-align: center;
+	height: 400px;
+	color: #BBBBBB;
+}
+	.OrderBtn {
+		text-decoration: none;
+		background: #0000ff;
+		border: 1px solid #0000ff;
+		padding: 15px 100px;
+		font-size: 17px;
+		color: white;
+		cursor: pointer;
+	}
+	.OrderBtn:hover {
+		background: rgb(0, 0, 160);
+		border: 1px solid rgb(0, 0, 160);
+	}
+	table th {
+		font-weight: normal;
+	}
+	.b_cnt {
+		width: 20px;
+	    height: 20px;
+	    display: inline-block;
+	    text-align: center;
+	    color: #fff !important;
+	    border-radius: 100%;
+	    font-size: 13px;
+	    line-height: 20px;
+	    position: relative;
+	    right: -5px;
+	    background: #0000ff;
+	    text-decoration: none;
+	    top: -5px;
+	    font-style: normal;
+	}
+</style>
+<script type="text/javascript">
+    $(function(){
+        $('#allCheckBtn').click(function(){
+            if($(this).prop('checked')){
+                $('.cartBtn').prop('checked', true); // 클래스를 사용하여 모든 체크박스 선택
+            }else{
+                $('.cartBtn').prop('checked', false); // 클래스를 사용하여 모든 체크박스 선택 해제
+            }
+        });
+
+        $('.selectAc_Delete').click(function(e){
+            e.preventDefault(); // 기본 이벤트 방지
+
+            let a_noList = [];
+            // 체크된 체크박스를 찾아서 선택된 항목 배열에 추가
+            $('.cartBtn:checked').each(function(){
+
+                let a_no = $(this).attr('data-a_no');
+
+                a_noList.push(a_no);
+            });
+           
+			
+            // 선택된 항목이 없으면 경고를 표시하고 함수를 종료
+            if(a_noList.length === 0){
+                alert("삭제할 상품을 선택해주세요.");
+                return;
+            }else if(confirm("삭제 하시겠습니까?")){
+            	 // 선택된 항목 배열을 서버로 보냄
+                $.ajax({
+                    type: "POST",
+                    url: "/deleteCartAcademy?a_noList="+a_noList,
+                    success: function(response){
+                        alert(response);
+                        location.href="/cartList"; //ajax로 하려했으나 화면이 안바뀌면 안되어서 그냥 화면이동추가
+                    },
+                    error: function(xhr, status, error){
+                        alert("삭제실패 : "+xhr.responseText);
+                    }
+                });
+            }else{
+            	return false;
+            }
+        });
+        $('.updateCartCountUp').click(function(){
+        	let a_no = $(this).closest('tr').find('.cartBtn').attr('data-a_no');
+        	
+        	$.ajax({
+        		type:"POST",
+        		url:"/upCartCount?a_no="+a_no,
+        		success:function(response){
+        			location.reload();
+        		},
+        		error:function(xhr,status,error){
+        			alert("수량증가중 에러 : "+xhr.responseText);
+        		}
+        	})
+        });
+        $('.updateCartCountDown').click(function(){
+        	let a_no = $(this).closest('tr').find('.cartBtn').attr('data-a_no');
+        	
+        	$.ajax({
+        		type:"POST",
+        		url:"/downCartCount?a_no="+a_no,
+        		success:function(response){
+        			location.reload();
+        		},
+        		error:function(xhr,status,error){
+        			alert("수량감소중 에러 : "+xhr.responseText);
+        		}
+        	})
+        });
+        
+        
+        $('.OrderBtn').click(function(){
+        	if(confirm("주문 하시겠습니까?")){
+        		 let a_noList = [];
+                 // 체크된 체크박스를 찾아서 선택된 항목 배열에 추가
+                 $('.cartBtn').each(function(){
+                     let a_no = $(this).attr('data-a_no');
+                     a_noList.push(a_no);
+                 });      		
+                 location.href="/orderCartAcademy?a_noList="+a_noList;
+        	}else return false;
+        });
+        
+    });
+</script>
+
+</head>
+<body layout:fragment="content" class="u-body u-xl-mode">
+	<div id="padding" style="width: 100%; min-height: 1px; height: 40px;"></div>
+	<!-- 장바구니 구현box -->
+	<div class="container" style="margin-top: 30px;">
+		<div class="shop-tit im-flex im-justify-between im-items-center">
+			<h3 class="hidden-sm hidden-xs" id="cart" style="color: black;">
+				장바구니<em class="_cart_item_count b_cnt">[[${cartTotal}]]</em>
+			</h3>
+			<div style="width: 100%; min-height: 1px; height: 30px;"></div>
+			<!-- 장바구니 없을 때 -->
+			<div th:if="${#lists.size(cartList)} == 0">
+				<table style="border-top: 1px solid #BBBBBB; border-bottom:1px solid #BBBBBB; width: 100%;">
+					<tr style="border-bottom: 1px solid #BBBBBB; text-align: center;">
+						<th style="width: 55%; padding: 10px 1px;">
+							<input type="checkbox" id="allCheckBtn" name="allCheck" style="margin-right: 10px;"><span style="margin-left: 10px;">강의정보</span>
+						</th>
+						<th width="15%; text-align: center;">수량</th>
+						<th width="15%; text-align: center;">주문금액</th>
+						<th width="15%; text-align: center;">배송정보</th>
+					</tr>
+					<tr>
+						<td colspan="4" class="no_cart"><img th:src="@{/images/btn/no_cart_btn.png}"><br><br>장바구니가 비었습니다</td>
+					</tr>
+				</table>
+				<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+				<div style="text-align: center; color: #0000ff;" ><a href="/">계속 강의 둘러보기</a></div>
+			</div>
+			<!-- 장바구니 있을 때 -->
+			<div th:if="${#lists.size(cartList)} > 0">
+				<table style="border-top: 1px solid #BBBBBB; border-bottom:1px solid #BBBBBB; width: 100%;">
+					<tr style="border-bottom: 1px solid #BBBBBB; text-align: center;">
+						<th style="width: 55%; padding: 10px 1px;">
+							<input type="checkbox" id="allCheckBtn" name="allCheck" style="margin-right: 10px;"><span style="margin-left: 10px;">강의정보</span>
+						</th>
+						<th width="15%;">수량</th>
+						<th width="15%;">주문금액</th>
+						<th width="15%;">배송정보</th>
+					</tr>
+					<tr>
+					<tr th:each="cartItem , idx : ${cartList}" style="border-bottom: 1px solid lightgray;">
+						<td style="display: flex; margin: 20px 0">
+							<input type="checkbox" th:value="${idx.index}" th:data-a_no="${cartItem.a_no}" class="cartBtn" style="margin-right: 10px;"> 
+							<img th:src="@{'/images/academy/'+ ${academyList[idx.index].image}}"style="width: 100px; height: 100px; margin-left: 10px;">
+							<div style="margin-left: 10px; margin-top: 10px;">
+								<span th:text="${academyList[idx.index].title}"></span><br>
+								<span th:text="${academyList[idx.index].schedule}"></span><br>
+								<span th:text="${#numbers.formatInteger(academyList[idx.index].price,0,'COMMA')}+'원'"></span>
+							</div>
+						</td>
+						<td style="text-align: center;">
+							<img class="updateCartCountDown" alt="+" th:src="@{/images/minus.png}" style="width:30px; height:30px;">
+							[[${cartItem.c_count}]]개
+							<img class="updateCartCountUp" alt="+" th:src="@{/images/plus.png}" style="width:30px; height:30px;">
+						</td>														
+						<td style="text-align: center;" th:text="${#numbers.formatInteger(TotalPriceList[idx.index],0,'COMMA')} +'원'"></td>
+						<td style="width:30px; text-align: center;">배송없음</td>
+					</tr>
+				</table>
+				<a class="selectAc_Delete" href="#">선택상품 삭제</a>
+				<p>
+				<table style="width: 100%; position: relative; top: 50px; border-top:1px solid black; border-bottom:1px solid black;">
+					<tr style="border-bottom: 1px solid #BBBBBB;"><th style="padding: 10px; font-weight: normal;">총 주문 상품 <span style="color: #0000ff" th:text="${TotalCount}"></span>개</th></tr>
+					<tr style="text-align: center;">
+						<td style="padding: 50px;"><span style="font-size: 15px; color: gray">총 주문금액</span><br><span style="color: #0000ff; font-weight: bold; font-size: 30px;" th:text="${#numbers.formatInteger(realTotalPrice,0,'COMMA')+'원'}"></span></td>
+					</tr>
+				</table>
+				<div style="text-align: center; position: relative; top: 100px;">
+					<a href="#" class="OrderBtn">주문하기</a>
+					<div style="text-align: center; color:#0000ff; margin-top: 20px;"><a href="/">계속 강의 둘러보기</a></div>
+				</div>
+			</div>
+			<div id="padding" style="width: 100%; min-height: 1px; height: 80px;"></div>
+		</div>
+	</div>
+	<div id="myModal" class="modal">
+	  <!-- 모달 내용 -->
+	  <div class="modal-content">
+	    <span class="close">&times;</span>
+	    <p>여기에 모달 내용을 작성하세요.</p>
+	  </div>
+	</div>
+</body>
+</html>

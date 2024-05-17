@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head><meta charset="UTF-8"><title>[[${attend.at_title}]] : 상상마당 아카데미</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+<script type="text/javascript"
+	src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+.comment_num_wrap img{
+	width: 20px;
+}
+.comment_num_wrap img:hover{
+	cursor: pointer;
+}
+.board_name a{
+	text-decoration: none;
+	color: #636363;
+}
+.board_name a:hover{
+	color: black;
+}
+/* 댓글 */
+.reply_btn:focus,
+.reply_text:focus{
+	outline: none;
+}
+.reply_btn {
+	width: 150px; 
+	height: 42px; 
+	border: 1px solid rgba(128, 128, 128, 0.2); 
+	border-radius: 3px;
+}
+.reply_text {
+	width: 100%; 
+	height: 90px; 
+	border: 1px solid rgba(128, 128, 128, 0.2); 
+	border-radius: 3px;
+}
+.reply_insert{
+	background: white;
+	border: 1px solid #0000ff;
+	padding: 8px 42px;
+	font-size: 15px;
+	color: #0000ff;
+	cursor: pointer;
+	float: right;
+}
+.reply_list {
+	background: white;
+	border: 1px solid #0000ff;
+	padding: 8px 42px;
+	font-size: 15px;
+	color: #0000ff;
+	cursor: pointer;
+}
+.reply_insert:hover,
+.reply_list:hover {
+	background: #0000ff;
+	color: white;
+}
+/* 목록 */
+
+.UpDownBtn a{
+	text-decoration: none;
+	color: black;
+	font-size:15px;
+	margin-left: 10px;
+	
+} 
+.attend_menu img:hover{
+	cursor: pointer;
+}
+#AttendListBtn{
+	background: white;
+	color:blue;
+	border: 1px solid blue;
+	padding:  10px 20px;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: bolder;
+}
+#AttendListBtn:hover{
+	background: blue;
+	color:white;
+	border: 1px solid blue;
+	transition: color 0.5s ease;
+}
+.writingBox a{
+	background: white;
+	color:blue;
+	border: 1px solid blue;
+	padding:  9px 20px;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: bolder;
+	border-radius: 0;
+}
+.writingBox a:hover{
+	background: blue;
+	color:white;
+	border: 1px solid blue;
+	transition: color 0.5s ease;
+}
+</style>
+<script type="text/javascript">
+$(function(){
+	$(".nextNo").click(function(){
+		let at_no = this.getAttribute("data-at_no");
+		at_no = parseInt(at_no,10);
+		at_no++;
+		location.href="/attend/hobbypage_detail?at_no=" +at_no;
+	});
+	
+	$(".beforeNo").click(function(){
+		let at_no = this.getAttribute("data-at_no");
+		at_no = parseInt(at_no,10);
+		at_no--;
+		location.href="/attend/hobbypage_detail?at_no=" +at_no;
+	});
+	$(".attend_menu img").click(function(){
+			$(this).next("a").click();
+	});
+});
+</script> 
+</head><body>
+<div layout:fragment="content">
+	<div class="board-view container" style="margin-top: 25px;">
+		<header class="board-title holder">
+			<p class="view_tit" style="font-size: 20px;">[[${attend.at_title}]]</p>
+		</header>
+		<div class="board_summary">
+			<!-- 상단 이름,등록일,조회수 -->
+			<div class="left" style="display: flex; margin-bottom: 20px;">
+				<div class="mark" style="width: 50px; height: 50px; position: relative; overflow: hidden; border-radius: 50%;">
+					<img alt="사용자사진" th:src="@{'/upload/'+${member.image}}"
+					style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%;">
+				</div>
+				<div style="margin-left: 15px;">
+					<div class="author">
+						<div class="writer" style="font-size: 15px;">[[${member.name}]]</div>
+					</div>
+					<div style="display: flex; font-size: 14px; font-weight: 100;">
+						<div class="board_name" style="margin-right: 14px;">
+							<a th:href="@{/attend/hobbypage}">취미에 진심인_편 선정작</a>
+						</div>
+						<div class="date" style="margin-right: 14px; color: #636363;">[[${attend.at_date}]]</div>
+						<div class="view-count" style="color: #636363;">조회수 [[${attend.at_view_count}]]</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<!-- 본문내용 -->
+			<div class="board_txt_area" style="align-content: center; text-align: center;">
+				<div class="img_title">
+					<img th:src="@{'/images/attend/'+${attend.at_image}}"
+					 style="width: 850px;">
+				</div>
+				<p><br></p>
+				<div>
+					<span th:if="${attend.at_editor != null}" th:utext="${attend.at_editor}"></span>
+					<span th:if="${attend.at_content1 != null}" th:utext="${attend.at_content1}"></span>
+					<span th:if="${attend.at_content2 != null}" th:utext="${attend.at_content2}"></span>
+					<span th:if="${attend.at_content3 != null}" th:utext="${attend.at_content3}"></span>
+					<span th:if="${attend.at_content4 != null}" th:utext="${attend.at_content4}"></span>
+					<span th:if="${attend.at_content5 != null}"	th:utext="${attend.at_content5}"></span>
+					<span th:if="${attend.at_content6 != null}" th:utext="${attend.at_content6}"></span>
+					<span th:if="${attend.at_content6 != null}" th:utext="${attend.at_content7}"></span>
+					<span th:if="${attend.at_content6 != null}" th:utext="${attend.at_content8}"></span>
+				</div>
+			</div>
+			<!-- 간격 padding -->
+			<div id="padding" style="width: 100%; min-height: 1px; height: 100px;"></div>
+			<div class="comment_section" id="comment_area">
+			<!-- 댓글영역 시작. 좋아요수, 댓글수, 공유하기 -->
+				<div class="comment_block">
+					<div class="btn-group-wrap" style="display: flex; justify-content: space-between;">
+						<div class="btn-group">
+						<div class="btn-group btn-group-comment">
+							<a th:onclick="toggleHeart([[${attend.at_no}]])" class="comment_num btn">
+								<img class="heartImage" alt="" th:if="${save == null}" th:src="@{/images/btn/bin-heart.png}" style="width: 20px;">
+								<img class="heartImage" alt="" th:if="${save != null}" th:src="@{/images/btn/full-heart.png}" style="width: 20px;">
+								<span th:id="'prod_detail_wish_count_'+${attend.at_no}">[[${attend.at_good_count}]]</span>
+							</a>
+							<div id="session_id" style="display: none;">[[${id}]]</div>
+							<script type="text/javascript">
+								 function toggleHeart(at_no) {
+										var id = document.getElementById('session_id').textContent;
+										var heartImages = document.getElementsByClassName('heartImage');
+								        var wishCount = document.getElementById('prod_detail_wish_count_'+at_no);
+								        for (var i = 0; i < heartImages.length; i++) {
+								            var heartImage = heartImages[i];
+								    		 if (heartImage) {
+										        if (heartImage.src.includes('bin-heart.png')) {
+										            heartImage.src = '/images/btn/full-heart.png';
+										            wishCount.textContent = parseInt(wishCount.textContent) + 1;
+			
+										            // plus_heart 서버로 정보 전송
+										            var plusHeartXhr = new XMLHttpRequest();
+										            plusHeartXhr.open('POST', '/attend/plus_heart', true);
+										            plusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+										            plusHeartXhr.send('at_no=' + encodeURIComponent(at_no)+ '&id=' + encodeURIComponent(id));
+										        } else {
+										            heartImage.src = '/images/btn/bin-heart.png';
+										            wishCount.textContent = parseInt(wishCount.textContent) - 1;
+			
+										            // minus_heart 서버로 정보 전송
+										            var minusHeartXhr = new XMLHttpRequest();
+										            minusHeartXhr.open('POST', '/attend/minus_heart', true);
+										            minusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+										            minusHeartXhr.send('at_no=' + encodeURIComponent(at_no)+ '&id=' + encodeURIComponent(id));
+										        }
+								            }
+								        }
+								      }							
+							</script>							
+						</div>
+						<div class="_btn-group _btn-comment" style="margin-left: 3px; align-content: center;">
+							<div class="comment_num">
+								<img alt="댓글" th:src="@{'/images/btn/speech-black.png'}"
+									style="width: 20px;">
+								<span>[[${attend.at_repl_count}]]</span>
+							</div>
+						</div>
+						</div>
+						<div class="tools" style="right: 0; align-content: center;">
+							<div class="comment_num_wrap btn-flat" >
+								<img alt="" th:src="@{'/images/btn/share.png'}"
+								data-toggle="modal" data-target="#shareModal">
+							</div>
+							<!-- 공유하기화면 -->
+							<div class="modal fade" id="shareModal" tabindex="-1"
+								aria-labelledby="shareModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="shareModalLabel">공유하기</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="form-group">
+												<input type="text" class="form-control" id="urlInput"
+													th:value="@{'http://localhost/attend/hobbypage_detail?at_no='+${attend.at_no}}">
+											</div>
+											<button class="btn btn-primary" onclick="copyUrl()">복사</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<script>
+							function copyUrl() {
+								var urlInput = document
+										.getElementById("urlInput");
+
+								urlInput.select();
+								document.execCommand("copy");
+
+								alert("URL이 복사되었습니다");
+							}
+						</script>
+					</div>									
+				</div>
+				<p><hr><br></p>				
+				<!-- 댓글 시작 -->
+				<div class="comment_section" id="comment_area">						
+					<div style="padding: 0 15px;">
+					<!-- 댓글 목록 -->
+					<div id="rListDisp"></div>
+					<!-- 댓글 입력 -->
+						<form action="/attend/at_rInsert" name="frm1" id="frm1" method="post">
+							<p>
+								<input type="hidden" name="at_bno" th:value="${attend.at_no}">
+								<input type="text" name="at_replier" placeholder="이름" class="reply_btn" required="required">
+								<input type="button" value="작성" id="at_rInsert" class="reply_insert">
+							</p>
+							<p>
+								<textarea rows="1" name="at_replytext" class="reply_text" placeholder="댓글을 남겨주세요" required="required"></textarea>
+							</p>
+						</form>
+						<div id="padding" style="width: 100%; min-height: 1px; height: 30px;"></div>
+					</div>						
+					<script type="text/javascript">
+						$('#rListDisp').load('/attend/at_replyList/at_bno/[[${attend.at_no}]]');
+						$('#at_rInsert').click(function() {
+							let sendData = $('#frm1').serialize();
+							$.post('/attend/at_rInsert', sendData, function(data){
+								alert("댓글이 입력되었습니다");
+								frm1.at_replytext.value="";
+								$('#rListDisp').html(data);
+							});
+						});
+					</script>
+				</div>
+			</div>
+			<!-- 다음목록보여주기 -->
+			<div class="comment_section">
+				<!--이전/다음목록-->
+				<div class="attend_menu">
+					<div class="UpDownBtn" th:if="${nextTitle} != 'false'">
+						<hr>
+						<img alt="upArrow" th:src="@{/images/staff/upArrow.png}">							
+						<a href="#" class="nextNo" th:data-at_no="${attend.at_no}">[[${nextTitle}]]</a><p>
+						<hr>
+					</div>
+					<div class="UpDownBtn" th:if="${beforeTitle} != 'false'">							
+						<img alt="downArrow" th:src="@{/images/staff/downArrow.png}">
+						<a href="#" class="beforeNo" th:data-at_no="${attend.at_no}">[[${beforeTitle}]]</a><br>
+						<hr>
+					</div>						
+				</div>
+				<div class="btn_wrap" style="display: flex; justify-content: space-between;">
+					<div class="menuBox">
+						<a th:href="@{/attend/hobbypage}" id="AttendListBtn">목록</a>
+					</div>
+					<div class="writingBox">
+						<a class="btn btn-primary btn-sm" th:href="@{/attend/writing}" role="button" onclick="idChk()">글쓰기</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

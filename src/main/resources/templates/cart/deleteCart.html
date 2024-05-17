@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<th:block th:if="${result} == -1"> <!-- 로그인x -->
+		<script type="text/javascript">
+			alert("로그인 후 삭제가 가능합니다.");
+			location.href="/";
+		</script>
+	</th:block>
+	<th:block th:if="${result} > 0"> 
+		<script type="text/javascript">
+			alert("장바구니에서 삭제되었습니다");
+			location.href="/cart/cartList";
+		</script>
+	</th:block>
+	<th:block th:if="${result} == 0">
+		<script type="text/javascript">
+			alert("장바구니에서 삭제가 실패되었습니다.");
+			history.go(-1);
+		</script>
+	</th:block>
+</body>
+</html>

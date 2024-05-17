@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.ReplyNoticeMapper">
+	<!-- 댓글 목록 -->
+	<select id="list" parameterType="integer" resultType="replyn">
+		select * from replynotice where nt_bno=#{nt_bno} order by nt_rno
+	</select>
+	<!-- 댓글 입력 -->
+	<insert id="insert" parameterType="replyn">
+		<selectKey keyProperty="nt_rno" order="BEFORE" resultType="integer">
+			select nvl(max(nt_rno), 0) + 1 nt_rno from replynotice
+		</selectKey>
+		insert into replynotice (nt_rno, nt_bno, nt_replytext, nt_replier, nt_regdate, nt_updatedate, nt_del) 
+			values(#{nt_rno},#{nt_bno},#{nt_replytext},#{nt_replier},sysdate,sysdate,'n')
+	</insert>
+	<!-- 댓글 수정-->
+	<update id="update" parameterType="replyn">
+		update replynotice set nt_replytext=#{nt_replytext}, nt_updatedate=sysdate
+			where nt_rno=#{nt_rno}
+	</update>
+	<!-- 댓글 삭제-->
+	<update id="delete" parameterType="replyn">
+		update replynotice set nt_del='y' where nt_rno=#{nt_rno}
+	</update>
+</mapper>

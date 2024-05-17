@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" th:href="@{/css/main.css}">
+<script type="text/javascript">
+	// 프로그램 알람 신청 완료 메일 보내기
+	$(document).ready(function(){
+	    $("form[action='']").submit(function(event){ 
+	        event.preventDefault();
+	        let formData = {
+	            a_name: $("input[name='a_name']").val(),
+	            a_email: $("input[name='a_email']").val(),
+	            e_keyword: $("input[name='e_keyword']").val()
+	        };
+	        $.ajax({
+	            url: "/email", 
+	            type: "POST",
+	            contentType: "application/json",
+	            data: JSON.stringify(formData),
+	            success: function(response){
+	                alert(response);
+	                $("form#frm1")[0].reset();
+	            },
+	            error: function(xhr, status, error){
+	                console.error(xhr.responseText);
+	                alert("알림 신청 실패");
+	            }
+	        });
+	    });
+	});
+	
+	// 프로그램 알림 안내 모달
+	document.addEventListener("DOMContentLoaded", function () {
+		let a_modal = document.getElementById("a_modal");
+		let b_modal = document.getElementById("b_modal");
+		let modal = document.getElementById("myModal");
+		let modal2 = document.getElementById("myModal2");
+		let closeBtn = document.getElementById("closeBtn");
+		let closeBtn2 = document.getElementById("closeBtn2");
+		function toggleModal() {
+			modal.classList.toggle("show");
+		}
+		function toggleModal2() {
+			modal2.classList.toggle("show");
+		}
+		  
+		a_modal.addEventListener("click", toggleModal);
+		b_modal.addEventListener("click", toggleModal2);
+		closeBtn.addEventListener("click", function(event) {
+			event.stopPropagation();
+			modal.classList.remove("show");
+		});
+		closeBtn2.addEventListener("click", function(event) {
+			event.stopPropagation();
+			modal2.classList.remove("show");
+		});
+		  
+		window.addEventListener("click", function (event) {
+			if (event.target === modal) {
+				toggleModal();
+			}
+			if (event.target === modal2) {
+				toggleModal2();
+			}
+		});
+	});
+	
+	// 페이지 이동
+	function art() {
+		let art = "/artist/artist_list";
+        window.location.href = art;
+	}
+	function att() {
+		let att = "/attend/tentext";
+        window.location.href = att;
+	}
+	function nt() {
+		let nt = "/notice/notice_list";
+        window.location.href = nt;
+	}
+</script>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="layout">
+		<!-- carousel slide -->
+		<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" style="z-index: 0;">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+			    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+			</div>
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img th:src="@{/images/main/carousel_1.png}" class="d-block w-100">
+					<div class="carousel-caption d-none d-md-block"></div>
+				</div>
+				<div class="carousel-item">
+					<img th:src="@{/images/main/carousel_2.png}" class="d-block w-100">
+					<div class="carousel-caption d-none d-md-block"></div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 간격 padding -->
+		<div id="padding" style="width: 100%; min-height: 1px; height: 100px;"></div>
+		
+		<!-- new & best -->
+		<div class="container" style="display: flex;">
+			<div class="text-table">
+				<span style="text-align: left; font-size: 18px; color:rgb(0,0,255);"><b>NEW</b></span>
+				<div style="border-top: 2px solid rgb(0,0,255); margin-bottom: 10px; margin-top: 7px"></div>
+				<th:block th:if="${#lists.size(new_list)} == 0">데이터가 없습니다</th:block>
+				<th:block th:if="${#lists.size(new_list)} > 0">
+					<div class="row">
+						<th:block th:each="academy, iterStat:${new_list}" th:if="${iterStat.index &lt; 2}">
+							<div class="col">
+								<a th:href="@{/academy/academyDetail(a_no=${academy.a_no})}">
+									<img class="img_h" th:src="@{images/academy/}+${academy.image}"><br>
+									<span class="a_title">[[${academy.title}]]</span>
+									<span style="display: flex;"><span class="a_price" th:text="${#numbers.formatInteger(academy.price,1,'COMMA')}"></span>&nbsp;원</span>
+									<span style="display: flex;">
+										<img th:if="${academy.show} == 'y'" th:src="@{/images/btn/new_btn.png}" style="height: 23px; margin-right: 5px;">
+									    <img th:if="${academy.status} == 'N'" th:src="@{/images/btn/status_n_btn.png}" style="height: 23px; margin-right: 5px;">
+									    <img th:if="${academy.status != 'N' && (academy.count > 0 || academy.status =='y')}" th:src="@{/images/btn/status_y_btn.png}" style="height: 23px; margin-right: 5px;">
+									    <img th:if="${academy.count == null or academy.count == 0}"  th:src="@{/images/btn/count_0_btn.png}" style="height: 23px;">
+									</span>
+								</a>
+								
+							</div>
+						</th:block>
+					</div>
+				</th:block>
+			</div>
+			<div class="text-table">
+				<span style="text-align: left; font-size: 18px; color:rgb(0,0,255);"><b>BEST</b></span>
+				<div style="border-top: 2px solid rgb(0,0,255); margin-bottom: 10px; margin-top: 7px"></div>
+				<th:block th:if="${#lists.size(best_list)} == 0">데이터가 없습니다</th:block>
+				<th:block th:if="${#lists.size(best_list)} > 0">
+					<div class="row">
+						<th:block th:each="academy, iterStat:${best_list}" th:if="${iterStat.index &lt; 2}">
+							<div class="col">
+								<a th:href="@{/academy/academyDetail(a_no=${academy.a_no})}">
+									<img class="img_h" th:src="@{images/academy/}+${academy.image}"><br>
+									<span class="a_title">[[${academy.title}]]</span>
+									<span style="display: flex;"><span class="a_price" th:text="${#numbers.formatInteger(academy.price,1,'COMMA')}"></span>&nbsp;원</span>
+									<span style="display: flex;">
+										<img th:if="${academy.show} == 'y'" th:src="@{/images/btn/new_btn.png}" style="height: 23px; margin-right: 5px;">
+									    <img th:if="${academy.status} == 'N'" th:src="@{/images/btn/status_n_btn.png}" style="height: 23px; margin-right: 5px;">
+									    <img th:if="${academy.status != 'N' && (academy.count > 0 || academy.status =='y')}" th:src="@{/images/btn/status_y_btn.png}" style="height: 23px; margin-right: 5px;">
+									    <img th:if="${academy.count == null or academy.count == 0}"  th:src="@{/images/btn/count_0_btn.png}" style="height: 23px;">
+									</span>							
+								</a>
+							</div>
+						</th:block>
+					</div>
+				</th:block>
+			</div>
+		</div>
+
+		<!-- 간격 padding -->
+		<div id="padding" style="width: 100%; min-height: 1px; height: 100px;"></div>
+
+		<!-- 온라인 프로그램 -->
+		<div class="container" style="display: flex; min-height: 250px;">
+		    <div class="text-table">
+		        <div class="table-box-online">
+		            <div class="table-box-left">
+		                <div class="text_box_0">
+		                    <div class="text_box_1"><span style="color: rgb(0, 0, 255); letter-spacing: 0px;"><b>온라인</b> 프로그램<br>ONLINE PROGRAM</span></div>
+		                </div>
+		            </div>
+		            <div class="table-box-right">
+		                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-wrap="true">
+		                    <div class="carousel-inner">
+		                        <th:block th:if="${#lists.size(online_list)} == 0">데이터가 없습니다</th:block>
+		                        <th:block th:if="${#lists.size(online_list)} > 0">
+		                            <div class="carousel-item active">
+		                                <div class="row">
+		                                    <th:block th:each="academy, iterStat:${online_list}" th:if="${iterStat.index &lt; 3}">
+		                                        <div class="col">
+		                                        	<a th:href="@{'/academy/academyDetail?a_no=' + ${academy.a_no}}">
+			                                            <img class="img_h_onoff" th:src="@{images/academy/}+${academy.image}" style="max-width: 100%; margin-bottom: 10px;">
+														<span style="display: flex;">
+															<img th:if="${academy.show} == 'y'" th:src="@{/images/btn/new_btn.png}" style="height: 23px; margin-right: 5px;">
+														    <img th:if="${academy.status} == 'N'" th:src="@{/images/btn/status_n_btn.png}" style="height: 23px; margin-right: 5px;">
+														    <img th:if="${academy.status != 'N' && (academy.count > 0 || academy.status =='y')}" th:src="@{/images/btn/status_y_btn.png}" style="height: 23px; margin-right: 5px;">
+														    <img th:if="${academy.count == null or academy.count == 0}"  th:src="@{/images/btn/count_0_btn.png}" style="height: 23px;">
+														</span>	                                        	
+		                                        	</a>
+		                                        </div>
+		                                    </th:block>
+		                                </div>
+		                            </div>
+		                            <th:block th:each="index: ${#numbers.sequence(3, #lists.size(online_list), 3)}">
+		                                <div class="carousel-item slow" style="padding-left: 15px;">
+		                                    <div class="row">
+		                                        <th:block th:each="i: ${#numbers.sequence(index, index + 2)}" th:if="${i lt #lists.size(online_list)}">
+		                                            <div class="col">
+		                                            	<a th:href="@{'/academy/academyDetail?a_no=' + ${online_list[i].a_no}}">
+			                                                <img class="img_h_onoff" th:src="@{images/academy/}+${online_list[i].image}" style="max-width: 100%; margin-right: 10px; margin-bottom: 10px;">
+															<span style="display: flex;">
+																<img th:if="${online_list[i].show} == 'y'" th:src="@{/images/btn/new_btn.png}" style="height: 23px; margin-right: 5px;">
+															    <img th:if="${online_list[i].status} == 'N'" th:src="@{/images/btn/status_n_btn.png}" style="height: 23px; margin-right: 5px;">
+															    <img th:if="${online_list[i].status != 'N' && (online_list[i].count > 0 || online_list[i].status =='y')}" th:src="@{/images/btn/status_y_btn.png}" style="height: 23px; margin-right: 5px;">
+															    <img th:if="${online_list[i].count == null or online_list[i].count == 0}"  th:src="@{/images/btn/count_0_btn.png}" style="height: 23px;">
+															</span>	                                            	
+		                                            	</a>
+		                                            </div>
+		                                        </th:block>
+		                                    </div>
+		                                </div>
+		                            </th:block>
+		                        </th:block>
+		                    </div>
+		                </div>  
+		            </div>
+		        </div>
+		    </div>      
+		</div>
+
+		
+		<!-- 간격 padding -->
+		<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+		
+		<!-- 오프라인 프로그램 -->
+		<div class="container" style="display: flex; min-height: 250px;">
+		    <div class="text-table">
+		        <div class="table-box-online">
+		            <div class="table-box-left-off">
+		                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-wrap="true">
+		                    <div class="carousel-inner">
+		                        <th:block th:if="${#lists.size(offline_list)} == 0">데이터가 없습니다</th:block>
+		                        <th:block th:if="${#lists.size(offline_list)} > 0">
+		                            <div class="carousel-item active">
+		                                <div class="row">
+		                                    <th:block th:each="academy, iterStat:${offline_list}" th:if="${iterStat.index &lt; 3}">
+		                                        <div class="col">
+		                                        	<a th:href="@{'/academy/academyDetail?a_no=' + ${academy.a_no}}">
+			                                            <img class="img_h_onoff" th:src="@{images/academy/}+${academy.image}" style="max-width: 100%; margin-bottom: 10px;">
+														<span style="display: flex;">
+															<img th:if="${academy.show} == 'y'" th:src="@{/images/btn/new_btn.png}" style="height: 23px; margin-right: 5px;">
+														    <img th:if="${academy.status} == 'N'" th:src="@{/images/btn/status_n_btn.png}" style="height: 23px; margin-right: 5px;">
+														    <img th:if="${academy.status != 'N' && (academy.count > 0 || academy.status =='y')}" th:src="@{/images/btn/status_y_btn.png}" style="height: 23px; margin-right: 5px;">
+														    <img th:if="${academy.count == null or academy.count == 0}"  th:src="@{/images/btn/count_0_btn.png}" style="height: 23px;">
+														</span>
+		                                            </a>
+		                                        </div>
+		                                    </th:block>
+		                                </div>
+		                            </div>
+		                            <th:block th:each="index: ${#numbers.sequence(3, #lists.size(offline_list), 3)}">
+		                                <div class="carousel-item" style="padding-left: 15px;">
+		                                    <div class="row">
+		                                        <th:block th:each="i: ${#numbers.sequence(index, index + 2)}" th:if="${i lt #lists.size(offline_list)}">
+		                                            <div class="col">
+		                                            	<a th:href="@{'/academy/academyDetail?a_no=' + ${offline_list[i].a_no}}">
+			                                                <img class="img_h_onoff" th:src="@{images/academy/}+${offline_list[i].image}" style="max-width: 100%; margin-right: 10px; margin-bottom: 10px;">
+															<span style="display: flex;">
+																<img th:if="${offline_list[i].show} == 'y'" th:src="@{/images/btn/new_btn.png}" style="height: 23px; margin-right: 5px;">
+															    <img th:if="${offline_list[i].status} == 'N'" th:src="@{/images/btn/status_n_btn.png}" style="height: 23px; margin-right: 5px;">
+															    <img th:if="${offline_list[i].status != 'N' && (offline_list[i].count > 0 || offline_list[i].status =='y')}" th:src="@{/images/btn/status_y_btn.png}" style="height: 23px; margin-right: 5px;">
+															    <img th:if="${offline_list[i].count == null or offline_list[i].count == 0}"  th:src="@{/images/btn/count_0_btn.png}" style="height: 23px;">
+															</span>
+		                                                </a>
+		                                            </div>
+		                                        </th:block>
+		                                    </div>
+		                                </div>
+		                            </th:block>
+		                        </th:block>
+		                    </div>
+		                </div>    
+		            </div>
+		            <div class="table-box-right-off">
+		                <div class="text_box_2">
+		                    <div class="text_box_3"><span style="color: white; letter-spacing: 0px;"><b>오프라인</b> 프로그램<br>OFFLINE PROGRAM</span></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>      
+		</div>
+
+
+		<!-- 간격 padding -->
+		<div id="padding" style="width: 100%; min-height: 1px; height: 80px;"></div>
+		
+		<!-- 소식 -->
+		<div class="sosick" style="background: #00f;">
+			<div class="container" >
+				<div class="inner_con">
+					<div class="img_0"><img th:src="@{/images/main/sosick_0.png}" style="max-width: 100%; height: auto;"></div>
+					<div class="img_1">
+						<img th:src="@{/images/main/sosick_1.png}">
+						<button class="sosick_btn" onclick="art()">아티스트 소식</button>
+						<th:block th:if="${#lists.size(art_list)} == 0">데이터가 없습니다</th:block>
+						<th:block th:if="${#lists.size(art_list)} > 0"> 
+							<th:block th:each="art, iterStat : ${art_list}" th:if="${iterStat.index} &lt; 5">
+								<div class="data_title"><a th:href="@{/artist/artist_list_detail(ar_no=${art.ar_no})}" style="color:white;">[[${art.ar_title}]]</a></div>
+							</th:block>
+						</th:block>
+					</div>
+					<div class="img_2">
+						<img th:src="@{/images/main/sosick_2.png}">
+						<button class="sosick_btn" onclick="att()">공모전 소식</button>
+						<th:block th:if="${#lists.size(att_list)} == 0">데이터가 없습니다</th:block>
+						<th:block th:if="${#lists.size(att_list)} > 0"> 
+							<th:block th:each="att, iterStat : ${att_list}" th:if="${iterStat.index} &lt; 5">
+								<div class="data_title"><a th:href="@{/attend/tentext_detail(t_no=${att.t_no})}" style="color:white;">[[${att.t_title}]]</a></div>
+							</th:block>
+						</th:block>
+					</div>
+					<div class="img_3">
+						<img th:src="@{/images/main/sosick_3.png}">
+						<button class="sosick_btn" onclick="nt()">상상마당 소식</button>	
+						<th:block th:if="${#lists.size(nt_list)} == 0">데이터가 없습니다</th:block>
+						<th:block th:if="${#lists.size(nt_list)} > 0"> 
+							<th:block th:each="nt, iterStat : ${nt_list}" th:if="${iterStat.index} &lt; 5">
+								<div class="data_title"><a th:href="@{/notice/notice_list_detail(nt_no=${nt.nt_no})}" style="color:white;">[[${nt.nt_title}]]</a></div>
+							</th:block>
+						</th:block>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 간격 padding -->
+		<div id="padding" style="width: 100%; min-height: 1px; height: 100px;"></div>
+		
+		<!-- 키워드 -->
+		<div style="text-align: center;">
+			<span style="font-size: 20px; color:rgb(0,0,255);"><b>KEYWORD</b></span>
+			<div style="border-top: 2px solid rgb(0,0,255); width: 150px; margin: 0 auto;"></div>
+			<div id="padding" style="width: 100%; min-height: 1px; height: 10px;"></div>
+			<span style="font-size: 30px;">관심있는 키워드를 클릭하시면,<br></span>
+			<span style="font-size: 30px; margin-top: -10px !important;"><b>관련 콘텐츠를 모아서 볼 수 있습니다.</b></span>
+		</div>
+		<div id="padding" style="width: 100%; min-height: 1px; height: 30px;"></div>
+		<div class="container" style="display: flex;">
+			<div class="kw_left">
+				<div class="kw_table">
+					<div class="kw_row">
+						<a th:href="@{/search(pageNum=1,keyword='에세이')}" style="margin-top: 50px;"><b class="kw_btn_0">#에세이</b></a>
+						<a th:href="@{/search(pageNum=1,keyword='스토리텔링')}" style="margin-top: 50px;"><b class="kw_btn_0">#스토리텔링</b></a>
+					</div>
+					<div id="padding" style="width: 100%; min-height: 1px; height: 20px;"></div>
+					<div class="kw_row">	
+						<a th:href="@{/search(pageNum=1,keyword='미디어')}"><b class="kw_btn_0">#미디어</b></a>
+						<a th:href="@{/search(pageNum=1,keyword='디자인')}"><b class="kw_btn_0">#디자인</b></a>
+					</div>
+					<div id="padding" style="width: 100%; min-height: 1px; height: 20px;"></div>
+					<div class="kw_row">
+						<a th:href="@{/search(pageNum=1,keyword='피규어')}"><b class="kw_btn_0">#피규어</b></a>
+						<a th:href="@{/search(pageNum=1,keyword='사진')}"><b class="kw_btn_0">#사진</b></a>
+					</div>
+				</div>
+			</div>
+			<div class="kw_center">
+			        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+			            <div class="carousel-inner">
+			                <div class="carousel-item active">
+			                    <img th:src="@{/images/main/kw_carousel_1.png}" >
+			                    <div class="carousel-caption d-none d-md-block"></div>
+			                </div>
+			                <div class="carousel-item">
+			                    <img th:src="@{/images/main/kw_carousel_2.png}">
+			                    <div class="carousel-caption d-none d-md-block"></div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			<div class="kw_right">
+				<div class="kw_table">
+					<div class="kw_row_1">
+						<a th:href="@{/search(pageNum=1,keyword='포트폴리오')}" style="margin-top: 50px;"><b class="kw_btn_0">#포트폴리오</b></a>
+						<a th:href="@{/search(pageNum=1,keyword='디지털드로잉')}" style="margin-top: 50px;"><b class="kw_btn_0">#디지털드로잉</b></a>
+					</div>
+					<div id="padding" style="width: 100%; min-height: 1px; height: 20px;"></div>
+					<div class="kw_row">	
+						<a th:href="@{/search(pageNum=1,keyword='브랜딩')}"><b class="kw_btn_0">#브랜딩</b></a>
+						<a th:href="@{/search(pageNum=1,keyword='그림책')}"><b class="kw_btn_0">#그림책</b></a>
+					</div>
+					<div id="padding" style="width: 100%; min-height: 1px; height: 20px;"></div>
+					<div class="kw_row">
+						<a th:href="@{/search(pageNum=1,keyword='굿즈')}"><b class="kw_btn_0">#굿즈</b></a>
+						<a th:href="@{/search(pageNum=1,keyword='소설')}"><b class="kw_btn_0">#소설</b></a>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<!-- 간격 padding -->
+		<div id="padding" style="width: 100%; min-height: 1px; height: 150px;"></div>
+		
+		<!-- 프로그램 알림 -->	
+		<div class="container" style="display: flex;  min-height: 711px; padding: 0 15px;">
+			<div class="alarm_left" style="background-color: #0000ff;">
+				<div class="alarm_txt">
+					<b style="font-size: 30px;">프로그램 알림을 받고 싶다면?</b><br><br>
+					<span style="font-size: 18px;">원하는 프로그램 신청이 가능할 때,</span><br>
+					<span style="font-size: 18px;">관심 분야의 신규 강의가 열릴 때</span><br>
+					<b style="font-size: 22px;">제일 먼저 안내해 드릴게요!</b>
+				</div>
+				<div class="alarm_request">
+					<form action="" method="post" id="frm1">
+						<div class="alarm_request_txt">
+							<p>성함*<br><input type="text" name="a_name" placeholder="이름을 입력해 주세요" required="required" style="margin-top: 5px; margin-bottom: 10px; height: 35px; width: 230px;"></p>
+							<p>이메일*<br><input type="email" name="a_email" placeholder="@ 이메일 형식으로 입력해 주세요" required="required" style="margin-top: 5px; margin-bottom: 10px; height: 35px; width: 230px;"></p>
+							<p>알림받을 강의명 혹은 카테고리를 입력해 주세요.<br><input type="text" name="e_keyword" placeholder="키워드로 적어주셔도 됩니다 :)" required="required" style="margin-top: 5px; margin-bottom: 25px; height: 35px; width: 230px;"></p>
+							<input type="checkbox" required="required" id="e3" style="margin-top: 10px;"><span id="a_modal">개인정보 수집 및 이용</span><label for="e3">에 동의합니다.(필수)*</label><br>
+							<input type="checkbox" required="required" id="e4" style="margin-top: 10px;"><span id="b_modal">광고성 정보 수신</span><label for="e4">에 동의합니다.(필수)*</label><br>
+							<input type="submit" value="알림받기" class="alarm_btn" style="margin-top: 40px;">
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="alarm_right">
+				<img th:src="@{/images/main/alarm.png}">
+			</div>
+		</div>
+		
+		
+		<!-- modal -->
+		<div id="myModal" class="modal_main">
+		  <div class="modal_main_content">
+		    <span class="close" id="closeBtn">&times;</span>
+		    <p><br></p>
+		    <h3 style="font-weight: 700">개인정보 수집 및 이용</h3>
+		    <p><p>
+		      마케팅 활용을 위한 최소한의 개인정보를 수집하고 이용합니다.<br>
+		      수집된 정보는 발송 외 다른 목적으로 이용되지 않습니다.<br>
+		      동의를 거부할 경우 수집 목적의 서비스를 제공 받으실 수 없습니다.
+		    </p>
+		  </div>
+		</div>
+		
+		<div id="myModal2" class="modal_main">
+		  <div class="modal_main_content2">
+		    <span class="close" id="closeBtn2">&times;</span>
+		    <p><br>
+		    <h3 style="font-weight: 700">광고성 정보 수신</h3>
+		    <p><p>제휴 콘텐츠, 프로모션, 이벤트 정보 등의 광고성 정보를 수신합니다.<p>
+		    </p>
+		    <table class="modal_t">
+		    	<tr style="background: lightgray;"><td>수집 항목</td>
+		    		<td>수집 목적</td>
+		    		<td>보유 기간</td></tr>
+		    	<tr><td>성명, 휴대폰 번호,<br>프로그램명</td>
+		    		<td>프로그램 모집 알림</td>
+		    		<td style="color: #0000ff; text-decoration: underline;">알림 신청일로부터<br>1년간 보관</td></tr>
+		    </table>
+		    <p><p>
+		  </div>
+		</div>	
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.btn {
+		cursor: pointer;
+		padding-right: 10px;
+	}
+</style>
+<script type="text/javascript">
+	function at_rUpdate(at_bno, at_rno) {
+		let txt = $('#reply_'+at_rno).text();
+		$('#reply_'+at_rno).html(
+				"<textarea row=3 class='form-control' id='rt'>"
+				+txt+"</textarea>");
+		$('#btn_'+at_rno).html(
+				"<div style='display:flex'><div onclick='up("+at_bno+","+at_rno+")'class='btn'>확인</div>"+
+				"<div onclick='lst("+at_bno+")' class='btn'>취소</div></div>")
+	}
+	function up(at_bno, at_rno) {
+		let sendData = "at_replytext="+$('#rt').val()+"&at_bno="+at_bno+"&at_rno="+at_rno;
+		$.post("/at_rUpdate", sendData, function(data){
+			alert("댓글이 수정 되었습니다");
+			$('#rListDisp').html(data);
+		});
+	}
+	function lst(at_bno) {
+		$('#rListDisp').load('/attend/at_replyList/at_bno/'+at_bno);
+	}
+	function at_rDelete(at_bno, at_rno) {
+		let sendData = "at_bno="+at_bno+"&at_rno="+at_rno;
+		$.post("/at_rDelete", sendData, function(data) {
+			alert("댓글이 삭제되었습니다");
+			$('#rListDisp').html(data);
+		});
+	}
+</script>
+</head>
+<body>
+	<div th:if="${#lists.size(at_rnList) > 0}">
+    	<div th:each="rat : ${at_rnList}">
+				<div style="display: flex; font-size: 13px; padding-bottom: 5px;">
+					<div style="padding-right: 10px;">[[${rat.at_replier}]]</div>
+					<div th:text="${#dates.format(rat.at_updatedate, 'yyyy-MM-dd HH:mm')}"></div>
+				</div>
+				<div th:id="|reply_${rat.at_rno}|">[[${rat.at_replytext}]]</div>
+				<div id="session_id" style="display: none;">[[${id}]]</div>
+				<div style="display: flex; float: right;" th:if="${rat.id eq id}">					
+					<div th:id="|btn_${rat.at_rno}|">
+						<div th:onclick="at_rUpdate([[${rat.at_bno}]],[[${rat.at_rno}]])" class="btn">
+							수정</div>
+					</div>
+						<div th:onclick="at_rDelete([[${rat.at_bno}]],[[${rat.at_rno}]])" class="btn">삭제</div>
+				</div><br>
+				<hr>
+			</th:block>
+		</div>
+	</div>
+	<div th:if="${#lists.size(at_rnList) == 0}"></div>
+	<div id="padding" style="width: 100%; min-height: 1px; height: 25px;"></div>
+</body>
+</html>

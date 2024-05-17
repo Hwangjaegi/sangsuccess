@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.AcademyMapper">
+	<!-- 강의 new 조회 -->
+	<select id="new_list" resultType="academy">
+		select * from academy order by a_date desc
+	</select>
+	<!-- 강의 best 조회 -->
+	<select id="best_list" resultType="academy">
+		select * from academy where view_count >= 300 order by a_date desc
+	</select>
+	<!-- 강의 online 조회 -->
+	<select id="online_list" resultType="academy">
+		select * from academy where onoff = 'Y' order by a_date desc
+	</select>
+	<!-- 강의 offline 조회 -->
+	<select id="offline_list" resultType="academy">
+		select * from academy where onoff = 'N' order by a_date desc
+	</select>
+
+	<select id="list_Free" resultType="Academy">
+		select a.* from academy a, category c where a.ct_no=c.ct_no and c.ct_no=1
+		 order by a_date desc
+	</select>
+	<select id="list_Hobby" resultType="Academy">
+		select a.* from academy a, category c where a.ct_no=c.ct_no and c.ct_no=2
+		 order by a_date desc
+	</select>
+	<select id="list_Write" resultType="Academy">
+		select a.* from academy a, category c where a.ct_no=c.ct_no and c.ct_no=3
+		 order by a_date desc
+	</select>
+	<select id="list_Book" resultType="Academy">
+		select a.* from academy a, category c where a.ct_no=c.ct_no and c.ct_no=4
+		 order by a_date desc
+	</select>
+	<select id="list_Design" resultType="Academy">
+		select a.* from academy a, category c where a.ct_no=c.ct_no and c.ct_no=5
+		 order by a_date desc
+	</select>
+	<select id="list_Media" resultType="Academy">
+		select a.* from academy a, category c where a.ct_no=c.ct_no and c.ct_no=6
+		 order by a_date desc
+	</select>
+	<select id="list_Photo" resultType="Academy">
+		select a.* from academy a, category c where a.ct_no=c.ct_no and c.ct_no=7
+		 order by a_date desc
+	</select>
+	<select id="select" parameterType="Integer" resultType="Academy">
+		select a.*, d.* from academy a, detail d where a.a_no = #{a_no} and a.a_no=d.a_no
+	</select>
+	<!--좋아요-->
+	<update id="increaseGoodCount" parameterType="Integer">
+        update academy set good_count = good_count + 1 where a_no = #{a_no}
+    </update>
+    <update id="decreaseGoodCount" parameterType="Integer">
+    	update academy set good_count = good_count - 1 where a_no = #{a_no}
+    </update>
+    	<!--조회수-->
+	<update id="increaseViewCount" parameterType="Integer">
+        update academy set view_count = view_count + 1 where a_no = #{a_no}
+    </update>
+	<!-- 게시글등록시 detail테이블이 필요없어서 새로운 셀렉트문 -->
+	<select id="selectAcademy" parameterType="Integer" resultType="Academy">
+		select * from academy where a_no = #{a_no}
+	</select>
+	<select id="findIdByANo" parameterType="Integer" resultType="String">
+		select id from academy where a_no = #{a_no}
+	</select>
+	<select id="ac_list" parameterType="String" resultType="Academy">
+		select * from academy where id=#{id}
+	</select>
+	<!-- 재기추가 -->
+	<!-- 아카데미 총개수 -->
+	<select id="getTotal" resultType="integer">
+		select count(*) from academy
+	</select>
+	
+	<!-- 아카데미 리스트 -->
+	<select id="AcademyList" parameterType="map" resultType="Academy">
+		select * from (select a.* , rowNum rn from(select * from academy order by a_no) a)
+			where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<insert id="insert_cart" parameterType="cart">
+		<selectKey keyProperty="c_no" resultType="Integer"
+			order="BEFORE">
+			select nvl(max(c_no),0)+1 c_no from cart
+		</selectKey>
+	  insert into cart (c_no, c_count, a_no, id) values (#{c_no}, #{c_count}, #{a_no}, #{id})
+	</insert>
+	
+</mapper>

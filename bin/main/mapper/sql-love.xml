@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.LoveMapper">
+	<!-- 위시리스트 추가 -->
+	<insert id="love_insert" parameterType="love">
+	    <selectKey keyProperty="l_no" resultType="Integer" order="BEFORE">
+	        select nvl(max(l_no),0)+1 l_no from love
+	    </selectKey>
+	    insert into love (l_no, a_no, id) values (#{l_no}, #{a_no}, #{id})
+	</insert>
+	<!-- 위시리스트 삭제 -->
+	<delete id="love_delete">
+		delete from love where a_no = #{a_no} and id = #{id} 
+	</delete>
+	<select id="findLoveByA_NoAndId" parameterType="love" resultType="love">
+		select * from love where a_no = #{a_no} and id = #{id}
+	</select>
+	
+</mapper>

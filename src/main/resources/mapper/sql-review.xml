@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.ReviewMapper">
+	<!-- 리뷰 총 개수 -->
+	<select id="getTotal" resultType="integer">
+		select count(*) from review 
+	</select>
+	<select id="getTotal_hobby" resultType="integer">
+		select count(*) from review where ct_no = 2
+	</select>
+	<select id="getTotal_write" resultType="integer">
+		select count(*) from review where ct_no = 3
+	</select>
+	<select id="getTotal_book" resultType="integer">
+		select count(*) from review where ct_no = 4
+	</select>
+	<select id="getTotal_design" resultType="integer">
+		select count(*) from review where ct_no = 5
+	</select>
+	<select id="getTotal_media" resultType="integer">
+		select count(*) from review where ct_no = 6
+	</select>
+	<select id="getTotal_photo" resultType="integer">
+		select count(*) from review where ct_no = 7
+	</select>
+	
+	<!-- 리뷰 목록 -->
+	<select id="review_list" parameterType="map" resultType="review">
+	    select * from (select a.* , rowNum rn from
+	    	(select * from review order by r_no desc) a)
+				where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="review_hobby" parameterType="map" resultType="review">
+	    select * from (select a.* , rowNum rn from
+	    	(select * from review where ct_no = 2 order by r_no desc) a)
+				where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="review_write" parameterType="map" resultType="review">
+	    select * from (select a.* , rowNum rn from
+	    	(select * from review where ct_no = 3 order by r_no desc) a)
+				where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="review_book" parameterType="map" resultType="review">
+	    select * from (select a.* , rowNum rn from
+	    	(select * from review where ct_no = 4 order by r_no desc) a)
+				where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="review_design" parameterType="map" resultType="review">
+	    select * from (select a.* , rowNum rn from
+	    	(select * from review where ct_no = 5 order by r_no desc) a)
+				where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="review_media" parameterType="map" resultType="review">
+	    select * from (select a.* , rowNum rn from
+	    	(select * from review where ct_no = 6 order by r_no desc) a)
+				where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="review_photo" parameterType="map" resultType="review">
+	    select * from (select a.* , rowNum rn from
+	    	(select * from review where ct_no = 7 order by r_no desc) a)
+				where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<!-- 상세 -->
+	<select id="select_d" parameterType="integer" resultType="review">
+		select * from review where r_no = #{r_no}
+	</select>
+	
+	<!-- 이전글/다음글(전체) -->
+	<select id="review_leg_list" parameterType="review" resultType="review">
+		select * from review where r_no = 
+			(select review_prev from (select lag(r_no) over(order by r_no) as review_prev,
+				n.* from review n) where r_no=#{r_no})
+	</select>
+	<select id="review_lead_list" parameterType="review" resultType="review">
+		select * from review where r_no = 
+			(select review_next from (select lead(r_no) over(order by r_no) as review_next,
+				n.* from review n) where r_no=#{r_no})
+	</select>
+	
+	<!-- 이전글/다음글(카테고리) -->
+	<select id="review_leg" parameterType="review" resultType="review">
+		select * from review where r_no = 
+			(select review_prev from (select lag(r_no) over(order by r_no) as review_prev,
+				n.* from review n  where ct_no=#{ct_no}) where r_no=#{r_no})
+	</select>
+	<select id="review_lead" parameterType="review" resultType="review">
+		select * from review where r_no = 
+			(select review_next from (select lead(r_no) over(order by r_no) as review_next,
+				n.* from review n  where ct_no=#{ct_no}) where r_no=#{r_no})
+	</select>
+	
+	<!-- 리뷰 입력 -->
+	<select id="select" parameterType="string" resultType="review">
+		select * from review where r_title = #{r_title}
+	</select>
+	<insert id="insert" parameterType="notice">
+		<selectKey keyProperty="r_no" order="BEFORE" resultType="integer">
+			select nvl(max(r_no), 0) + 1 r_no from review
+		</selectKey>
+		insert into review (r_no, r_title, r_image, r_content, r_date, id, ct_no)
+		values (#{r_no}, #{r_title}, #{r_image}, #{r_content}, sysdate, #{id}, #{ct_no})
+	</insert>
+	
+	<!-- 리뷰 수정 -->
+	<update id="update" parameterType="review">
+		update review set r_title=#{r_title}, r_image=#{r_image}, r_content=#{r_content}, ct_no=#{ct_no}
+		where r_no=#{r_no}
+	</update>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="delete" parameterType="integer">
+		delete from review where r_no=#{r_no}
+	</delete>
+	
+</mapper>

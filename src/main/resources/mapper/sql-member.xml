@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.MemberMapper">
+	<select id="select" parameterType="string" resultType="member">
+		select * from member where id = #{id}
+	</select>
+
+	<select id="selectEmail" parameterType="string" resultType="member">
+		select * from member where email = #{email}
+	</select>
+
+	<select id="select_PW_Email" parameterType="map" resultType="member">
+		select * from member where email = #{email} and id = #{id}
+	</select>
+	
+	<select id="selectNameToTel" parameterType="map" resultType="member">
+		select * from member where name = #{name} and tel = #{tel}
+	</select>
+	
+	<!-- 구매내역 조회 -->
+	<select id="selectBuyList" parameterType="map" resultType="Buy">
+		select * from (select a.* , rowNum rn from(select * from buy order by b_no desc) a)
+			where rn between #{startRow} and #{endRow} and id=#{id}
+	</select>
+	
+	<!-- 어드민 구매내역 list -->
+	<select id="selectAdminBuyList" resultType="Buy">
+		select * from (select a.* , rowNum rn from(select * from buy order by b_no desc) a)
+			where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<!-- 구매한 아카데미 조회 -->
+	<select id="selectBuyInfo" parameterType="integer" resultType="Academy">
+		select * from Academy where a_no = #{a_no}
+	</select>
+	
+	<!-- 구매번호로 구매내역조회 -->
+	<select id="selectBuy" parameterType="integer" resultType="Buy">
+		select * from Buy where b_no = #{b_no}
+	</select>
+	
+	<!-- 구매번호로 구매한 이미지조회 -->
+	<select id="selectImg" parameterType="integer" resultType="Academy">
+		select * from academy where a_no = #{a_no}
+	</select>
+	
+	<!-- 구매 맥스번호 -->
+	<select id="select_Max_Buy" parameterType="string" resultType="integer">
+		select count(*) from buy where id=#{id}
+	</select>
+	
+	<!-- 취소번호 Max 값 추출 -->
+	<select id="select_Max_CaNo">
+		select nvl(max(ca_no),0)+1 from cancle_buy
+	</select>
+	
+	<!-- 위시리스트 조회 -->
+	<select id="selectWishList" parameterType="map" resultType="cart">
+		select * from (select a.* , rowNum rn from(select * from love order by l_no desc) a)
+			where rn between #{startRow} and #{endRow} and id=#{id}
+	</select>
+	
+	<!-- 위시리스트 Max 넘버 -->
+	<select id="select_Max_Wish_No" parameterType="string" resultType="integer">
+		select count(*) from Love where id = #{id}
+	</select>
+	
+	<!-- 취소조회 Max넘버 ID -->
+	<select id="select_Max_cancle" parameterType="string" resultType="integer">
+		select count(*) from buy where id =#{id} and cancle ='y'
+	</select>
+	
+	<!-- QnA게시판 Max 넘버 -->
+	<select id="select_Max_QnA_No" parameterType="string" resultType="integer">
+		select nvl(max(q_no),0)+1 from qna
+	</select>
+	
+	<!-- QnA게시판 페이징용 -->
+	
+	<select id="select_Max_QnA_No_ID" parameterType="string" resultType="integer">
+		select count(*) from qna where id=#{id}
+	</select>
+	
+	<select id="select_count_QnA_No" parameterType="string" resultType="integer">
+		select count(*) from qna where id=#{id}
+	</select>
+	
+	<!-- QnA게시판 문의내역 List -->
+	<select id="selectQnAList" parameterType="map" resultType="QnA">
+	select * from (select a.* , rowNum rn from(select * from qna order by q_no desc) a)
+			where rn between #{startRow} and #{endRow} and id=#{id}
+	</select>
+	
+	<!-- QnA q_no로 정보가져오기 -->
+	<select id="selectQnA" parameterType="integer" resultType="QnA">
+		select * from qna where q_no = #{q_no}
+	</select>
+	
+	<!-- 카카오ID가 존재하는지 확인 -->
+	<select id="selectKakao" parameterType="string" resultType="member">
+		select * from member where id = #{userID}
+	</select>
+	
+	<!-- 주문 취소 완료된 내역 조회 -->
+	<select id="selectCancleList" parameterType="string" resultType="buy">
+		select * from buy where id=#{id} and cancle = 'y'
+	</select>
+	
+	<!-- 주문취소된 아카데미 목록조회 -->
+	<select id="selectAcademyCancle" parameterType="map" resultType="academy">	
+		select * from (select a.* , rowNum rn from (select * from buy where cancle='y' order by b_no desc) a)
+			where rn between #{startRow} and #{endRow} and id = #{id}
+	</select>
+	
+	<!-- 사용자 구매번호 Max 조회  -->
+	<select id="select_Max_Bno" resultType="integer">
+		select nvl(max(b_no),0)+1 from buy
+	</select>
+	
+	<!-- 관리자 회원관리 -->
+	<select resultType="integer" parameterType="pagingbean" id="getTotal">
+	<!-- 페이징용 전체 회원 카운트 -->
+		select count(*) from member 
+	</select>
+	
+	<select resultType="member" parameterType="pagingbean" id="paginglist">
+	select * from (select a.* , rowNum rn from(select * from member order by reg_date desc) a)
+		where rn between #{startRow} and #{endRow} 
+	</select>
+	
+	<!-- 관리자 아카데미정보 수정시 기존정보 -->
+	<select id="selectAcademy" parameterType="integer" resultType="Academy">
+		select * from academy where a_no = #{a_no}
+	</select>
+	
+	<!-- 관리자 구매한 아카데미정보 list에 담기위한 -->
+	<select id="selectBuyAcademy" parameterType="integer" resultType="Academy">
+		select * from academy where a_no = #{a_np}
+	</select>
+	
+	<!-- 관리자 문의관리 리스트 -->
+	<select id="adminQnAList" resultType="QnA">
+		select * from (select a.* , rowNum rn from (select * from qna order by q_no desc) a)
+			where rn between #{startRow} and #{endRow} 
+	</select>
+	
+	<!-- 관리자 주문 총개수 -->
+	<select id="getTotalOrder" resultType="integer">
+		select count(*) from buy
+	</select>
+	
+	<!-- 관리자 QnA 총 개수 -->
+	<select id="getTotalQnA" resultType="integer">
+		select count(*) from qna
+	</select>
+	
+	<!-- 관리자 Academy 총 개수 -->
+	<select id="select_max_a_no" resultType="integer">
+		select nvl(max(a_no),0)+1 from academy
+	</select>
+	
+	
+	
+	<insert id="insert" parameterType="member">
+		insert into member values(#{id},#{password},#{name},#{tel},#{email},#{image},sysdate,'n','n','n')
+	</insert>
+	
+	<!-- 1:1문의 게시글 입력 -->
+	<insert id="insertQnA">
+		insert into qna values(#{q_no} , #{q_title} , #{q_content} , sysdate , 'n' , #{id})
+	</insert>
+	
+	<!-- 취소내역 입력 -->
+	<insert id="insertCancle" parameterType="cancle" >
+		insert into cancle_buy values(#{ca_no} , #{ca_option} , #{ca_content} , #{b_no})
+	</insert>
+	
+	<!-- 카카오ID없을시 insert -->
+	<insert id="insertKakao" parameterType="Kakao">
+		insert into member (id,name,image)
+		values(#{userID} , #{nickName} , #{profile_image})
+	</insert>
+	
+	<!-- 어드민 아카데미 등록 -->
+	<insert id="insertAcademy" parameterType="Academy">
+		insert into Academy values(#{a_no} , #{title} , #{price} , #{intro} , #{tag} , #{schedule} , #{a_name}
+		,#{place} , #{inwon} , #{turn} , #{request} , #{onoff} , #{image} , #{count} , sysdate , #{id} , 0
+		,0,#{status},#{ct_no},#{content})
+	</insert>
+	
+	<!-- 결제한아카데미 구매처리 -->
+	<insert id="insertBuy" parameterType="buy">
+		insert into buy values(#{b_no} , sysdate , 'n' , #{c_count} , #{a_no} , #{id})
+	</insert>
+	
+	<!-- 구매취소요청 n => r 변경 , 관리자 구매취소승인 r => y 변경 -->
+	<update id="updateCancle" parameterType="integer">
+		update buy set cancle = 'r' where b_no = #{b_no}
+	</update>
+	
+	<!-- 취소철회 y => n 변경 -->
+	<update id="updateCancle_Stop" parameterType="integer">
+		update buy set cancle = 'n' where b_no = #{b_no}
+	</update>
+	
+	<update id="updatePass" parameterType="member">
+		update member set password = #{password} where id = #{id}
+	</update>
+	
+	<update id="updateMember" parameterType="member">
+		update member set name = #{name}
+		<if test="password != null and tel != null">
+			,password = #{password} , tel = #{tel} , image = #{image}
+		</if> where id = #{id}
+	</update>
+	
+	<update id="delete" parameterType="string">
+		update member set del = 'y' where id = #{id}
+	</update>
+	
+	<!-- QnA 게시글 수정 -->
+	<update id="QnAUpdate" parameterType="qna">
+		update qna set q_title = #{q_title} , q_content = #{q_content} , q_date = sysdate where q_no = #{q_no}
+	</update>
+	
+	<!-- 아카데미 업데이트 -->
+	<update id="updateAcademy" parameterType="Academy">
+	update academy set title = #{title} , price = #{price} , intro = #{intro} , tag = #{tag} , schedule =  #{schedule} , a_name = #{a_name}
+		,place = #{place} ,inwon = #{inwon} ,turn = #{turn} ,request = #{request} ,onoff = #{onoff} ,image = #{image} ,count = #{count} ,id = #{id}
+		,status = #{status},ct_no = #{ct_no},content = #{content} where a_no = #{a_no}
+	</update>
+	
+	<!-- 관리자 취소 승락 -->
+	<update id="updateCancleOk" parameterType="integer">
+		update buy set cancle = 'y' where b_no = #{b_no}
+	</update>
+	
+	<!-- 관리자 강제탈퇴 철회 -->
+	<update id="updateMember2" parameterType="string">
+		update member set del = 'n' where id = #{id}
+	</update>
+	
+	<!-- QnA 문의 삭제 -->
+	<update id="deleteQnA" parameterType="integer">
+		update qna set q_del = 'y' where q_no = #{q_no}
+	</update>
+	
+	<!-- 취소철회시 Cancle Buy 테이블에서 해당 b_no 삭제 -->
+	<delete id="deleteCancel" parameterType="integer">
+		delete from cancle_buy where b_no = #{b_no}
+	</delete>
+	<!-- 어드민 아카데미삭제 전 제약조건 디테일 삭제 -->
+	<delete id="deleteDetail" parameterType="integer">
+		delete from detail where a_no = #{a_no}
+	</delete>
+	<!-- 어드민 아카데미 삭제 -->
+	<delete id="deleteAcademy" parameterType="integer">
+		delete from academy where a_no = #{a_no}
+	</delete>
+</mapper>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>상상마당 아카데미｜수강후기</title>
+<style type="text/css">
+	.layout {
+		min-height: 2000px;
+	}
+	.review_container {
+		max-width: 70%;
+	    margin: 0 auto;
+	}
+	.section_wrap_grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+	.section_wrap_grid > div {
+		width: calc(20% - 10px);
+	 	margin-bottom: 20px;
+		position: relative;
+	}
+	.section_wrap_grid img {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+	.section_wrap_grid div.content {
+		padding: 10px;
+		background-color: #f9f9f9;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		box-sizing: border-box;
+	}
+	.widget_data ul li:nth-child(1){
+		background-color: blue;
+		border-left: 1px solid blue;
+		color: white;
+		transition: color 0.5s ease;
+	}
+	.widget_data ul li:nth-child(1):hover{
+		background-color: white;		    
+	}
+	.widget_data ul li:nth-child(1):hover a{
+		color: black;
+	}
+	.widget_data ul li:nth-child(1) a{
+		color: white;
+		transition: color 0.5s ease;
+	}
+	.widget_data li {
+		border: 1px solid blue;
+		border-left: none;
+		border-bottom: none;
+		color: blue;
+	}
+	.widget_data li a {
+		text-decoration: none;
+		color : blue;
+		transition: color 0.3s ease;	    
+	}
+	.widget_data li a:hover {
+		color: black;
+	}
+	.widget_data ul{
+		border-bottom: 2px solid blue;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="layout">	
+			<!-- header -->
+			<div style="background-color: #0000ff;">
+				<div id="padding" style="width: 100%; min-height: 1px; height: 80px;"></div>
+				<div style="text-align: center; color: white;">
+					<span style="font-weight: bold; font-size: 36px;">수강후기</span><br>
+					<span style="font-size: 24px;">상상마당 아카데미 상상후기</span>
+				</div>
+				<div id="padding" style="width: 100%; min-height: 1px; height: 88px;"></div>
+			</div>
+			
+			<!-- 카테고리 -->
+			<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+			<div class="review_container">
+				<div class="widget_data">
+				    <ul class="list-unstyled d-flex">
+				        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+				        <a href="/review/review_list"><span class="plain_name" data-hover="전체">전체</span></a></li>
+						<li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+						<a href="/review/review_hobby"><span class="plain_name" data-hover="취미">취미</span></a></li>
+				        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+				        <a href="/review/review_write"><span class="plain_name" data-hover="글쓰기">글쓰기</span></a></li>
+				        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+				        <a href="/review/review_book"><span class="plain_name" data-hover="그림책">그림책</span></a></li>
+						<li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+						<a href="/review/review_design"><span class="plain_name" data-hover="디자인">디자인</span></a></li>
+				        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+				        <a href="/review/review_media"><span class="plain_name" data-hover="미디어">미디어</span></a> </li>
+						<li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+						<a href="/review/review_photo"><span class="plain_name" data-hover="사진">사진</span></a></li>
+				    </ul>
+				    <br>
+				</div>
+				<div class="section_wrap_grid">
+				    <th:block th:if="${#lists.size(review_list)} == 0">데이터가 없습니다</th:block>
+				    <div th:each="review : ${review_list}">	
+						<a th:href="@{/review/reviewDetail(r_no=${review.r_no})}">
+							<img alt="" th:src="@{/images/review/}+${review.r_image}" style="width:230px; height:auto;">
+							<span th:text="${review.r_title}" style="font-size: 15px; margin-top: 16px;"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+</body>
+</html>

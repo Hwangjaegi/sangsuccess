@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.UnionMapper">
+<!-- 총 개수 -->
+	<select id="getTotal" parameterType="string" resultType="integer">
+		select count(*) from (
+			 select * from (select a.*, rowNum rn from (
+	            select title, intro, image, a_date from academy 
+	            	<if test="keyword != null and keyword != ''">
+	              		where title like '%' || #{keyword} || '%' or intro like '%' || #{keyword} || '%'
+	      		 	</if>
+	      		 	 union
+	            select st_title, st_content, st_image, st_date from staff
+	           		 <if test="keyword != null and keyword != ''">
+	                	 where st_title like '%' || #{keyword} || '%' or st_content like '%' || #{keyword} || '%'
+		            </if>
+	           		union
+	            select nt_title, nt_content, nt_image, nt_date from notice 
+	            	<if test="keyword != null and keyword != ''">
+	                	where nt_title LIKE '%' || #{keyword} || '%' or nt_content like '%' || #{keyword} || '%'
+		            </if>
+	           		union
+	            select ar_title, ar_content, ar_image, ar_date from artist
+	            <if test="keyword != null and keyword != ''">
+	                where ar_title LIKE '%' || #{keyword} || '%' or ar_content like '%' || #{keyword} || '%'
+	            </if>
+	            order by 4 desc
+	        ) a
+	   	 )
+		)
+	</select>
+	
+	<!-- 전체 목록 -->
+	<select id="uni_list" parameterType="map" resultType="union">
+	    select * from (select a.*, rowNum rn from (
+	            select a_no no, 'ac' kind, title, intro content, image, a_date from academy 
+	            	<if test="keyword != null and keyword != ''">
+	              		where   title like '%' || #{keyword} || '%' or intro like '%' || #{keyword} || '%'
+	      		 	</if>
+	      		 	 union
+	            select st_no no, 'st' kind, st_title, st_content content, st_image, st_date from staff
+	           		 <if test="keyword != null and keyword != ''">
+	                	 where st_title like '%' || #{keyword} || '%' or st_content like '%' || #{keyword} || '%'
+		            </if>
+	           		union
+	            select nt_no no,'nt' kind, nt_title, nt_content content, nt_image, nt_date from notice 
+	            	<if test="keyword != null and keyword != ''">
+	                	where nt_title LIKE '%' || #{keyword} || '%' or nt_content like '%' || #{keyword} || '%'
+		            </if>
+	           		union
+	            select ar_no no, 'ar' kind, ar_title, ar_content content, ar_image, ar_date from artist
+	            <if test="keyword != null and keyword != ''">
+	                where ar_title LIKE '%' || #{keyword} || '%' or ar_content like '%' || #{keyword} || '%'
+	            </if>
+	            order by 6 desc
+	        ) a
+	    )
+	    where rn between #{startRow} and #{endRow}
+	</select>
+
+</mapper>

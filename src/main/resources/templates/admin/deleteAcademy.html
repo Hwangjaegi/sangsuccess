@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:if="${result} > 0">
+	<input id="pageNum" type="hidden" th:data-pageNum="${pageNum}">
+	<script type="text/javascript">
+		let pageNum = $('#pageNum').attr("data-pageNum");
+		alert("해당 아카데미가 삭제되었습니다!");
+		location.href="/listAcademy?pageNum="+pageNum;
+	</script>
+</div>
+<div th:if="${result} <= 0">
+	<script type="text/javascript">
+		alert("아카데미 삭제중 오류가 발생하였습니다");
+		history.back();
+	</script>
+</div>
+</body>
+</html>

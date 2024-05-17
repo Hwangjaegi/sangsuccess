@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.StaffMapper">
+	<select id="staffList" parameterType="map" resultType="Staff">
+		select * from (select a.* , rowNum rn from(select * from staff order by st_no) a)
+			where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<!-- Staff 리스트 페이징 최대개수 -->
+	<select id="geTotal" resultType="integer">
+		select count(*) from staff
+	</select>
+	
+	<select id="selectStaff" parameterType="integer" resultType="Staff">
+		select * from staff where st_no = #{st_no}
+	</select>
+</mapper>

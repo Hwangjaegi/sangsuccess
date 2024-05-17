@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:if="${result} > 0">
+	<div th:if="${notice.ct_no} == '8'">
+		<script type="text/javascript">
+			alert("수정이 완료되었습니다");
+			location.href="/notice/notice_event";
+		</script>	
+	</div>
+	<div th:if="${notice.ct_no} == '9'">
+		<script type="text/javascript">
+			alert("수정이 완료되었습니다");
+			location.href="/notice/notice_noti";
+		</script>	
+	</div>
+</div>
+<div th:if="${result} <= 0">
+	<script type="text/javascript">
+		alert("수정 실패");
+		history.back();
+	</script>
+</div>
+</body>
+</html>

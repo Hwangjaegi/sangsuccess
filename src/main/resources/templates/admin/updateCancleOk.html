@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:if="${result} > 0">
+		<script type="text/javascript">
+			alert("취소가 승인되었습니다");
+			location.href="/adminOrder";
+		</script>
+	</div>
+	<div th:if="${result} <= 0">
+		<script type="text/javascript">
+			alert("취소가 실패 되었습니다");
+			history.back();
+		</script>
+	</div>
+</body>
+</html>

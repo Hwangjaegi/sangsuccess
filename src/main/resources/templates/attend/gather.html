@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head><meta charset="UTF-8"><title>상상마당 아카데미 | 모집</title>
+<style type="text/css">
+.inside{
+	background-color: #fafafa;
+}
+#file_btn{
+	margin-top: 10px;
+	margin-bottom: 30px;
+	border: 1px solid #D5D5D5;
+	border-radius: 0;
+	width: 160px;height:45px;
+	font-weight: bold;
+	display: flex; align-items: center; justify-content: center;
+}
+#file_btn:hover{
+	border: 1px solid #A6A6A6;
+}
+#input_file {
+	position:relative;
+	display:none;
+    bottom: 65px; /* label 요소의 하단에서 input 요소를 표시합니다. */
+    left: 85px;
+}
+#sub_btn{
+	width: 100%;
+	border-radius: 0;
+	font-weight: bold;
+	background-color: #0000ff;
+	border: 1px solid #ffffff;
+	
+}
+#sub_btn:hover{
+	border: 1px solid #0000ff;
+}
+#downloadArea:hover{
+	cursor: pointer;
+}
+.accordion-item .accordion-button:focus {
+    border-color: black; /* 버튼의 포커스 상태일 때의 보더 색상 지정 */
+    outline: none;
+}
+
+.accordion-item .accordion-button:not(.collapsed) {
+    background-color: initial; /* 확장된 상태가 아닐 때 배경색을 초기값으로 설정하여 변하지 않도록 함 */
+}
+</style>
+</head><body>
+<div layout:fragment="content">
+	<div class="section" style="background-color:#0000ff;">
+		<div class="widget padding" data-height="80" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:80px;"></div>
+		</div>
+		<div class="text-table">
+			<div class="section_wrap">
+				<h6 style="text-align:center; line-height:2;">
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing: -1px;">
+					<span style="font-size:36px;"><strong><span style="color:rgb(255,255,255)">모집</span></strong></span><br>
+					상상마당 아카데미의 강사(아티스트) 모집</span><br>
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing:-1px;"></span>
+				</h6>
+			</div>
+		</div>
+		<div class="widget padding" data-height="88" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:88px; "></div>
+		</div>
+	</div>
+	<div class="container" style="margin: 110px auto;">
+	<br>
+		<!-- 이미지+텍스트 -->
+		<div style="display: flex;">
+			<div class="widget image">
+				<img alt="" th:src="@{'/images/attend/ga.png'}">
+			</div>
+			<div class="text-table" style="margin-left: 30px;">
+				<br>
+				<div>
+					<p style="text-align: left;">
+					<span style="font-size: 18px; color: rgb(0,0,255);">
+						<strong>상상마당 아카데미에서 좋은 수업을 열어주세요.</strong>
+					</span>
+					</p>
+				</div>
+				<div class="line_box holder" style="width: 100%" >
+					<hr style="border-top-width: 2px; border-color: #0000ff; opacity: 1;">					
+				</div>
+				<div class="text-table">
+					<div style="letter-spacing: -0.4px;">
+						<p style="line-height: 2; text-align: justify;">
+						<span style="font-size: 18px;">
+							KT&amp;G 상상마당 아카데미는 평생교육시설로서 상상을 통한 창작활동을 추구하는 소통의 공간이 되도록 노력하고 있습니다.&nbsp;
+						</span>
+						<span style="font-size: 18px;">
+							누구나 일상의 경험을 통해 예술에 대한 이해의 폭이 넓어지기를, 예술가의 길을 꿈꾸는 이들에게는
+							 지속적인 동기 부여를 위한 자극이 되기를 희망합니다.&nbsp;
+						</span><br>
+						<span style="font-size: 18px;">
+							많은 사람들이 문화예술을 쉽고 다양하게 경험하길 바라며, 개관 이후 지금까지 다양한 문화예술 교육
+							 프로그램을 기획하여&nbsp;
+						</span>
+						<span style="font-size: 18px;">
+							인재육성 프로젝트, 문화예술 프로그램, 생활예술 클래스로 구분해 운영하고 있습니다.
+						</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		<!-- 신청절차 -->
+			<div class="inside">
+				<br>
+				<div>
+				<div class="text-table" style="margin-top: 90px;">
+					<div style="text-align: center;">
+						<span style="color: rgb(0,0,225); font-size: 20px; margin-bottom: -10px; ">
+							<strong>APPLY</strong>
+						</span>
+					</div>
+				</div>
+				<div class="_widget_data" style="opacity: 1; text-align: center; margin-top: 0; height: 7px;">
+				    <div class="widget line type01 _hide" style="display: inline-block; margin-top: 0; ">
+				        <div class="line_box holder" style="width: 150px; display: inline-block; text-align: center; margin-top: 0; ">
+				            <hr style="border-top-width: 2px; border-color: #0000ff; opacity: 1; width: 100%; margin-top: 0;">
+				        </div>
+				    </div>
+				</div>
+				</div>
+				<div class="text-table">
+					<div>
+						<p style="text-align: center; ">
+							<strong><span style="font-size: 30px; color: rgb(0,0,0);">
+							제안서는 이렇게 받고 있어요.
+							</span></strong>
+						</p>
+					</div>
+				</div>
+				<br>
+			</div>
+			<div class="inside">
+				<div class="stage" style="display: flex; justify-content: center; padding-bottom: 90px;">
+					<!-- 다운로드양식 -->
+					<div class="active" style="width: 303px; margin-right: 0px; display: flex; justify-content: center;">
+					    <div class="_item item_gallery" style="position: relative; padding: 5px; text-align: center; ">
+					        <div class="text_wrap" id="downloadArea">
+					            <img alt="" th:src="@{'/images/attend/download.png'}"  style="margin-top: 10px; margin-bottom: 15px;">
+					            <p class="title" style="display: block;"><strong>1. 제안서 다운로드</strong><br>
+					            <span class="body">* 아이콘을 클릭하시면<br>
+					            제안서 양식이 다운로드 됩니다.</span></p>
+					        </div>
+							<script>
+							document.getElementById("downloadArea").addEventListener("click", function() {
+							    var xhr = new XMLHttpRequest();
+							    xhr.open("GET", "/download", true);
+							    xhr.responseType = "blob"; // 파일 형식으로 응답 받기
+							    xhr.onload = function() {
+							        if (xhr.status === 200) {
+							            // 다운로드 링크 생성하여 클릭
+							            var blob = xhr.response;
+							            var downloadLink = document.createElement("a");
+							            downloadLink.href = window.URL.createObjectURL(blob);
+							            downloadLink.download = "강사제안서_상상마당.zip";
+							            downloadLink.click();
+							        }
+							    };
+							    xhr.send();
+							});
+							</script>
+					        <a class="item_container _item_container" style="display: block;"></a>
+					    </div>
+					</div>
+					<!-- 작성 -->
+					<div class="active" style="width: 303px; margin-right: 0px; display: flex; justify-content: center;">
+						<div class="_item item_gallery" style="position: relative; padding: 5px; text-align: center;">
+							<div class="text_wrap">
+								<img alt="" th:src="@{'/images/attend/paper.png'}" style="margin-bottom: 10px;">
+								<p class="title" style="display: block;"><strong>2. 작성하기</strong><br>
+								<span class="body">* 해당 제안서는 기본 양식이며,<br>
+								콘텐츠에 맞게 변형하셔도 무방합니다.<br>
+								* 추가로 제출하실 포트폴리오가 있다면<br>
+								함께 압축하여 첨부해주세요.</span></p>
+							</div>
+							<a class="item_container _item_container" style="display: block;"></a>
+						</div>
+					</div>
+					<!-- 보내기 -->
+					<div class="active" style="width: 303px; margin-right: 0px; display: flex; justify-content: center;">
+						<div class="_item item_gallery" style="position: relative; padding: 5px; text-align: center;">
+							<div class="text_wrap">
+								<img alt="" th:src="@{'/images/attend/send.png'}" style="margin-top:13px; margin-bottom: 15px;">
+								<p class="title" style="display: block;"><strong>3. 접수하기</strong><br>
+								<span class="body">* 아래 인적사항을 채원주신 뒤,<br>
+								'제출하기' 버튼을 눌러 주세요.<br>
+								* 상시 접수 받고 있습니다.</span></p>
+							</div>
+							<a class="item_container _item_container" style="display: block;"></a>
+						</div>
+					</div>
+					<!-- 회신 -->
+					<div class="active" style="width: 303px; margin-right: 0px; display: flex; justify-content: center;">
+						<div class="_item item_gallery" style="position: relative; padding: 5px; text-align: center;">
+							<div class="text_wrap">
+								<img alt="" th:src="@{'/images/attend/checkmail.png'}" style="margin-top:8px; margin-bottom: 5px;">
+								<p class="title" style="display: block;"><strong>4. 회신 받기</strong><br>
+								<span class="body">보내주신 제안서는 최대한 꼼꼼히 살펴본 뒤,<br>
+								한 달 이내로 회신 드리겠습니다.<br>
+								* 문의 academy@ssmadang.co.kr</span></p>
+							</div>
+							<a class="item_container _item_container" style="display: block;"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container" style="margin-top: 130px;">
+				<div class="text_bg_color" style="background-color: #0000ff; height: 250px; display: flex; align-items: center; margin-bottom: 30px;">
+					<div class="widget_data">
+						<div class="widget text_wrap">
+							<div class="text-table holder" style="margin-left:45px; text-align: left;">
+									<p style="text-align: left; ">
+									<strong><span style="font-size: 30px; color: rgb(255,255,255);">
+											이런 선생님을 모시고 싶어요.
+										</span></strong>
+										<br><br></p>
+									<p style="text-align: left;">
+									<span style="color: rgb(255,255,255);">
+									<strong>* 자격증/학력 등의 자격 요건은 중요하지 않습니다. 강의 경력이 없으셔도 무방합니다.</strong>
+									</span>
+									<strong><br></strong>
+									<span style="color: rgb(255,255,255);">
+										<span style="font-size: 18px;">
+											&nbsp;- 문화 예술 분야 현장에서의 풍부한 경험과 직업 활동이 있는 분
+										</span>
+									</span>
+									<br>
+									<span style="color: rgb(255,255,255);">
+										<span style="font-size: 18px;">
+											&nbsp;- 후배들을 이글어 주고자 하는 진심이 있는 분&nbsp;
+										</span>
+									</span>
+									<span style="color: rgb(255,255,255);">
+										<span style="font-size: 18px;">
+											&nbsp;- 상상마당 아카데미에 없는 새로운 강의 콘텐츠를 갖고 계신 분
+										</span>
+									</span>
+									</p>
+								</div>						
+							</div>
+						</div>
+					</div>
+				<!-- 입력폼, Q&A -->
+				<div class="col-dz col-dz-6" style="display: flex;">
+					<!-- 입력폼 -->
+					<div class="widget_data" data-widget-name="입력폼" data-widget-type="form" style="width: 45%; margin-right: 20px;">
+						<div class="form-widget">
+							<!-- <div style="position: absolute; width: 100%; height: 100%; z-index: 100" onclick="checkPermit()"></div> -->
+							<div class="deadline-opacity container" 
+							style="border: 2px solid #0000ff; padding: 40px;">
+								<form id="addForm" method="post" target="hidden-frame">
+									<input type="hidden" name="board_code" value="[참여] 문화예술 강사 모집">
+									<div id="input_form_token">
+										<input type="hidden" name="write_token">
+										<input type="hidden" name="write_token_key">
+									</div>
+									<div class="form-group">
+										<label for="input_txt" class="control-label">
+											이름<i class="icon-required" aria-hidden="true"></i>
+										</label>
+										<input type="text" class="form-control" name="name"
+										placeholder="이름을 입력하세요" id="input_txt" autocomplete="off"
+										style="border:none; border-bottom: 1px solid #0000ff; border-radius: 0; background-color: #F6F6F6; margin: 10px 0 30px 0;">
+									</div>
+									<div class="form-group">
+										<label for="input_email" class="control-label">
+											이메일 주소<i class="icon-required" aria-hidden="true"></i>
+										</label>
+										<input type="text" class="form-control" name="email"
+										id="input_email" autocomplete="off"
+										style="border:none; border-bottom: 1px solid #0000ff; border-radius: 0; background-color: #F6F6F6; margin: 10px 0 30px 0;">
+									</div>
+									<div class="form-group">
+										<label for="input_num" class="control-label">
+											연락처<i class="icon-required" aria-hidden="true"></i>
+										</label>
+										<div style="display: flex;">
+										<input type="tel" maxlength="4" class="form-control inline-blocked" 
+										name="phonenumber1"	id="input_num" autocomplete="off"
+										style="border:none; border-bottom: 1px solid #0000ff; border-radius: 0; background-color: #F6F6F6; margin: 10px 0 30px 0; width: 90px;">
+										<span class="inline-blocked" style="color: #0000ff; text-align: center; margin-top: 15px; margin-left:5px; margin-right:5px;">-</span>
+										<input type="tel" maxlength="4" class="form-control inline-blocked" 
+										name="phonenumber2"	id="input_num" autocomplete="off"
+										style="border:none; border-bottom: 1px solid #0000ff; border-radius: 0; background-color: #F6F6F6; margin: 10px 0 30px 0; width: 90px;">
+										<span class="inline-blocked" style="color: #0000ff; text-align: center; margin-top: 15px; margin-left:5px; margin-right:5px;">-</span>
+										<input type="tel" maxlength="4" class="form-control inline-blocked" 
+										name="phonenumber3"	id="input_num" autocomplete="off"
+										style="border:none; border-bottom: 1px solid #0000ff; border-radius: 0; background-color: #F6F6F6; margin: 10px 0 30px 0; width: 90px;">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="input_text_area" class="control-label">
+											콘텐츠 내용<i class="icon-required" aria-hidden="true"></i>
+										</label>
+										<textarea rows="3" class="form-control" name="textarea"
+										id="input_text_area" autocomplete="off"
+										style="border:none; border-bottom: 1px solid #0000ff; border-radius: 0; background-color: #F6F6F6; margin: 10px 0 30px 0;"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="input_file" class="control-label">
+											제안서 파일 첨부<i class="icon-required" aria-hidden="true"></i>
+										</label>
+										<div class="holder">
+											<label id="file_btn" class="btn btn-default form_widget_btn" for="input_file">
+												<i aria-hidden="true" class="bt bt-upload" style="margin-right: 4px;">
+													<img alt="" th:src="@{'/images/upload.png'}" style="width: 12px;">
+												</i>파일 올리기</label>
+											<input type="file" name="form_file" class="file" id="input_file" autocomplete="off">											
+											<span id="file_selected_info"></span>
+												<script>
+												    // 파일 선택 시 파일명을 표시하는 함수
+												    document.getElementById('input_file').addEventListener('change', function() {
+												        var fileInput = document.getElementById('input_file');
+												        var fileInfo = document.getElementById('file_selected_info');
+												        var files = fileInput.files;
+												        if (files.length > 0) {
+												            fileInfo.textContent = '선택된 파일: ' + files[0].name;
+												        } else {
+												            fileInfo.textContent = '선택된 파일이 없습니다.';
+												        }
+												    });
+												</script>
+										</div>
+									</div>
+								</form>
+								<div class="form text-full">
+									<a id="sub_btn" class="btn btn-primary input_form_submit" onclick="submitForm()">
+									제출하기
+									</a>
+								</div>
+								<script type="text/javascript">
+									function submitForm() {
+									    var form = document.getElementById('addForm');
+									    var formData = new FormData(form);
+									    
+									    var xhr = new XMLHttpRequest();
+									    xhr.open('POST', '/gather_form', true);
+									    xhr.onload = function() {
+									        if (xhr.status === 200) {
+									            $('#input_form_complete_modal').modal('show');
+									        } else {
+									            $('#input_form_error_modal').modal('show');
+									        }
+									    };
+									    xhr.send(formData);
+									}
+								</script>
+								<!-- 입력성공 모달 -->
+								<div class="modal in modal_site_alert" style="display: none;" tabindex="-1" role="dialog"
+								aria-hidden="false" id="input_form_complete_modal">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="layer _pop">
+												<div class="container-fluid">
+													<p class="text-center" style="margin-bottom: 0; word-break:break-all;">
+													정상적으로 접수되었습니다
+												</div>
+												<div class="btn-group-justified"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- 입력실패 모달 -->
+								<div class="modal in modal_site_alert" style="display: none;" tabindex="-1" role="dialog"
+								aria-hidden="false" id="input_form_complete_modal">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="layer _pop">
+												<div class="container-fluid">
+													<p class="text-center" style="margin-bottom: 0;"></p>
+												</div>
+												<div class="btn-group-justified">
+													<a href="" class="btn right" onclick="site_form.hideModal();">확인</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>							
+						</div>
+					</div>
+				<!-- Q&A -->
+				<div class="container" style="width: 55%; margin-left: 10px; padding-top: 30px;">
+					<div class="widget_data">
+						<div class="widget text_wrap default_padding">
+							<div class="text-table">
+								<div>
+									<p style="text-align: left; margin-bottom: 0;"><span style="font-size: 18px; color: rgb(0,0,255);">
+										<strong>강의 개설 절차에 대해 궁금하신가요?</strong>
+									</span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="widget_data">
+						<div class="widget line type01">
+							<div class="line_box holder" style="width: 100%; margin-top: 0; height: 5px;">
+								<hr style="border-top-width: 2px; border-color: #0000ff; opacity: 1; margin-top: 0;">
+							</div>
+						</div>
+					</div>
+					<div class="accordion" id="accordionPanelsStayOpenExample">
+					  <div class="accordion-item" style="border: none; border-bottom: 1px solid black;">
+					    <h2 class="accordion-header">
+					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+					       data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne"
+					       style="height: 50px; align-content: center; text-align: center;">
+					        <h4 style="align-content: center;text-align: center; display: flex;"><span class="table cell" style="font-size: 17px;">1. 담당 기획자 미팅</span></h4>
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+					      <div class="accordion-body" style="margin-top: 15px;">
+					         <p><span style="font-size: 16px;">상상마당 아카데미에는 각 강의 별로 담당 기획자가 있습니다. 
+					         보내주신 제안서 검토 후 담당기획자가 배정이 되어 연락을 드립니다.&nbsp;</span><br>
+					         <span style="font-size: 16px;">이후 담당 기획자는 강의 콘텐츠 및 커리 큘럼에 대해 선생님과 함께 
+					         고민하고 개발하는 역할을 합니다.</span></p>
+					         <p><span style="font-size: 16px;">&nbsp;</span></p>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="accordion-item" style="border: none; border-bottom: 1px solid black;">
+					    <h2 class="accordion-header">
+					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+					        <h4><span class="table cell" style="font-size: 17px;">2. 오픈 클래스 진행</span></h4>
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+					      <div class="accordion-body" style="margin-top: 15px;">
+					        <p><span style="font-size: 16px;">정규 강의 개설 전, 커리큘럼의 일부 내용을
+					         강의해주시는 오픈 클래스를 진행합니다.</span><br>
+					         <span style="font-size: 16px;">오픈 클래스에는 아카데미 기획자들, 콘텐츠에 
+					         관심이 있는 수강생분들이 참여할 수 있습니다.</span></p>
+					          <p><span style="font-size: 16px;">&nbsp;</span></p>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="accordion-item" style="border: none; border-bottom: 1px solid black;">
+					    <h2 class="accordion-header">
+					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+					        <h4><span class="table cell" style="font-size: 17px;">3. 계약서 작성</span></h4>
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+					      <div class="accordion-body" style="margin-top: 15px;">
+					      	<p><span style="font-size: 16px;">상상마당 아카데미와 정규 강의에 대한 최종 계약을 진행합니다.</span>
+					        <p><span style="font-size: 16px;">&nbsp;</span></p>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="accordion-item" style="border: none; border-bottom: 1px solid black;">
+					    <h2 class="accordion-header">
+					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+					        <h4><span class="table cell" style="font-size: 17px;">4. 정규강의 1기 OPEN!</span></h4>
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
+					      <div class="accordion-body" style="margin-top: 15px;">
+					      	<p><span style="font-size: 16px;">상상마당 홈페이지에 정규 강의 모집페이지가 열립니다. 약 두 달여의 
+					      	강의 신청 기간이 있고, 이 기간 동안에는 담당 기획자와 강사 선생님이 함께 강의에 대한 홍보를 진행합니다. 정규 강의가 
+					      	시작된 후에도 담당 기획자와 긴밀하게 필요 / 준비 사항에 대한 논의가 진행됩니다.</span></p>
+					        <p><span style="font-size: 16px;">&nbsp;</span></p>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="accordion-item" style="border: none; border-bottom: 1px solid black;">
+					    <h2 class="accordion-header">
+					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
+					        <h4><span class="table cell" style="font-size: 17px;">5. 강사료 지급</span></h4>
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse">
+					      <div class="accordion-body" style="margin-top: 15px;">
+					      	<p><span style="font-size: 16px;">강사료는 한 기수 종강 후 일괄 지급해드립니다. (종강 후 익월 15일)</span></p>
+					        <p><span style="font-size: 16px;">&nbsp;</span></p>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="accordion-item" style="border: none; border-bottom: 1px solid black;">
+					    <h2 class="accordion-header">
+					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
+					        <h4><span class="table cell" style="font-size: 17px;">6. 콘텐츠 점검과 후속기수 논의</span></h4>
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse">
+					      <div class="accordion-body" style="margin-top: 15px;">
+					      	<p><span style="font-size: 16px;">콘텐츠 점검과 후속기수 논의</span></p>
+					        <p><span style="font-size: 16px;">&nbsp;</span></p>
+					      </div>
+					    </div>
+					  </div>
+					</div>					
+				</div>
+			</div>
+		</div>	
+</div>
+</body>
+</html>	

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.AttendMapper">
+
+	<!-- 참여 - 열줄 조회 -->
+	<select resultType="tentext" id="att_list">
+		select * from tentext order by t_date desc 
+	</select>
+	<!--취미진심 -->
+	<select id="list_attend" resultType="attend">
+		select * from attend order by at_date desc
+	</select>
+	<select id="select" parameterType="Integer" resultType="attend">
+		select *
+		from attend where at_no = #{at_no}
+	</select>
+	<select id="select_mb" parameterType="Integer"
+		resultType="member">
+		select m.* from member m inner join attend at on m.id =
+		at.id
+		where at.at_no = #{at_no}
+	</select>
+	<!--조회수 -->
+	<update id="increaseViewCount" parameterType="Integer">
+		update attend set at_view_count = at_view_count + 1 where at_no = #{at_no}
+	</update>
+	<!--좋아요 -->
+	<update id="increaseGoodCount" parameterType="Integer">
+		update attend set at_good_count = at_good_count + 1 where at_no = #{at_no}
+	</update>
+	<update id="decreaseGoodCount" parameterType="Integer">
+		update attend set at_good_count = at_good_count - 1 where at_no = #{at_no}
+	</update>
+	<update id="at_countup" parameterType="Integer">
+		update attend set at_repl_count = (select count(*) from at_replynotice where
+		at_bno = #{at_bno}) where at_no = #{at_bno}
+	</update>
+	<update id="w_countup" parameterType="Integer">
+		update write set w_repl_count = (select count(*) from w_replynotice where
+		w_bno = #{w_bno}) where w_no = #{w_bno}
+	</update>
+	<!--참여-글쓰기 -->
+	<select id="list_write" parameterType="map" resultType="write">
+		select * from (
+		select a.*, rowNum rn from (
+		select w.*, m.image, m.name from write w, member m where m.id=w.id
+		<if test="keyword != null and keyword != ''">
+			and w.w_title like '%' || #{keyword} || '%' or
+			w.w_content like '%' || #{keyword} || '%'
+		</if>
+		order by w_date desc
+		) a
+		)
+		where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="getTotal" parameterType="string"
+		resultType="integer">
+		select count(*) from write
+		<if test="keyword != null and keyword != ''">
+			where w_title like '%'||#{keyword}||'%' or w_content like
+			'%'||#{keyword}||'%'
+		</if>
+	</select>
+	<select id="select_w" parameterType="Integer" resultType="write">
+		select
+		* from write where w_no = #{w_no}
+	</select>
+	<select id="select_mbw" parameterType="Integer"
+		resultType="member">
+		select m.* from member m inner join write w on m.id = w.id
+		where w.w_no = #{w_no}
+	</select>
+	<!--좋아요 -->
+	<update id="w_increaseGoodCount" parameterType="Integer">
+		update write set w_good_count = w_good_count + 1 where w_no = #{w_no}
+	</update>
+	<update id="w_decreaseGoodCount" parameterType="Integer">
+		update write set w_good_count = w_good_count - 1 where w_no = #{w_no}
+	</update>
+	<!-- 글쓰기 입력 -->
+	<select id="select_wm" resultType="member"
+		parameterType="string">
+		select * from member where id = #{id}
+	</select>
+	<insert id="saveWrite" parameterType="write">
+		<selectKey keyProperty="w_no" resultType="Integer"
+			order="BEFORE">
+			select nvl(max(w_no),0)+1 w_no from write
+		</selectKey>
+		insert into Write (w_no, w_title, w_content, id, w_date, w_good_count)
+		values (#{w_no}, #{w_title}, #{w_content}, #{id}, sysdate, 0)
+	</insert>
+	<!-- 글쓰기 삭제 -->
+	<delete id="deletePage">
+		delete from write where w_no = #{w_no}
+	</delete>
+	<!-- 글쓰기 수정 -->
+	<update id="updateWrite" parameterType="write">
+		update write set w_title
+		= #{w_title}, w_content = #{w_content} where w_no = #{w_no}
+	</update>
+
+	<!-- 열줄 공모전 -->
+	<select id="select_t" parameterType="Integer"
+		resultType="tentext">
+		select * from tentext where t_no = #{t_no}
+	</select>
+	<select id="list_tentext" parameterType="map"
+		resultType="tentext">
+		select * from (
+		select a.*, rowNum rn from (
+		select * from tentext order by t_date desc
+		) a
+		)
+		where rn between #{startRow} and #{endRow}
+	</select>
+	<select id="getTotal_tt" parameterType="string"
+		resultType="integer">
+		select count(*) from tentext
+	</select>
+
+	<!--열줄-심사평 -->
+	<select id="select_ta" parameterType="Integer"
+		resultType="tenaudit">
+		select * from ten_audit where ta_no = #{ta_no}
+	</select>
+	<select id="list_tenaudit" resultType="tenaudit">
+		select * from ten_audit
+		order by ta_no desc
+	</select>
+</mapper>

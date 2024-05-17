@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>상상마당 아카데미｜공지</title>
+<style type="text/css">
+	div > a {
+		text-decoration: none;
+	}
+	.widget_data {
+		padding: 0 15px;
+	}
+	.widget_data ul li:nth-child(1){
+		border-left: 1px solid blue;
+	}
+	.widget_data ul li:nth-child(2){
+		background-color: blue;
+		border-left: 1px solid blue;
+		color: white;
+		transition: color 0.5s ease;
+	}
+	.widget_data ul li:nth-child(2):hover{
+		background-color: white;		    
+	}
+	.widget_data ul li:nth-child(2):hover a{
+		color: black;
+	}
+	.widget_data ul li:nth-child(2) a{
+		color: white;
+		transition: color 0.5s ease;
+	}
+	.widget_data li {
+		border: 1px solid blue;
+		border-left: none;
+		border-bottom: none;
+		color: blue;
+	}
+	.widget_data li a {
+		text-decoration: none;
+		color : blue;
+		transition: color 0.3s ease;	    
+	}
+	.widget_data li a:hover {
+		color: black;
+	}
+	.widget_data ul{
+		border-bottom: 2px solid blue;
+	}
+	.p_link {
+	    text-decoration: none;
+		color: #A3A3A3;
+		font-size: 14px;
+		padding: 10px;
+	}
+	.p_link_active {
+	    text-decoration: none;
+		font-weight: bold;
+		color: black;
+		font-size: 14px;
+		padding: 10px;
+	}
+	
+	/* 댓글 */
+	.reply_btn:focus,
+	.reply_text:focus{
+		outline: none;
+	}
+	.reply_btn {
+		width: 150px; 
+		height: 42px; 
+		border: 1px solid rgba(128, 128, 128, 0.2); 
+		border-radius: 3px;
+		margin-bottom: 10px;
+	}
+	.reply_text {
+		width: 100%; 
+		height: 62px; 
+		border: 1px solid rgba(128, 128, 128, 0.2); 
+		border-radius: 3px;
+	}
+	.reply_insert{
+		background: white;
+		border: 1px solid #0000ff;
+		padding: 8px 42px;
+		font-size: 15px;
+		color: #0000ff;
+		cursor: pointer;
+		float: right;
+		margin-bottom: 10px;
+	}
+	.reply_list {
+		background: white;
+		border: 1px solid #0000ff;
+		padding: 8px 42px;
+		font-size: 15px;
+		color: #0000ff;
+		cursor: pointer;
+	}
+	.reply_insert:hover,
+	.reply_list:hover {
+		background: #0000ff;
+		color: white;
+	}
+	/* 이전/다음글 */
+	.ll_btn {
+		text-decoration: none;
+		padding-left: 30px;
+		color: black;
+		cursor: pointer;
+	}
+	/* 버튼 */
+	.update_btn {
+		background: #0000ff;
+		border: 1px solid #0000ff;
+		padding: 8px 42px;
+		font-size: 15px;
+		color: white;
+		cursor: pointer;
+		margin-right: 10px;
+		float: right;
+	}
+	.update_btn:hover {
+		background: white;
+		color: #0000ff;
+	}
+</style>
+<script type="text/javascript">
+	function del(nt_no) {
+		let cf = confirm("정말로 삭제하시겠습니까?");
+		if (cf) location.href="/notice/notice_delete?nt_no="+nt_no;
+		else alert("삭제가 취소되었습니다");
+	}
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!-- header -->
+		<div style="background-color: #0000ff;">
+			<div id="padding" style="width: 100%; min-height: 1px; height: 80px;"></div>
+			<div style="text-align: center; color: white;">
+				<span style="font-weight: bold; font-size: 36px;">공지</span><br>
+				<span style="font-size: 24px;">상상마당 공지사항과 이벤트</span>
+			</div>
+			<div id="padding" style="width: 100%; min-height: 1px; height: 88px;"></div>
+		</div>
+			
+		<!-- 카테고리 -->
+		<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+		<div class="container">
+			<div class="widget_data">
+			    <ul class="list-unstyled d-flex">
+			        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+			        <a href="/notice/notice_list"><span class="plain_name" data-hover="전체">전체</span></a></li>
+					<li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+					<a href="/notice/notice_event"><span class="plain_name" data-hover="취미">이벤트</span></a></li>
+			        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+			        <a href="/notice/notice_noti"><span class="plain_name" data-hover="글쓰기">공지</span></a></li>
+			    </ul>
+			    <br>
+			</div>
+			
+			<!-- 본문 -->
+			<div style="padding: 0 15px;">
+				<div style="font-size: 20px">
+					<th:block th:if="${notice.ct_no} == '8'"><a href="/notice/notice_event">이벤트&nbsp;</a>[[${notice.nt_title}]]</th:block>
+					<th:block th:if="${notice.ct_no} == '9'"><a href="/notice/notice_noti">공지&nbsp;</a>[[${notice.nt_title}]]</th:block>
+				</div>
+				<hr>
+				<p style="text-align: center;"><img th:src="@{/images/notice/}+${notice.nt_image}" style="height:500px; display: inline-block; padding: 40px;"></p>
+				<div th:utext="${notice.nt_content}"></div>
+				<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+			</div>
+			<div th:if="${id} == 'admin'" style="padding: 0 15px;">
+				<button class="update_btn" th:onclick="del([[${notice.nt_no}]])">삭제</button>
+				<a class="update_btn" th:href="@{/notice/notice_updateForm(nt_no=${notice.nt_no})}">수정</a>
+				<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+			</div>
+			<hr>
+			<div id="padding" style="width: 100%; min-height: 1px; height: 25px;"></div>
+		
+			<!-- 댓글 시작 -->
+			<div style="padding: 0 15px;">
+			<!-- 댓글 목록 -->
+			<div id="rListDisp"></div>
+			<!-- 댓글 입력 -->
+			<form action="" name="frm1" id="frm1" method="post">
+				<input type="hidden" name="nt_bno" th:value="${notice.nt_no}">
+					<span th:if="${id} == null">
+						<input type="text" name="nt_replier" placeholder="이름" class="reply_btn" readonly="readonly" onclick="loginCall()">
+						<input type="button" value="작성" class="reply_insert"  onclick="loginCall()">
+						<textarea rows="1" name="nt_replytext" class="reply_text" placeholder="댓글을 남겨주세요" required="required" onclick="loginCall()"></textarea>
+					</span>
+					<span th:if="${id} != null">
+						<input type="text" name="nt_replier" class="reply_btn" th:value="${id}" readonly="readonly">
+						<input type="button" value="작성" id="nt_rInsert" class="reply_insert">
+						<textarea rows="1" name="nt_replytext" class="reply_text" placeholder="댓글을 남겨주세요" required="required"></textarea>
+					</span>
+				</form>
+			</div>
+			
+			<!-- 이전글/다음글 -->
+			<div id="padding" style="width: 100%; min-height: 1px; height: 25px;"></div>
+			<div th:if="${notice_lead} != null">
+				<img th:src="@{/images/staff/upArrow.png}">
+				<a class="ll_btn" th:href="@{/notice/notice_event_detail(nt_no=${notice_lead.nt_no})}">[[${notice_lead.nt_title}]]</a><p>
+			</div>
+			<div th:if="${notice_leg} != null">
+				<hr>
+				<img th:src="@{/images/staff/downArrow.png}">
+				<a class="ll_btn" th:href="@{/notice/notice_event_detail(nt_no=${notice_leg.nt_no})}">[[${notice_leg.nt_title}]]</a><br>
+			</div>
+			<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+			<a class="reply_list" href="/notice/notice_event">목록</a>			
+		</div>
+		<script type="text/javascript">
+			$('#rListDisp').load('/notice/nt_replyList/nt_bno/[[${notice.nt_no}]]');
+			$('#nt_rInsert').click(function() {
+				let sendData = $('#frm1').serialize();
+				$.post('/notice/nt_rInsert', sendData, function(data){
+					alert("댓글이 입력되었습니다");
+					frm1.nt_replytext.value="";
+					$('#rListDisp').html(data);
+				});
+			});
+			function loginCall() {
+				let isLoggedIn = getCookie("isLoggedIn");
+			    if (!isLoggedIn) {
+			        alert("로그인 후 작성해 주세요");
+			    }
+			}
+			function getCookie(name) {
+			    let value = "; " + document.cookie;
+			    let parts = value.split("; " + name + "=");
+			    if (parts.length === 2) {
+			        return parts.pop().split(";").shift();
+			    }
+			}
+		</script>
+	</div>
+</body>
+</html>

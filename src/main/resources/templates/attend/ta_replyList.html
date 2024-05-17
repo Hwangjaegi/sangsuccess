@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.btn {
+		cursor: pointer;
+		padding-right: 10px;
+	}
+</style>
+<script type="text/javascript">
+	function ta_rUpdate(ta_bno, ta_rno) {
+		let txt = $('#reply_'+ta_rno).text();
+		$('#reply_'+ta_rno).html(
+				"<textarea row=3 class='form-control' id='rt'>"
+				+txt+"</textarea>");
+		$('#btn_'+ta_rno).html(
+				"<div style='display:flex'><div onclick='up("+ta_bno+","+ta_rno+")'class='btn'>확인</div>"+
+				"<div onclick='lst("+ta_bno+")' class='btn'>취소</div></div>")
+	}
+	function up(ta_bno, ta_rno) {
+		let sendData = "ta_replytext="+$('#rt').val()+"&ta_bno="+ta_bno+"&ta_rno="+ta_rno;
+		$.post("/ta_rUpdate", sendData, function(data){
+			alert("댓글이 수정 되었습니다");
+			$('#rListDisp').html(data);
+		});
+	}
+	function lst(ta_bno) {
+		$('#rListDisp').load('/attend/ta_replyList/ta_bno/'+ta_bno);
+	}
+	function ta_rDelete(ta_bno, ta_rno) {
+		let sendData = "ta_bno="+ta_bno+"&ta_rno="+ta_rno;
+		$.post("/ta_rDelete", sendData, function(data) {
+			alert("댓글이 삭제되었습니다");
+			$('#rListDisp').html(data);
+		});
+	}
+</script>
+</head>
+<body>
+	<div th:if="${#lists.size(ta_rnList) > 0}">
+    	<div th:each="rat : ${ta_rnList}">
+				<div style="display: flex; font-size: 13px; padding-bottom: 5px;">
+					<div style="padding-right: 10px;">[[${rat.ta_replier}]]</div>
+					<div th:text="${#dates.format(rat.ta_updatedate, 'yyyy-MM-dd HH:mm')}"></div>
+				</div>
+				<div th:id="|reply_${rat.ta_rno}|">[[${rat.ta_replytext}]]</div>
+				<div id="session_id" style="display: none;">[[${id}]]</div>
+				<div style="display: flex; float: right;" th:if="${rat.id eq id}">
+					<div th:id="|btn_${rat.ta_rno}|">
+						<div th:onclick="ta_rUpdate([[${rat.ta_bno}]],[[${rat.ta_rno}]])" class="btn">수정</div>
+					</div>
+					<div th:onclick="ta_rDelete([[${rat.ta_bno}]],[[${rat.ta_rno}]])" class="btn">삭제</div>
+				</div><br>
+				<hr>
+			</th:block>
+		</div>
+	</div>
+	<div th:if="${#lists.size(ta_rnList) == 0}"></div>
+	<div id="padding" style="width: 100%; min-height: 1px; height: 25px;"></div>
+</body>
+</html>

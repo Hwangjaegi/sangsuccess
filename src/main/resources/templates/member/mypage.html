@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<head>
+	<!-- include libraries(jQuery, bootstrap) -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+    <!-- include summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+
+<style type="text/css">
+body{
+		background: lightgray;
+	}
+	/* 페이징 Css */
+	.p_link {
+		text-decoration: none;
+		color: #A3A3A3;
+		font-size: 14px;
+		padding: 10px;
+	}
+	
+	.p_link_active {
+		text-decoration: none;
+		font-weight: bold;
+		color: black;
+		font-size: 14px;
+		padding: 10px;
+	}
+	.active{
+		border-bottom: 3px solid blue;
+	}
+	.left-menu{
+		width: 200px;
+		position: relative;
+		top:90px;
+	}
+	.left-menu>li{
+		padding: 10px;
+		width: 100%;
+	}
+	.left-menu>li:hover{
+		transform:scale(1.1);
+		transition:transform 0.1s ;
+	}
+	.left-menu>li>a{
+		text-decoration: none;
+		color:black;
+		font-size: 16px;
+		font-weight: bold;
+	}
+	.contai{
+        justify-content: space-between; /* 요소를 양쪽 끝으로 배치 */
+        margin: 0 auto;
+        width:1200px; height: 100%;
+	}
+	.cancleContai{
+		justify-content: space-between; /* 요소를 양쪽 끝으로 배치 */
+        margin: 0 auto;
+	}
+	.user_list {
+		position:relative;
+		left:200px;
+		top:-200px;
+		width:1000px;
+        display: block;
+        align-items: center; /* 요소를 수직으로 중앙 정렬 */
+        padding:20px;
+    }
+    .user_infoBox{
+    	background: white; 
+    	height: 150px; 
+    	width: 800px;
+    	margin-top: 10px;
+    }
+    .profileImg{ /* 사용자 이미지 */
+    	width:80px;
+    	height:80px;
+    	border-radius: 50%;
+    	position: relative;
+    	top:35px;
+    	left:20px;
+    }
+    .orderImg{ /* 사용자 이미지 */
+    	width:100px;
+    	height:100px;
+    	position: relative;
+
+    }
+    .user_list img:nth-child(2){ /* 사용자 마이페이지 구매사진 */
+    	width:400px;
+    	height:400px;
+    	top:35px;
+    	left:20px;
+    }
+    .user_info {
+        display: flex;
+        flex-direction: column; /* 요소를 수직 방향으로 배치 */
+   		position: relative;
+   		top:40px;
+   		left:50px;
+    }
+    .user_info > span {
+        margin-bottom: 5px; /* 텍스트 사이의 간격 조정 */ 
+    }
+    .order , .wish_list , .cancel , .qna , .cancleForm{ /* 메뉴초기 display none */
+    	display:none;
+    	position: relative;
+    	top:100px;
+    	float: left;
+    }
+    .order_list{
+    	position: relative;
+    	top:100px;
+    	float: left; 
+    }
+    .order > h6 {
+    	text-align: left; 
+    	font-weight: bold; 
+    	font-size: 17px;
+    	margin-bottom: 20px;
+    }
+    .order_Box{
+    	margin-bottom:30px; 
+    	background: white; 
+    	width: 800px; 
+    	height: 100px;
+    }
+    .wish_list > h6{
+    	text-align: left; 
+    	font-weight: bold; 
+    	font-size: 17px;
+    	margin-bottom: 20px;
+    }
+    .wish_i{
+		background: blue; 
+		border-radius: 50%; 
+		color: white; 
+		padding:8px; 
+		line-height:8px; 
+		width:30px; 
+		display: inline-block;
+	}
+    .wish_title{
+    	color:navy;
+    	font-size: 13px;
+    }
+    .wish_price{
+		color:black;
+		font-weight: bold;
+		font-size: 13px;
+    }
+
+    .wish_img {
+    	width:250px;
+        transition: filter 0.3s ease;
+    }
+    .wish_img:hover{
+    	cursor: pointer;
+    	opacity: 0.5;
+    }
+    .wish_img_container{
+    	width: 250px;
+    	height: 250px;
+    	position: absolute;
+    	top:44px;
+    	background-color: rgba(128, 128, 128, 0.5); /* 알파 값이 0.5로 설정되어 있어서 50% 투명도를 가집니다 */
+    }
+
+    /* 업데이트 모달 스타일 */
+    #update_Modal{
+		display: none; /* 초기에는 보이지 않도록 설정 */
+		position: fixed; 
+		z-index: 1; 
+		padding-top: 100px; 
+		left: 0;
+		top: 0;
+		width: 100%; 
+		height: 100%;
+		overflow: auto; 
+		background-color: rgba(0,0,0,0.4);
+    }
+    .modal_content {
+		width: 400px;
+		height: auto;
+		margin: 50px auto;
+		padding: 20px 10px;
+		background: #fff;
+		border: 2px solid #666;
+	}
+	.modal_content span,input{
+		font-size:16px;
+	}
+    .modal_content2 {
+		width: 600px;
+		height: auto;
+		margin: 50px auto;
+		padding: 20px 10px;
+		background: #fff;
+		border: 2px solid #666;
+	}
+	/* 취소상세 모달 스타일 */
+	#cancle_Detail_Modal{
+		display: none; /* 초기에는 보이지 않도록 설정 */
+		position: fixed; 
+		z-index: 1; 
+		padding-top: 100px; 
+		left: 0;
+		top: 0;
+		width: 100%; 
+		height: 100%;
+		overflow: auto; 
+		background-color: rgba(0,0,0,0.4);
+	}
+	#update_close_btn {
+		width: 10px; 
+		height: 10px;
+		position: relative;
+		left: 370px;
+		top: -40px;
+	}
+	#update_close_btn:hover {
+		cursor: pointer;
+	}
+	#update_close_btn2{
+		width: 10px; 
+		position: relative;
+		left: 220px;
+		bottom: 65px;
+	}
+	#update_close_btn2:hover {
+		cursor: pointer;
+	}
+	#delete_close_btn {
+		width: 10px; 
+		height:10px;
+		position: relative;
+		left: 565px;
+		top: -40px;
+	}
+	#delete_close_btn:hover {
+		cursor: pointer;
+	}
+	/* 회원탈퇴 모달 스타일 */
+	#delete_Modal{
+		display: none; /* 초기에는 보이지 않도록 설정 */
+		position: fixed; 
+		z-index: 1; 
+		padding-top: 100px; 
+		left: 0;
+		top: 0;
+		width: 100%; 
+		height: 100%;
+		overflow: auto; 
+		background-color: rgba(0,0,0,0.4);
+	}
+	/* 회원탈퇴 버튼 */
+	.deleteMember{
+		text-align: center;
+		
+	}
+	.deleteMember a {
+		text-decoration: none;
+	}
+	.deleteMember a:nth-child(1) {
+		background: white; 
+		color: black; 
+		border: 1px solid gray; 
+		padding: 10px;
+	}
+	.deleteMember a:nth-child(2) {
+		background: blue; 
+		color:white; 
+		border: 1px solid blue; 
+		padding: 10px; 
+	}
+	.cancel > h6{
+		text-align: left; 
+    	font-weight: bold; 
+    	font-size: 17px;
+    	margin-bottom: 20px;
+	}
+	.cancle_Box > h6 {
+		border:1px solid gray; 
+		padding: 5px;
+		text-decoration: none;
+		color: black;
+	}
+	.cancleText p{
+		font-size: 15px;
+	}
+	.cancleSelect span{
+		font-size: 14px;
+	}
+	.cancleRefund span{
+		font-size: 15px;
+	}
+	
+	/* 신청예약조회 */
+	.cancle_Box h6:hover{
+		cursor: pointer;
+   		border: 2px solid blue;
+    	transition: border-color 0.3s ease; /* 테두리 색상에 대한 부드러운 전환 */
+	}
+	
+	/* 1:1문의게시판 문의작성 버튼 */
+	.QnABtn{
+		font-weight:bold;
+		background: white; 
+		color: blue; 
+		border: 1px solid blue; 
+		padding: 10px; 
+		float: right; 
+		position: relative; top: 100px;
+	}
+	.QnABtn:hover{
+		background: blue;
+		color:white;
+		transform:scale(1.1);
+		transition:transform 0.1s ;
+	}
+	.qna span{
+		font-size: 16px;
+	}
+	.qna_infoBox{
+		position: relative; 
+		left: 60px; 
+		top:-60px;
+	}
+	.qna_infoBox a{
+		text-decoration: none;
+		font-size: 15px;
+		color:gray;
+	}
+	.qna h6{
+		text-align: left; 
+    	font-weight: bold; 
+    	font-size: 17px;
+    	margin-bottom: 20px;
+	}
+	.cancleBtn{
+		border: 1px solid gray;
+		background: white;
+		color:black;
+		width: 100px;
+		height: 80px;
+		padding:8px;
+		font-size:12px;
+		text-decoration: none;
+		position: relative;
+		top: -2px;
+	}
+	.cancle_return{
+		border: 1px solid gray;
+		background: white;
+		color:black;
+		width: 100px;
+		height: 80px;
+		padding:8px;
+		font-size:12px;
+		text-decoration: none;
+		position: relative;
+		top: -2px;
+	}
+	.cancleBtn:hover{
+		text-decoration: none;
+	}
+
+</style>
+
+<script type="text/javascript">
+$(function(){
+    // 페이지 로드 시 실행되는 함수
+    $(document).ready(function(){
+        // 링크에 저장된 menu 값을 가져옴
+        var menuValue = $("#menuItem").val();
+
+        // menu 값에 해당하는 ID를 가진 태그에 클래스를 추가
+        $("#" + menuValue).addClass("active");
+        $("." + menuValue).css("display","block");
+    });
+
+	// 정보 수정 버튼 클릭 시 모달 보이기
+	$("#update").click(function(){
+		$("#menuItem").val("update");
+		var menuValue = $("#menuItem").val();
+	        
+	    // menu 값에 해당하는 ID를 가진 태그에 클래스를 추가 
+	    $("#" + menuValue).addClass("active");
+	    //div 안보이기
+	    $("#order").removeClass("active");
+	    $(".order").css("display","none");
+	    $("#wish_list").removeClass("active");
+	    $(".wish_list").css("display","none");
+	    $("#cancel").removeClass("active");
+	    $(".cancel").css("display","none");
+	    $("#qna").removeClass("active");
+	    $(".qna").css("display","none");
+	    $("." + menuValue).css("display","block");
+		$("#update_Modal").css("display","block");
+		$("#delete").removeClass("active");
+	});
+	//이미지변경 아이콘클릭시 input file실행
+	$(document).on('click','#updateImgButton', function(){
+		$("#updateFile").click();
+	});
+	
+	//파일 선택 시 미리보기 및 업로드
+	$(document).on('change','#updateFile', function(){
+		var file = this.files[0]; // 선택한 파일 가져오기
+
+		if (file) {
+			var reader = new FileReader(); // FileReader 객체 생성
+			
+			// 파일 읽기가 완료되었을 때의 이벤트 처리
+			reader.onload = function(e) {
+				var imgElement = document.getElementById('preViewImgUpdate');
+				imgElement.src = e.target.result; // 이미지 미리보기에 데이터 설정
+				imgElement.style.display = 'block'; // 이미지 미리보기 표시
+			};
+			
+			// 파일을 읽어서 데이터 URL로 설정
+			reader.readAsDataURL(file);
+		};
+	});
+	
+	//모달 x버튼 클릭시 Modal감추기
+	document.getElementById("update_close_btn").onclick = function() {
+		document.getElementById("update_Modal").style.display = "none";
+	}
+	
+	//회원탈퇴 버튼 클릭시
+	$("#delete").click(function(){
+		//item을 delete로변경
+		$("#menuItem").val("delete");
+		var menuValue = $("#menuItem").val();
+		
+		$("#"+menuValue).addClass("active");
+		//div 안보이기
+	    $("#order").removeClass("active");
+	    $(".order").css("display","none");
+	    $("#wish_list").removeClass("active");
+	    $(".wish_list").css("display","none");
+	    $("#cancel").removeClass("active");
+	    $(".cancel").css("display","none");
+	    $("#qna").removeClass("active");
+	    $(".qna").css("display","none");
+	    $("." + menuValue).css("display","bloc멈추다k");
+		$("#delete_Modal").css("display","block");
+		$("#update").removeClass("active");
+		
+	});
+	
+	//QnA 내역 수정버튼 클릭 시
+	$(document).on('click' , '.qnaUpdate' , function(){
+		let q_no = this.getAttribute("data-qno");
+		
+		let check = confirm("수정 하시겠습니까?");
+		if(check) location.href="QnAWhiteForm?q_no="+ q_no;
+	});
+	
+	//QnA 내역 지우기 버튼 클릭 시
+	$(document).on('click' , '.qnaDelete' , function(){
+		let q_no = this.getAttribute("data-qno");
+		
+		let check = confirm("삭제 하시겠습니까?");
+		if(check) location.href="qnaDelete?q_no="+ q_no;
+	});
+	
+	//회원탈퇴 모달 x버튼 클릭시 Modal감추기
+	document.getElementById("delete_close_btn").onclick = function() {
+		document.getElementById("delete_Modal").style.display = "none";
+	};
+	
+	//주문 취소하기 버튼 클릭시
+	$(document).on('click','.cancleBtn',function(){
+		let b_no = this.getAttribute("data-bno");
+		
+		let check = confirm("취소 하시겠습니까?");
+		if(check) location.href="mypage?menu=cancleForm&b_no=" +b_no;
+	});
+	
+	//취소 철회 버튼 클릭 시
+	$(document).on('click','.cancle_return',function(){
+		let b_no = this.getAttribute("data-bno");
+	
+		let check = confirm("철회 하시겠습니까?");
+		if(check) location.href="cancle_Stop?b_no=" + b_no;
+	
+	});
+	
+	$('.wish_img').click(function(){
+		let a_no = $(this).attr('data-a_no');
+		location.href="/academy/academyDetail?a_no="+a_no;
+	})
+	
+});
+
+
+</script>
+</head>
+<body style="height: 100%;">
+	<div layout:fragment="content" style="background: #EAEAEA; height: 1600px;">
+		<input type="hidden" th:value="${menu}" id="menuItem">
+		<div class="contai">
+			<ul class="left-menu">
+				<li><a th:href="@{mypage(menu='order')}" id="order">신청/예약 조회</a>
+				
+				<li><a th:href="@{mypage(menu='wish_list')}" id="wish_list">위시 리스트</a>
+				
+				<li><a th:href="@{mypage(menu='cancel')}" id="cancel">취소 조회</a>
+				
+				<li><a th:href="@{mypage(menu='qna')}" id="qna">1:1 문의</a>
+				<li><a href="javascript:void(0);"id="update">정보 수정</a>
+				<li><a href="javascript:void(0);"id="delete">회원 탈퇴</a>
+			</ul>
+			
+			<div class="user_list">
+				<div class="user_infoBox">
+					<img th:if="${kakaoChk} == 'true'" class="profileImg" alt="프로필사진" th:src="@{${member.image}}" style="float: left;">
+					<img th:if="${kakaoChk} == 'false'" class="profileImg" alt="프로필사진" th:src="@{'/upload/'+${member.image}}" style="float: left;">
+					<div class="user_info">												
+						<span style="font-size: 20px;">[[${member.name}]] 님 안녕하세요</span><p>
+						 <span style="font-size: 15px;">총 주문 금액 : [[${TotalPrice}]]원</span>
+					</div>
+				</div>
+				<div class="order">
+					<h6>신청조회</h6>
+					<!-- 신청 및 예약이 있으면 조회후 보여주는 코드작성 -->
+					<div th:if="${academyList} == null">주문내역이 없습니다</div>
+					<!-- 주문내역 있으면 , 								너비이상넘어가면 아래로내려옴 -->
+					<div th:if="${academyList} != null" style="display: flex; flex-wrap: wrap;">
+						<div th:id="'academy_'+${academy.a_no}" th:each = "academy : ${academyList}">
+							<div style="display: flex; align-items: center;">
+								<h4>주문번호 : <b style="color: blue;">[[${academy.b_no}]]</b></h4>
+								<h4 style="position: relative; left: 580px;">주문일자 : [[${academy.b_date}]]</h4>
+							</div>
+							<div class="order_Box">
+								<div style="display: flex; align-items: center;">
+									<img class="orderImg" alt="디테일이미지" th:src="@{'/images/academy/'+${academy.image}}"><p>
+									<div style="margin-left: 20px; width: 350px;">
+										<h5><a th:href="@{/academy/academyDetail(a_no=${academy.a_no})}" style="text-decoration: none; color:black;">[[${academy.title}]]</a></h5>
+										<h5>[[${academy.intro}]]</h5>
+										<h5>[[${academy.price}]]원/[[${academy.c_count}]]개</h5>
+									</div>
+									<!-- 신청 완료시 -->
+									<div th:if="${academy.cancle} == 'n'" style="display: flex; align-items: center;">
+										<div>
+											<h6 style="margin-left: 70px; color: blue;">신청 완료</h6><!-- cancle값사용 -->
+										</div>
+										<div class="cancle_Box"style="position: relative; left: 120px; top: 4px;">
+											<a href="#" th:attr="data-bno=${academy.b_no}" class="cancleBtn">취소하기</a>
+										</div>
+									</div>
+									<!-- 신청 취소 요청시 -->
+									<div th:if="${academy.cancle} == 'r'" style="display: flex; align-items: center;">
+										<div>
+											<h6 style="margin-left: 70px; color: red;">취소 요청</h6><!-- cancle값사용 -->
+										</div>
+										<div class="cancle_Box"style="position: relative; left: 120px;">
+											<div class="academyInfo" th:attr="data-academy ='${academy.cancle}'"></div><!-- 취소상세모달에서사용 -->
+											<a href="#" th:attr="data-bno=${academy.b_no}" class="cancle_return">취소철회</a>
+										</div>
+									</div>
+									<!-- 신청 취소 완료시 -->
+									<div th:if="${academy.cancle} == 'y'" style="display: flex; align-items: center;">
+										<div>
+											<h6 style="margin-left: 70px; color: green;">취소 완료</h6><!-- cancle값사용 -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- paging -->
+					<div class="paging" style="width: 850px;">
+						<ul class="pagination justify-content-center">
+							<!-- 앞에 보여줄 것이 있다(이전) -->
+							<th:block th:if="${pb2.startPage > pb2.pagePerBlock}">
+								<li><a class="p_link" style="color: red;"
+									th:href="@{/mypage(menu=order,pageNum2=${pb2.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_1.png}"
+										style="width: 13px; height: 13px; margin-right: 5px;">
+								</a></li>
+							</th:block>
+			
+							<!--  -->
+							<th:block th:unless="${pb2.startPage > pb2.pagePerBlock}">
+								<li><img th:src="@{images/btn/paging_1.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-right: 5px;"></li>
+							</th:block>
+			
+							<th:block th:each="i2:${#numbers.sequence(pb2.startPage,pb2.endPage)}">
+								<th:block th:if="${total2 > 0}">
+									<th:block th:if="${pb2.currentPage == i2 }">
+										<li><a class="p_link_active"
+											th:href="@{/mypage(menu=order,pageNum2=${i2})}">[[${i2}]]</a></li>
+									</th:block>
+									<th:block th:if="${pb2.currentPage != i2 }">
+										<li><a class="p_link" th:href="@{/mypage(menu=order,pageNum2=${i2})}">[[${i2}]]</a></li>
+									</th:block>
+								</th:block>
+							</th:block>
+			
+							<!-- 뒤에 보여줄 것이 남아 있다(다음) -->
+							<th:block th:if="${pb2.endPage < pb2.totalPage}">
+								<li><a class="p_link"
+									th:href="@{/mypage(menu=order,pageNum2=${pb2.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_2.png}"
+										style="width: 13px; height: 13px; margin-left: 5px;">
+								</a></li>
+							</th:block>
+							<th:block th:unless="${pb2.endPage < pb2.totalPage}">
+								<li><img th:src="@{images/btn/paging_2.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-left: 5px;"></li>
+							</th:block>
+						</ul>
+					</div>
+				</div>
+				
+				
+				<div class="wish_list" style="width: 900px;">
+				<div>
+					<h4 style="text-align: left; font-weight: bold; margin-left: 20px;">위시리스트
+					 <i class="wish_i">[[${count_Wish_No}]]</i></h4>
+					<!-- 신청 및 예약이 있으면 조회후 보여주는 코드작성 -->
+					<div th:if="${academyArr} == null">주문내역이 없습니다</div>
+					<div th:if="${academyArr} != null" style="display: flex; align-items: center; flex-wrap:wrap;">
+						<div th:each="academy : ${academyArr}" style="width: 250px; margin: 10px 20px;">
+							<img th:data-a_no="${academy.a_no}" class="wish_img" alt="위시사진" th:src="@{'/images/academy/'+${academy.image}}"><br>
+						
+							<span class="wish_title">[[${academy.title}]]</span><br>
+							<span class="wish_price">[[${academy.price}]]원</span><br>
+
+							<img th:if="${academy.show} == 'Y'" th:src="@{/images/btn/new_btn.png}" style="height: 23px; margin-right: 5px;">
+							<img th:src="@{${academy.status == 'N'} ? '/images/btn/status_n_btn.png' : '/images/btn/status_y_btn.png'}" style="height: 23px; margin-right: 5px;">
+							<img th:if="${academy.count == null or academy.count == 0}"  th:src="@{/images/btn/count_0_btn.png}" style="height: 23px; width: 44px;">
+						</div>
+					</div>
+				</div>
+					<!-- paging -->
+					<div class="paging" style="width: 850px;">
+						<ul class="pagination justify-content-center">
+							<!-- 앞에 보여줄 것이 있다(이전) -->
+							<th:block th:if="${pb.startPage > pb.pagePerBlock}">
+								<li><a class="p_link" style="color: red;"
+									th:href="@{/mypage(menu=wish_list,pageNum=${pb.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_1.png}"
+										style="width: 13px; height: 13px; margin-right: 5px;">
+								</a></li>
+							</th:block>
+			
+							<!--  -->
+							<th:block th:unless="${pb.startPage > pb.pagePerBlock}">
+								<li><img th:src="@{images/btn/paging_1.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-right: 5px;"></li>
+							</th:block>
+			
+							<th:block th:each="i:${#numbers.sequence(pb.startPage,pb.endPage)}">
+								<th:block th:if="${total > 0}">
+									<th:block th:if="${pb.currentPage == i }">
+										<li><a class="p_link_active"
+											th:href="@{/mypage(menu=wish_list,pageNum=${i})}">[[${i}]]</a></li>
+									</th:block>
+									<th:block th:if="${pb.currentPage != i }">
+										<li><a class="p_link" th:href="@{/mypage(menu=wish_list,pageNum=${i})}">[[${i}]]</a></li>
+									</th:block>
+								</th:block>
+							</th:block>
+			
+							<!-- 뒤에 보여줄 것이 남아 있다(다음) -->
+							<th:block th:if="${pb.endPage < pb.totalPage}">
+								<li><a class="p_link"
+									th:href="@{/mypage(menu=wish_list,pageNum=${pb.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_2.png}"
+										style="width: 13px; height: 13px; margin-left: 5px;">
+								</a></li>
+							</th:block>
+							<th:block th:unless="${pb.endPage < pb.totalPage}">
+								<li><img th:src="@{images/btn/paging_2.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-left: 5px;"></li>
+							</th:block>
+						</ul>
+					</div>
+				</div>
+				
+				<!-- 취소조회 -->
+				<div class="cancel">
+					<h6>취소조회</h6>
+					<div th:if="${cancleSuccess} == null" style="font-size:14px;">취소 완료 내역이 없습니다</div>
+					<div th:if="${cancleSuccess} == 'true'">
+						<!-- 주문내역 있으면 , 								너비이상넘어가면 아래로내려옴 -->
+						<div th:if="${academyList} != null" style="display: flex; flex-wrap: wrap;">
+							<div th:each = "academy : ${academyList}">
+								<div th:if="${academy.cancle} == 'y'">
+									<div style="display: flex; align-items: center;">
+										<h4>주문번호 : <b style="color: blue;">[[${academy.b_no}]]</b></h4>
+										<h4 style="position: relative; left: 580px;">주문일자 : [[${academy.b_date}]]</h4>
+									</div>
+									
+									<div class="order_Box">
+										<div style="display: flex; align-items: center;">
+											<img class="orderImg" alt="디테일이미지" th:src="@{'/images/academy/'+${academy.image}}"><p>
+											<div style="margin-left: 20px; width: 350px;">
+												<h5>[[${academy.title}]]</h5>
+												<h5>[[${academy.intro}]]</h5>
+												<h5>[[${academy.price}]]원/[[${academy.c_count}]]개</h5>
+											</div>
+											<!-- 신청 취소 완료시 -->
+											<div th:if="${academy.cancle} == 'y'" style="display: flex; align-items: center;">
+												<div>
+													<h6 style="margin-left: 70px; color: green;">취소 완료</h6><!-- cancle값사용 -->
+												</div>
+												<div class="cancle_Box"style="position: relative; left: 140px;">
+													<div class="academyInfo" th:attr="data-academy ='${academy.cancle}'"></div><!-- 취소상세모달에서사용 -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- paging -->
+					<div class="paging" style="width: 850px;">
+						<ul class="pagination justify-content-center">
+							<!-- 앞에 보여줄 것이 있다(이전) -->
+							<th:block th:if="${pb3.startPage > pb3.pagePerBlock}">
+								<li><a class="p_link" style="color: red;"
+									th:href="@{/mypage(menu=cancle,pageNum3=${pb3.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_1.png}"
+										style="width: 13px; height: 13px; margin-right: 5px;">
+								</a></li>
+							</th:block>
+			
+							<!--  -->
+							<th:block th:unless="${pb3.startPage > pb3.pagePerBlock}">
+								<li><img th:src="@{images/btn/paging_1.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-right: 5px;"></li>
+							</th:block>
+			
+							<th:block th:each="i3:${#numbers.sequence(pb3.startPage,pb3.endPage)}">
+								<th:block th:if="${total3 > 0}">
+									<th:block th:if="${pb3.currentPage == i3 }">
+										<li><a class="p_link_active"
+											th:href="@{/mypage(menu=cancle,pageNum4=${i3})}">[[${i3}]]</a></li>
+									</th:block>
+									<th:block th:if="${pb3.currentPage != i3 }">
+										<li><a class="p_link" th:href="@{/mypage(menu=cancle,pageNum3=${i3})}">[[${i3}]]</a></li>
+									</th:block>
+								</th:block>
+							</th:block>
+			
+							<!-- 뒤에 보여줄 것이 남아 있다(다음) -->
+							<th:block th:if="${pb3.endPage < pb3.totalPage}">
+								<li><a class="p_link"
+									th:href="@{/mypage(menu=cancle,pageNum3=${pb3.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_2.png}"
+										style="width: 13px; height: 13px; margin-left: 5px;">
+								</a></li>
+							</th:block>
+							<th:block th:unless="${pb3.endPage < pb3.totalPage}">
+								<li><img th:src="@{images/btn/paging_2.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-left: 5px;"></li>
+							</th:block>
+						</ul>
+					</div>
+				</div>
+				
+				<!-- 1:1문의 -->
+				<div class="qna" style="width: 800px;">
+					<h6 style="text-align: left; font-weight: bold;">1:1문의게시판
+					  <i style="background: blue; border-radius: 50%; color: white; padding:8px; line-height:3px; width:30px; display: inline-block; ">[[${count_QnA_No}]]</i></h6>
+						<hr>
+					<!-- 신청 및 예약이 있으면 조회후 보여주는 코드작성 -->
+					<div th:if="${qnalist.size == 0}">등록된 문의가 없습니다</div>
+					<div th:if="${qnalist} != null">
+						<div th:each="qnaItem : ${qnalist}">
+						<div th:if="${qnaItem.q_del} == 'y'">
+							<img th:if="${kakaoChk} == 'true'" th:src="@{${member.image}}" alt="Preview" style= " width: 50px; border-radius: 50%;">
+							<img th:if="${kakaoChk} == 'false'" id="previewImage2" th:src="@{'/upload/'+${member.image}}" alt="Preview" style= " width: 50px; border-radius: 50%;">
+							<div class="qna_infoBox">
+								<span style="font-weight: bold;">[[${member.name}]]</span>
+								<span th:text="${#dates.format(qnaItem.q_date,'yyyy-MM-dd HH:mm:ss')}"></span><p>
+								<h4><b>삭제된 문의글입니다</b></h4>
+							</div>
+						</div>
+						<div th:if="${qnaItem.q_del} == 'n'">
+							<img th:if="${kakaoChk} == 'true'" th:src="@{${member.image}}" alt="Preview" style= " width: 50px; border-radius: 50%;">
+							<img th:if="${kakaoChk} == 'false'" id="previewImage2" th:src="@{'/upload/'+${member.image}}" alt="Preview" style= " width: 50px; border-radius: 50%;">
+							<div class="qna_infoBox">
+								<span style="font-weight: bold;">[[${member.name}]]</span>
+								<span th:text="${#dates.format(qnaItem.q_date,'yyyy-MM-dd HH:mm:ss')}"></span><p>
+								<span><b>제목 : [[${qnaItem.q_title}]]</b></span>
+								<h4 th:utext="${qnaItem.q_content}"></h4>
+								 <a href="#" class="qnaUpdate" th:attr="data-qno=${qnaItem.q_no}">수정</a>
+								 <span>|</span> 
+								 <a href="#" class="qnaDelete" th:attr="data-qno=${qnaItem.q_no}">지우기</a>
+							</div>
+						</div>
+						</div>
+					</div>
+				
+					<!-- paging -->
+					<div class="paging" style="width: 850px;">
+						<ul class="pagination justify-content-center">
+							<!-- 앞에 보여줄 것이 있다(이전) -->
+							<th:block th:if="${pb4.startPage > pb4.pagePerBlock}">
+								<li><a class="p_link" style="color: red;"
+									th:href="@{/mypage(menu=qna,pageNum4=${pb4.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_1.png}"
+										style="width: 13px; height: 13px; margin-right: 5px;">
+								</a></li>
+							</th:block>
+			
+							<!--  -->
+							<th:block th:unless="${pb4.startPage > pb4.pagePerBlock}">
+								<li><img th:src="@{images/btn/paging_1.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-right: 5px;"></li>
+							</th:block>
+			
+							<th:block th:each="i4:${#numbers.sequence(pb4.startPage,pb4.endPage)}">
+								<th:block th:if="${total4 > 0}">
+									<th:block th:if="${pb4.currentPage == i4 }">
+										<li><a class="p_link_active"
+											th:href="@{/mypage(menu=qna,pageNum4=${i4})}">[[${i4}]]</a></li>
+									</th:block>
+									<th:block th:if="${pb4.currentPage != i4 }">
+										<li><a class="p_link" th:href="@{/mypage(menu=qna,pageNum4=${i4})}">[[${i4}]]</a></li>
+									</th:block>
+								</th:block>
+							</th:block>
+			
+							<!-- 뒤에 보여줄 것이 남아 있다(다음) -->
+							<th:block th:if="${pb4.endPage < pb4.totalPage}">
+								<li><a class="p_link"
+									th:href="@{/mypage(menu=qna,pageNum4=${pb4.startPage - 1})}"> <img
+										th:src="@{images/btn/paging_2.png}"
+										style="width: 13px; height: 13px; margin-left: 5px;">
+								</a></li>
+							</th:block>
+							<th:block th:unless="${pb4.endPage < pb4.totalPage}">
+								<li><img th:src="@{images/btn/paging_2.png}"
+									style="width: 13px; height: 13px; cursor: not-allowed; margin-left: 5px;"></li>
+							</th:block>
+						</ul>
+					</div>
+					<a th:href="@{QnAWhiteForm}" style="background: white; color:blue; padding:10px; border: 1px solid blue; text-decoration: none;
+					font-weight: bold; float: right;">문의 작성</a>
+				</div>
+				
+				<!-- 신청 취소버튼 클릭시 보여지는 화면 -->
+				<div class="cancleForm">
+					<div th:if="${buyItem} == null">취소할 주문이 없습니다</div>
+					<div th:if="${buyItem} != null" style="height: 100%;" >
+						<h4 style="text-align: left; font-weight: bold;">주문 취소요청 : <b style="color: blue">[[${buyItem.b_no}]]</b></h4>
+						<div style="background: white; width: 400px; height: 200px;">
+							<span class="cancleText" style="position: relative; left: 10px; top:15px;">
+								<p>
+									주문하신 상품 단위로 취소요청이 가능합니다<br>
+									상품이 발송되기 전에 취소요청을 하실 수 있습니다.
+								</p>
+								<p>
+									<b style="color: red">
+									단, 상품을 이미 발송한 경우 취소처리 거부될 수 있습니다<br>
+									쿠폰을 사용한 주문을 취소/반품하여 쿠폰 사용이 취소된 경우<br> 
+									유효기간이	경과하지 않았다면 <br>
+									반환되어 다시 사용이 가능합니다.<br>
+									(쿠폰의 경우 모든 상품을 취소/반품해야 반환됩니다.)
+									</b>
+								</p>
+							</span>
+						</div>
+						<p>
+						<div style="background: white; width: 400px; height: 300px;">
+							<div style="margin: 20px; position: relative; top: 30px;">
+								<h3><b>취소사유 선택</b></h3>
+								<form action="cancleSelect">
+									<input type="hidden" th:name="b_no" th:value="${buyItem.b_no}">
+									
+									<select class="form-select" name="ca_option" style="font-size: 14px;">
+										<optgroup label="취소사유선택">
+											<option value="Mind">단순 변심
+											<option value="Different">강의정보 상이
+											<option value="Change">강의일정 변경
+											<option value="Repayment1">재결제(동일 강의)
+											<option value="Repayment2">재결제(다른 강의)
+											<option value="Refunds">중도 환급
+											<option value="Closed">폐강
+											<option value="Etc">기
+										</optgroup>
+									</select>
+									<div style="margin-top: 10px;text-align: center;">
+										<textarea class="form-control" rows="5" name="ca_content" placeholder="반품 사유를 입력하세요" style="font-size: 16px;"></textarea>
+										<input type="submit" value="주문 취소" style="background: blue; color: white; width: 100px;height: 50px; margin-top: 15px; font-size: 14px; ">
+									</div>
+								</form>
+							</div>
+						</div>
+					
+						<div style="background: white; width: 360px; height: 300px;
+						position:absolute;  left: 440px; top:28px;">
+							<div class="cancleSelect" style="margin: 20px;">
+								<h3><b>취소 상품</b></h3>							
+								<input type="checkbox" value="1" checked="checked">
+								<img alt="상품이미지" th:src="@{'/images/academy/'+${academyItem.image}}" style="width: 80px; height: 80px; margin-left: 15px;">
+								<div class="paddingbox" style="padding: 15px;"></div>
+								<span><b>[[${academyItem.title}]]</b></span><p>
+								<span>[[${academyItem.intro}]] </span><br>
+								<span>[[${academyItem.request}]]</span>
+								<p><span>
+								<b th:text="${#numbers.formatInteger(academyItem.price,0,'COMMA')+'원'}">[[${academyItem.price}]]원</b>
+								/
+								<b th:text="${#numbers.formatInteger(buyItem.c_count,0,'COMMA')+'개'}">[[${buyItem.c_count}]]개</b></span>
+							</div>
+						</div>
+					
+						<div style="background: white; width: 360px; height: 300px;
+						position: absolute; left: 440px; top:350px;">
+							<div class="cancleRefund" style="margin: 20px;">
+								<h3><b>환불 예정 금액</b></h3>
+								<p>
+								<span>취소상품 금액</span>
+								<span style="float: right;" th:text="${#numbers.formatInteger(academyItem.price,0,'COMMA')+'원'}"></span>
+								<p>
+								<span>취소상품 총금액 [금액x개수]</span> <span style="float: right;" th:text="${#numbers.formatInteger(buyTotal,0,'COMMA')+'원'}"></span><p>
+								
+								<div style="width: 100%; height: 3px; background: gray; margin: 20px 0px; z-index: 0;"></div>
+								<span>반품 배송비 차감</span> <span style="float: right;">0원</span><p>
+								<div style="width: 100%; height: 3px; background: gray; margin: 20px 0px"></div>
+								<span><b>환불 예정 금액</b></span> <span style="float: right;"><b style="color: blue;" th:text="${#numbers.formatInteger(buyTotal,0,'COMMA')+'원'}"></b></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			<!-- 정보수정 모달 -->
+			<div id="update_Modal">
+			<div class="modal_content">
+				<h2 th:if="${kakaoChk} == 'true'" style="text-align: center;">정보수정[카카오]</h2>
+				<h2 th:if="${kakaoChk} == 'false'" style="text-align: center;">정보수정</h2>
+				<img id="update_close_btn" alt="" th:src="@{/images/main/close.png}">
+				<form action="update" name="updatefrm" method="post" enctype="multipart/form-data" onsubmit="return passChk()">
+					<input type="hidden" name="id" th:value="${member.id}">
+					<div id="fileupload_profile_img" class="fileupload_profile_img"	accept="image/*">
+						<input type="file" name="file" id="updateFile" style="display: none;"> 
+						<img th:if="${kakaoChk} == 'true'" th:src="@{${member.image}}" alt="Preview" style= " width: 100px; height: 100px; border-radius: 50%;">
+						<img th:if="${kakaoChk} == 'false'" id="preViewImgUpdate"th:src="@{'/upload/'+${member.image}}" alt="Preview" style="width: 100px; height: 100px; border-radius: 50%;">
+					</div>
+
+					<div style="position: relative; width:100%; left: 210px; bottom: 30px;">
+						<button type="button" id="updateImgButton" style="background: white; border-radius: 50%; height: 30px; width: 30px;">
+							<i class="bi bi-camera"></i>
+						</button>
+					</div>
+					<span>계정정보 변경</span>
+				
+					<input class="form-control" type="text" th:value="${member.id}" disabled="disabled">
+					<input th:if="${kakaoChk} != 'true'" class="form-control" type="password" name="password" required="required" placeholder="변경할 비밀번호를 입력하세요">
+					<input th:if="${kakaoChk} != 'true'" class="form-control" type="password" name="password2" required="required" placeholder="비밀번호 확인">
+					<span>이름</span>
+					<input class="form-control" type="text" name="name" th:value="${member.name}">
+					<span th:if="${kakaoChk} != 'true'">연락처</span>
+					<input th:if="${kakaoChk} != 'true'" class="form-control" type="tel" name="tel" th:value="${member.tel}">
+					<input class="form-control" type="submit" value="변경하기" style="background: blue; color: white;" >
+				</form>
+			</div>
+			</div>
+			
+			<!-- 회원탈퇴 모달 -->
+			<div id="delete_Modal">
+				<div class="modal_content2">
+					<!-- 여기에 모달 내용을 추가하세요 -->
+					<h2 style="text-align: center;">회원탈퇴</h2>
+					<img id="delete_close_btn" alt="" th:src="@{/images/main/close.png}">
+					<div style="margin: 50px 10px;">
+						<span style="text-align: left; font-size: 15px;">가입된 회원정보가 모두 삭제됩니다. 작성하신 게시물은 삭제되지 않습니다.<br>
+						탈퇴 후 같은 계정으로 재가입 시 기존에 가지고 있던 적립금은 복원되지 않으며,<br>
+						사용 및 다운로드 했던 쿠폰도 사용 불가능합니다.<br>
+						회원 탈퇴를 진행 하시겠습니까?
+						</span>
+					</div>
+					<p>
+					<div class="deleteMember">
+						<a href="mypage">취소</a>
+						<a th:href="@{delete(id=${member.id})}">탈퇴하기</a>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 취소상세 모달 -->
+			<div id="cancle_Detail_Modal">
+				<b>취소 상세정보</b>
+				<hr>			
+			</div>
+		</div>
+		<script type="text/javascript">
+		function passChk(){
+			alert(updatefrm.password.value);
+			if(updatefrm.password.value != updatefrm.password2.value){
+				alert("암호와 암호확인이 같지않습니다.");
+				return false;
+			}
+		}
+		</script>
+	</div>
+	</div>
+</body>
+
+</html>

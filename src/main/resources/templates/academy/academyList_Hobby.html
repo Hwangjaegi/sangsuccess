@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+     <style>
+        .section_wrap_grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .section_wrap_grid > div {
+            width: calc(20% - 10px); /* 5개씩 한 줄로 정렬되게끔 */
+            margin-bottom: 20px;
+            position: relative; /* 상대 위치 지정 */
+        }
+
+        .section_wrap_grid img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .section_wrap_grid div.content {
+            padding: 10px;
+            background-color: #f9f9f9;
+            position: absolute; /* 절대 위치 지정 */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .widget_data ul li:nth-child(2){
+		    background-color: blue;
+		    color: white;
+		    transition: color 0.5s ease;
+		}
+        .widget_data ul li:nth-child(2):hover{
+		    background-color: white;		    
+		}
+		.widget_data ul li:nth-child(2):hover a{
+			color: black;
+		}
+		.widget_data ul li:nth-child(2) a{
+		    color: white;
+		    transition: color 0.5s ease;
+		}
+		.widget_data ul li:nth-child(1){
+			border-left: 1px solid blue;
+		}
+		.widget_data li {
+		    border: 1px solid blue;
+		    border-left: none;
+		    border-bottom: none;
+		    color: blue;
+		}
+		.widget_data li a {
+		    text-decoration: none;
+		    color : blue;	
+		    transition: color 0.3s ease;    
+		}
+				
+		.widget_data li a:hover {
+		    color: black;
+		 }
+		 .widget_data ul{
+		 	border-bottom: 2px solid blue;
+		 }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="section" style="background-color:#0000ff;">
+		<div class="widget padding" data-height="80" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:80px;"></div>
+		</div>
+		<div class="text-table">
+			<div class="section_wrap">
+				<h6 style="text-align:center; line-height:2;">
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing: -1px;">
+					<span style="font-size:36px;"><strong><span style="color:rgb(255,255,255)">취미</span></strong></span><br>
+					답답한 일상 속, 오직 나만을 위한 여유</span><br>
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing:-1px;"><strong>쉽고 가볍게 즐기며 배우는 취미 예술 과정</strong></span>
+				</h6>
+			</div>
+		</div>
+		<div class="widget padding" data-height="88" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:88px; "></div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="container">
+	<div class="widget_data">
+    <ul class="list-unstyled d-flex">
+        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+        <a href="academyList_Free"><span class="plain_name" data-hover="무료특강">무료특강</span></a></li>
+       <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+       <a href="academyList_Hobby"><span class="plain_name" data-hover="취미">취미</span></a></li>
+        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+        <a href="academyList_Write"><span class="plain_name" data-hover="글쓰기">글쓰기</span></a></li>
+        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+        <a href="academyList_Book"><span class="plain_name" data-hover="그림책">그림책</span></a></li>
+         <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+         <a href="academyList_Design"><span class="plain_name" data-hover="디자인">디자인</span>
+            </a></li>
+        <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+        <a href="academyList_Media"><span class="plain_name" data-hover="미디어">미디어</span></a> </li>
+         <li class="px-3 py-2" style="width: 120px; height: 45px; text-align: center; align-content: center;">
+         <a href="academyList_Photo"><span class="plain_name" data-hover="사진">사진</span></a></li>
+    </ul>
+    <br>
+</div>
+	<div class="section_wrap_grid">
+	    <div th:each="hobby : ${list_Hobby}">
+	        <a th:href="@{/academy/academyDetail(a_no=${hobby.a_no})}">
+	            <img alt="" th:src="@{'/images/academy/'+${hobby.image}}" style="width:230px; height:auto;">
+	        </a>
+	        <div style="margin-top: 16px;">
+	            <span th:text="${hobby.title}" style="font-size: 15px;"></span>
+	            <br>
+	            <div  style="margin: 7px 0;">
+	            <span style="font-size: 16px; font-weight: bold;" th:text="${#numbers.formatInteger(hobby.price,1,'COMMA')}"></span>원
+	        	</div>
+	        </div>
+	         <div class="images" style="display: flex;">
+	         	<div th:if="${hobby.show} == 'y'" style="margin-right: 5px;">
+	                <img alt="new" th:src="@{/images/new_btn.png}" th:style="'height: 23px;'">
+	           </div>
+	        	<div th:if="${hobby.status == 'N'}" style="margin-right: 5px;">
+	                <img alt="대기접수중" th:src="@{/images/status_n_btn.png}" th:style="'height: 23px;'">
+	            </div>
+	             <div th:if="${hobby.status != 'N' && (hobby.count > 0 || hobby.status =='y')}">
+	                <img alt="모집중" th:src="@{/images/status_y_btn.png}" th:style="'height: 23px;'">
+	            </div>
+	            <div th:if="${hobby.count == 0}">
+	                <img alt="모집마감" th:src="@{/images/count_0_btn.png}" th:style="'height: 23px;'">
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	</div>
+</div>
+</body>
+</html>

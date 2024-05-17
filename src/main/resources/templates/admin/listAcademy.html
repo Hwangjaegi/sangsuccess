@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.academyTable th {
+	font-weight: normal;
+}
+.academyTable th, td {
+	text-align: center;
+	position: relative;
+}
+/* 페이징 Css */
+.p_link {
+	text-decoration: none;
+	color: #A3A3A3;
+	font-size: 14px;
+	padding: 10px;
+}
+
+.p_link_active {
+	text-decoration: none;
+	font-weight: bold;
+	color: black;
+	font-size: 14px;
+	padding: 10px;
+}
+.deleteAcademy{
+	text-decoration: none;
+	color:red;
+}
+.updateAcademy{
+	text-decoration: none;
+	color:blue;
+}
+.academyInsert {
+	text-decoration: none;
+	background: #0000ff;
+	border: 1px solid #0000ff;
+	padding: 10px 20px;
+	font-size: 15px;
+	color: white;
+	cursor: pointer;
+	order: 1;
+}
+.adminMainBtn {
+	text-decoration: none;
+	background: white;
+	border: 1px solid #0000ff;
+	padding: 10px 20px;
+	font-size: 15px;
+	color: #0000ff;
+	cursor: pointer;
+	order: 2;
+}
+.academyInsert:hover {
+	background: white;
+	border: 1px solid #0000ff;
+	color: #0000ff;
+}
+.adminMainBtn:hover {
+	background: #0000ff;
+	border: 1px solid #0000ff;
+	color: white;
+}
+.detailAcademyBtn{
+	text-decoration: none;
+	color: black;
+}
+.btns {
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+<script type="text/javascript">
+	$(function() {
+		// deleteAcademy 클래스를 가진 모든 요소에 대해 클릭 이벤트 핸들러를 등록합니다.
+		$('.deleteAcademy').click(function() {
+			// 클릭된 요소의 th:data-a_no와 th:data-index 속성 값을 가져옵니다.
+			let a_no = $(this).data("a_no");
+			let pageNum = $("#pageNumHi").attr("data-pageNum");
+
+			// 확인 대화 상자를 표시합니다.
+			let check = confirm("삭제 하시겠습니까?");
+			if (check) {
+				location.href = "/admin/deleteAcademy?a_no=" + a_no+"&pageNum="+pageNum; // 예시: 해당 링크로 페이지 이동
+			}
+		});
+		
+		$('.updateAcademy').click(function(){
+			let a_no = $(this).data("a_no");
+			let pageNum = $("#pageNumHi").attr("data-pageNum");
+			
+			let check = confirm("수정 하시겠습니까?");
+			if(check){
+				location.href="/admin/updateAcademy?a_no=" + a_no+"&pageNum="+pageNum;
+			}
+		});
+		
+	});
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="section" style="background-color: #0000ff;">
+			<div class="widget padding" data-height="80"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 80px;"></div>
+			</div>
+			<div class="text-table">
+				<div class="section_wrap">
+					<h6 style="text-align: center; line-height: 2;">
+						<span
+							style="color: rgb(255, 255, 255); font-size: 24px; letter-spacing: -1px;">
+							<span style="font-size: 36px;"><strong>
+							<span style="color: rgb(255, 255, 255)">상품 관리</span></strong></span><br>
+						</span>
+					</h6>
+				</div>
+			</div>
+			<div class="widget padding" data-height="88"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 88px;"></div>
+			</div>
+		</div>
+		<div style="width: 100%; min-height: 1px; height: 50px;"></div>
+		<div class="container">
+			<div th:if="${academyList} == null">조회되는 아카데미가 없습니다</div>
+			<div class="productList" th:if="${academyList} != null">
+			<input id="pageNumHi" type="hidden" th:value="${pageNum}" th:data-pageNum="${pageNum}">
+				<div class="btns">
+					<a href="/admin/academyInsert" class="academyInsert">아카데미 등록</a>
+					<a href="/admin/admin" class="adminMainBtn">관리자 메인</a>				
+				</div>
+
+				<Table class="academyTable" style="width: 100%;">
+					<tr style="background: #0000ff; color: white; height: 40px;">
+						<th width="8%">번호</th>
+						<th width="15%">사진</th>
+						<th width="36%">제목</th>
+						<th width="15%">가격</th>
+						<th width="10%">수량</th>
+						<th width="8%">수정</th>
+						<th width="8%">삭제</th>
+					</tr>
+					<tr th:each="academy, index : ${academyList}" th:id="'academy_' + ${academy.a_no}" style="border-bottom: 1px solid lightgray; height: 160px">
+						<td>[[${academy.a_no}]]</td>
+						<td><img alt="image"th:src="'/images/academy/' + ${academy.image}"style="width: 100px;"></td>
+						<td><a class="detailAcademyBtn" th:href="@{/academy/academyDetail(a_no=${academy.a_no})}">[[${academy.title}]]</a></td>
+						<td th:text="${#numbers.formatInteger(academy.price, 0, 'COMMA') +'원'}"></td>
+						<td>[[${academy.count}]]</td>
+						<td><a class="updateAcademy" href="#" th:data-a_no="${academy.a_no}"><img th:src="@{/images/btn/update_btn.png}" style="width: 20px;"></a></td>
+						<td><a class="deleteAcademy" href="#" th:data-a_no="${academy.a_no}"><img th:src="@{/images/btn/delete_btn.png}" style="width: 20px;"></a></td>			
+					</tr>
+				</Table>
+				<div style="width: 100%; min-height: 1px; height: 60px;"></div>
+			</div>
+		</div>
+		<p>	
+		<!-- paging -->
+		<div class="paging">
+			<ul class="pagination justify-content-center">
+				<!-- 앞에 보여줄 것이 있다(이전) -->
+				<th:block th:if="${pb.startPage > pb.pagePerBlock}">
+					<li><a class="p_link"
+						th:href="@{'/admin/listAcademy/pageNum/'+${pb.startPage - 1}}"> <img
+							th:src="@{images/btn/paging_1.png}"
+							style="width: 13px; height: 13px; margin-right: 5px;">
+					</a></li>
+				</th:block>
+
+				<!--  -->
+				<th:block th:unless="${pb.startPage > pb.pagePerBlock}">
+					<li><img th:src="@{images/btn/paging_1.png}"
+						style="width: 13px; height: 13px; cursor: not-allowed; margin-right: 5px;"></li>
+				</th:block>
+
+				<th:block th:each="i:${#numbers.sequence(pb.startPage,pb.endPage)}">
+					<th:block th:if="${total > 0}">
+						<th:block th:if="${pb.currentPage == i }">
+							<li><a class="p_link_active"
+								th:href="@{/listAcademy(pageNum=${i})}">[[${i}]]</a></li>
+						</th:block>
+						<th:block th:if="${pb.currentPage != i }">
+							<li><a class="p_link" th:href="@{/listAcademy(pageNum=${i})}">[[${i}]]</a></li>
+						</th:block>
+					</th:block>
+				</th:block>
+
+				<!-- 뒤에 보여줄 것이 남아 있다(다음) -->
+				<th:block th:if="${pb.endPage < pb.totalPage}">
+					<li><a class="p_link"
+						th:href="@{'/admin/listAcademy/pageNum/'+${pb.endPage + 1}}"> <img
+							th:src="@{images/btn/paging_2.png}"
+							style="width: 13px; height: 13px; margin-left: 5px;">
+					</a></li>
+				</th:block>
+				<th:block th:unless="${pb.endPage < pb.totalPage}">
+					<li><img th:src="@{images/btn/paging_2.png}"
+						style="width: 13px; height: 13px; cursor: not-allowed; margin-left: 5px;"></li>
+				</th:block>
+			</ul>
+			<div style="width: 100%; min-height: 1px; height: 50px;"></div>
+		</div>
+	</div>
+</body>
+</html>

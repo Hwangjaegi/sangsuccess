@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- ~{} : templates를 가르킨다 , ::header => header태그범위안 내용을 가져온다. -->
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	#find_ID_Box{
+	display: block;
+	}
+	#emailForm{
+	display: none;
+	}
+	#telFind{
+	display: none;
+	}
+	#find_ID_Email{
+	display:none;
+	}
+	#find_ID_Email_replacePass{
+	display:none;
+	}
+	#complete_Send{
+	display:none;
+	}
+	#fail_Send{
+	display:none;
+	}
+	#find_ID_NameToTel{
+	display:none;
+	}
+	#find_ID_NameToTel label:hover{
+	cursor: pointer;
+	}
+	.labelp:hover{
+	cursor: pointer;
+	}
+</style>
+</head>
+<body>
+	<!-- 아이디찾기 방법선택 -->
+	<div id="find_ID_Box" style="width: 100%; height: 300px; margin:0 auto;" >
+		<input style="text-align: left;" type="radio" value="1" name="ChkID" id="Chk1"><label for="Chk1" class="labelp">가입한 이메일로 찾기</label><p>
+		<input class="form-control"  type="email" name="email" id="emailForm" required="required" autofocus="autofocus" placeholder="가입시 입력한 이메일">
+		<hr>
+		<input type="radio" value="2" name="ChkID" id="Chk2"><label for="Chk2" class="labelp">가입한 휴대폰으로 찾기</label>
+		<div id="telFind">
+			<input class="form-control" id="joinName" type="text" name="name_nicname" required="required" placeholder="이름"><p>
+			<input class="form-control" id="joinTel" type="tel" name="tel" required="required" placeholder="휴대폰번호">
+		</div>
+		<hr>
+		<button class="btn btn-success" type="button" id="find_ID_Btn">아이디 찾기</button>
+	</div>
+	
+	<!-- 이메일로 아이디찾기 -->
+	<div id="find_ID_Email" style="width: 100%; height: 200px; margin:0 auto;">
+		<hr>
+		<span>입력하신 정보와 일치하는 계정을 발견했습니다.</span><br>
+		<strong><i id="findEmail"></i></strong><p>
+		<button id="replacePassBtn1" class="btn btn-warning">비밀번호 재설정</button>
+		<button class="btn btn-success" id="findID_loginBtn">로그인</button><p>
+		<b style="color: blue; float: left; ">정확한 아이디가 기억나지 않아요!</b><p>
+	</div>
+	
+	<!-- 비밀번호 재설정 버튼클릭 -->
+	<div id="find_ID_Email_replacePass">
+		<span>비밀번호를 재설정할 방법을 선택해주세요</span><p>
+		<div style="text-align: left;">
+			<div>
+				<input type="radio" name="replace1" id="replace1"><label for="replace1" class="labelp">가입한 이메일로 재설정</label>
+			</div>
+			<span style="margin: 10px 0px;">회원정보에 등록된 아래의 이메일 주소로<br>
+			정확한 계정 정보를 전송하시겠습니까?</span><p>
+			<b class="findEmail"></b><p>
+			<button id="sendEmailBtn" class="form-control btn btn-success">계속</button>
+		</div>
+	</div>
+	
+	<!-- 비밀번호 메일전송 성공시 -->
+	<div id="complete_Send">
+		<span id="complete_SendText"></span><p> <!-- 이메일전송완료 텍스트 호출 -->
+		<b class="findEmail"></b><p> <!-- 이메일 호출 -->
+		<span>이메일이 보이지 않는 경우 <br>휴지통 또는 스팸함 등을 확인 해주세요!</span>
+	</div>
+	
+	<!-- 비밀번호 메일전송 실패시 -->
+	<div id="fail_Send">
+		<span id="fail_SendText"></span>
+		<span>이메일 전송에러가 발생하였습니다.</span>
+	</div>
+	
+	<!-- 이름과 번호로 아이디찾기 -->
+	<div id="find_ID_NameToTel">
+	<hr>
+		<div id="find_ID_NameList"></div> <!-- 조회된 이메일 list 가져옴 -->
+		<button id="replacePassBtn2" class="btn btn-warning">비밀번호 재설정</button>
+		<button class="btn btn-success" id="findID_loginBtn">로그인</button><p>
+		<b style="color: blue; float: left; ">정확한 아이디가 기억나지 않아요!</b><p>
+	</div>
+<script type="text/javascript">
+	// 페이지 로드될 때 체크 상태 확인 및 이메일 입력 폼 표시
+	window.onload = function() {
+		var Chk1 = document.getElementById("Chk1");
+		if (Chk1.checked) {
+			document.getElementById("emailForm").style.display = "block";
+		}
+		
+	};
+	
+	// 라디오 버튼 변경 시 이벤트 처리
+	document.getElementById("Chk1").addEventListener("change", function() {
+		if (this.checked) {
+			document.getElementById("emailForm").style.display = "block";
+			document.getElementById("telFind").style.display = "none";
+		} 
+	});
+	
+	document.getElementById("Chk2").addEventListener("change", function() {
+		if (this.checked) {
+			document.getElementById("emailForm").style.display = "none";
+			document.getElementById("telFind").style.display = "block";
+		} 
+	});
+	
+	//아이디찾기버튼 클릭시 함수
+	let member; //전역변수 member선언
+	let memberList; //전역변수 memberList선언
+	let selectChkId;
+	
+	$("#find_ID_Btn").click(function(){
+		selectChkID = document.querySelector('input[name="ChkID"]:checked').value; // 체크된radio 선택
+		 
+		if(selectChkID == "1"){
+		    let email = $("#emailForm").val();
+			if(email == ""){
+				alert("이메일을 입력해주세요");
+				return;
+			}
+		    
+		    $.post("checkEmail",{email : email} , function(data){
+		    	member = data;
+		    	if(member.email == undefined){
+		    		alert("존재하지 않는 이메일입니다");
+		    		return;
+		    	}else{
+		    		alert("존재하는 이메일입니다");
+		    		document.getElementById("find_ID_Box").style.display="none";
+		    		document.getElementById("find_ID_Email").style.display="block";
+		    		document.getElementById("findEmail").innerText = "아이디 : " +member.id;
+		    		document.getElementsByClassName("findEmail")[0].innerText = "이메일 : " +member.email;
+		    		document.getElementsByClassName("findEmail")[1].innerText = "이메일 : " +member.email;
+		    	}
+		    });
+		}
+		/* 이름과 전화번호로 찾기 */
+		else if (selectChkID == "2") {
+		    let name = $("#joinName").val();
+		    let tel = $("#joinTel").val();
+		    if (name == "" || tel == "") {
+		        alert("이름 또는 전화번호를 입력해주세요");
+		        return;
+		    }
+
+		    $.post("checkNameToTel", { name: name, tel: tel }, function(data) {
+		        memberList = data;
+
+		        if (memberList.length == 0) {
+		            alert("존재하지 않는 이름 또는 번호입니다.");
+		            return;
+		        } else {
+		            let find_ID_NameList = document.getElementById("find_ID_NameList");
+		            find_ID_NameList.innerHTML = ""; // 이전에 표시된 내용을 초기화
+
+		            	memberList.forEach(function(member, index) {
+		                let radioInput = document.createElement("input"); //인풋생성
+		                radioInput.setAttribute("type", "radio"); //radio인풋 속성 type
+		                radioInput.setAttribute("name", "findedID"); //radio인풋 속성 name
+		                radioInput.setAttribute("id", "findedID" + index); // 각 라디오 버튼의 고유한 ID 설정
+		                radioInput.setAttribute("value", member.email); //radio인풋 속성 value -> index
+
+		                let textLabel = document.createElement("label");
+		                textLabel.setAttribute("for", "findedID" + index); // label과 radioInput을 연결
+		                textLabel.innerText = member.email; // 텍스트 설정
+
+		                let div = document.createElement("div"); //radio와 label을묶을 div생성
+		                div.appendChild(radioInput); //radio추가
+		                div.appendChild(textLabel); //label추가
+
+		                find_ID_NameList.appendChild(div); // find_ID_NameeList에 div추가
+		            });
+		            
+		            document.getElementById("find_ID_Box").style.display = "none";
+		            document.getElementById("find_ID_NameToTel").style.display = "block";
+		        };
+
+		    });
+		};
+	});
+	
+	//가입한 이메일로 찾기 비밀번호 재설정 버튼 클릭시 화면전환
+	document.getElementById("replacePassBtn1").onclick = function(){
+		document.getElementById("find_ID_Email").style.display="none";
+		document.getElementById("find_ID_Email_replacePass").style.display="block";
+	}
+	
+	//가입한 이름 및 휴대폰으로 찾기
+	document.getElementById("replacePassBtn2").onclick = function(){
+		
+		let checkedRadio = document.querySelector('input[name="findedID"]:checked');
+	    if (checkedRadio) {
+	        let checkedValue = checkedRadio.value;
+	        document.getElementsByClassName("findEmail")[0].innerText = checkedValue;
+	        document.getElementById("find_ID_NameToTel").style.display="none";
+			document.getElementById("find_ID_Email_replacePass").style.display="block";
+	    } else {
+	        alert("이메일이 선택되지 않았습니다.");
+	    }
+	}
+	
+	//이메일로 임시 비밀번호 전송 버튼
+	document.getElementById("sendEmailBtn").onclick = function(){
+		if(selectChkID == 1){	// 가입한 이메일로 찾기일 때 메일전송
+			$.post("sendEmail" , {email : member.email} , function(result){ // 메일전송완료시 1 실패시 -1
+			if(result > 0){
+				document.getElementById("find_ID_Email_replacePass").style.display="none";
+				document.getElementById("fail_Send").style.display="none";
+				document.getElementById("complete_Send").style.display="block";
+				document.getElementById("complete_SendText").innerText += "이메일 전송완료";
+			}else if(result < 0){
+				document.getElementById("find_ID_Email_replacePass").style.display="none";
+				document.getElementById("complete_Send").style.display="none";
+				document.getElementById("fail_Send").style.display="block";
+				document.getElementById("fail_SendText").innerText += "이메일 전송실패";
+			}
+			});
+		}
+		else if(selectChkID == 2){ // 가입한 휴대폰으로 찾기일 때 메일전송
+			let checkedRadio = document.querySelector('input[name="findedID"]:checked');
+			if(checkedRadio){
+				let checkedValue = checkedRadio.value;
+				$.post("sendEmail" , {email : checkedValue} , function(result){ // 메일전송완료시 1 실패시 -1
+					if(result > 0){
+						document.getElementById("find_ID_Email").style.display="none";
+						document.getElementById("fail_Send").style.display="none";
+						document.getElementById("complete_Send").style.display="block";
+						document.getElementById("complete_SendText").innerText += "이메일 전송완료";
+					}else if(result < 0){
+						document.getElementById("find_ID_Email").style.display="none";
+						document.getElementById("complete_Send").style.display="none";
+						document.getElementById("fail_Send").style.display="block";
+						document.getElementById("fail_SendText").innerText += "이메일 전송실패";
+					}
+				});
+			}
+		}
+	};
+	
+	$(function(){
+		$('#findID_loginBtn').click(function(){
+			location.href="/";
+		});
+	});
+
+</script>
+</body>
+</html>

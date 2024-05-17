@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.ReplyAttendMapper">
+	<!--취미진심-->
+	<!-- 댓글 목록 -->
+	<select id="list_at" parameterType="integer" resultType="replyattend">
+		select * from at_replynotice where at_bno=#{at_bno} order by at_rno
+	</select>
+	<!-- 댓글 입력 -->
+	<insert id="insert_at" parameterType="ReplyAttend">
+		<selectKey keyProperty="at_rno" order="BEFORE" resultType="integer">
+			select nvl(max(at_rno), 0) + 1 at_rno from at_replynotice
+		</selectKey>
+		insert into at_replynotice values(
+			#{at_rno},#{at_bno},#{at_replytext},#{at_replier},sysdate,sysdate,#{id})
+	</insert>
+	<!-- 댓글 수정-->
+	<update id="update_at" parameterType="ReplyAttend">
+		update at_replynotice set at_replytext=#{at_replytext}, at_updatedate=sysdate
+			where at_rno=#{at_rno}
+	</update>
+	<!-- 댓글 삭제-->
+	<delete id="delete_at">
+		delete from at_replynotice where at_rno=#{at_rno}
+	</delete>
+
+	<!-- 참여-글쓰기 -->
+	<!-- 댓글 목록 -->
+	<select id="list_w" parameterType="integer" resultType="ReplyAttend">
+		select * from w_replynotice where w_bno=#{w_bno} order by w_rno
+	</select>
+	<!-- 댓글 입력 -->
+	<insert id="insert_w" parameterType="ReplyAttend">
+		<selectKey keyProperty="w_rno" order="BEFORE" resultType="integer">
+			select nvl(max(w_rno), 0) + 1 w_rno from w_replynotice
+		</selectKey>
+		insert into w_replynotice values(
+			#{w_rno},#{w_bno},#{w_replytext},#{w_replier},sysdate,sysdate, #{id})
+	</insert>
+	<!-- 댓글 수정-->
+	<update id="update_w" parameterType="ReplyAttend">
+		update w_replynotice set w_replytext=#{w_replytext}, w_updatedate=sysdate
+			where w_rno=#{w_rno}
+	</update>
+	<!-- 댓글 삭제-->
+	<delete id="delete_w">
+		delete from w_replynotice where w_rno=#{w_rno}
+	</delete>
+
+	<!--열줄공모전-->
+	<!-- 댓글 목록 -->
+	<select id="list_t" parameterType="integer" resultType="ReplyAttend">
+		select * from t_replynotice where t_bno=#{t_bno} order by t_rno
+	</select>
+	<!-- 댓글 입력 -->
+	<insert id="insert_t" parameterType="ReplyAttend">
+		<selectKey keyProperty="t_rno" order="BEFORE" resultType="integer">
+			select nvl(max(t_rno), 0) + 1 t_rno from t_replynotice
+		</selectKey>
+		insert into t_replynotice values(
+			#{t_rno},#{t_bno},#{t_replytext},#{t_replier},sysdate,sysdate, #{id})
+	</insert>
+	<!-- 댓글 수정-->
+	<update id="update_t" parameterType="ReplyAttend">
+		update t_replynotice set t_replytext=#{t_replytext}, t_updatedate=sysdate
+			where t_rno=#{t_rno}
+	</update>
+	<!-- 댓글 삭제-->
+	<delete id="delete_t">
+		delete from t_replynotice where t_rno=#{t_rno}
+	</delete>
+
+	<!--열줄공모전 심사평-->
+	<!-- 댓글 목록 -->
+	<select id="list_ta" parameterType="integer" resultType="ReplyAttend">
+		select * from ta_replynotice where ta_bno=#{ta_bno} order by ta_rno
+	</select>
+	<!-- 댓글 입력 -->
+	<insert id="insert_ta" parameterType="ReplyAttend">
+		<selectKey keyProperty="ta_rno" order="BEFORE" resultType="integer">
+			select nvl(max(ta_rno), 0) + 1 ta_rno from ta_replynotice
+		</selectKey>
+		insert into ta_replynotice values(
+			#{ta_rno},#{ta_bno},#{ta_replytext},#{ta_replier},sysdate,sysdate, #{id})
+	</insert>
+	<!-- 댓글 수정-->
+	<update id="update_ta" parameterType="ReplyAttend">
+		update ta_replynotice set ta_replytext=#{ta_replytext}, ta_updatedate=sysdate
+			where ta_rno=#{ta_rno}
+	</update>
+	<!-- 댓글 삭제-->
+	<delete id="delete_ta">
+		delete from ta_replynotice where ta_rno=#{ta_rno}
+	</delete>
+</mapper>

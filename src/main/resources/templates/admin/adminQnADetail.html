@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.table{
+	margin-bottom: 10px;
+}
+.table th{
+	vertical-align: middle;
+}
+.detailQnABox{
+	width: 1000px; 
+	margin: 0 auto; 
+	text-align: center;
+	position: relative;
+	top: 20px;
+}
+.adminMainBtn {
+	text-decoration: none;
+	color: green;
+	font-size: 25px;
+	border: 1px solid green;
+	padding: 5px;
+}
+
+</style>
+<script type="text/javascript">
+	$(function(){
+		$('#QnAdeleteBtn').click(function(){
+			let q_no = $('#QnAdeleteBtn').data("q_no");
+			alert(q_no);
+			let check = confirm("문의를 삭제하시겠습니까?");
+			if(check){
+				location.href="/admin/adminQnADelete?q_no="+q_no;
+			}else return false;
+		});
+	});
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="section" style="width: 1000px; margin: 0 auto;">
+			<div class="widget padding" data-height="80"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 80px;"></div>
+			</div>
+			<div class="text-table">
+				<div class="section_wrap">
+					<h6 style="text-align: center; line-height: 2;">
+						<span style="color: blue; font-size: 24px; letter-spacing: -1px;">
+							<span style="font-size: 36px; color: blue;"><b>문의 상세</b></span>
+						</span>
+					</h6>
+				</div>
+			</div>
+				<a href="/admin/admin" class="adminMainBtn">어드민메인</a>
+			<div class="detailQnABox" >
+				<table class="table table-hover">
+					<tr><th style="width: 20%;">문의번호</th><td style="width: 80%;">[[${qnaItem.q_no}]]</td></tr>
+					<tr><th>작성자</th><td>[[${qnaItem.id}]]</td></tr>
+					<tr><th>문의작성일</th><td>[[${qnaItem.q_date}]]</td></tr>
+					<tr><th>문의제목</th><td th:utext="${qnaItem.q_title}"></td></tr>
+					<tr><th>문의내용</th><td th:utext="${qnaItem.q_content}"></td></tr>
+				</table>
+				<a id="QnAdeleteBtn" class="btn btn-danger" href="/admin/adminQnADelete" th:data-q_no="${qnaItem.q_no}">삭제</a>
+				<a id="QnAAnswerBtn" class="btn btn-success" th:href="@{/QnAWhiteForm(q_no=${qnaItem.q_no},answer=true)}">답변</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.productMG , .orderMG , .memberMG , .qnaMG{
+		width: 150px;
+		height: 150px;
+		background: white;
+		border: 1px solid #0000ff;
+		color: #0000ff;
+		text-align: center;
+		margin: 10px;
+		font-weight: bold;
+	}
+	.productMG:hover , .orderMG:hover , .memberMG:hover , .qnaMG:hover{
+		cursor: pointer;
+		background: blue;
+		color:white;
+	}
+	.productMG span , .orderMG span , .memberMG span , .qnaMG span{
+		font-size: 30px;
+		position: relative;
+		top: 35%;
+	}
+</style>
+<script type="text/javascript">
+$(function(){
+	$(".productMG").click(function(){
+		location.href="/listAcademy";
+	});
+	
+	$('.orderMG').click(function(){
+		location.href="/adminOrder";
+	});
+	
+	$('.memberMG').click(function(){
+		location.href="/adminMemberList";
+	});
+	$('.qnaMG').click(function(){
+		location.href="/adminQnA";
+	});
+	
+});
+</script>
+</head>
+<body>
+	<div layout:fragment="content" >
+		<div class="section" style="background-color: #0000ff;">
+			<div class="widget padding" data-height="80"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 80px;"></div>
+			</div>
+			<div class="text-table">
+				<div class="section_wrap">
+					<h6 style="text-align: center; line-height: 2;">
+						<span
+							style="color: rgb(255, 255, 255); font-size: 24px; letter-spacing: -1px;">
+							<span style="font-size: 36px;"><strong><span
+									style="color: rgb(255, 255, 255)">관리자 페이지</span></strong></span><br>
+						</span>
+					</h6>
+				</div>
+			</div>
+			<div class="widget padding" data-height="88"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 88px;"></div>
+			</div>
+		</div>
+			<div style="display: flex; align-content: center; justify-content: center; margin-top: 50px;">
+				<div class="productMG">
+					<span>상품관리</span>
+				</div>
+				<div class="orderMG">
+					<span>주문관리</span>
+				</div>
+				<div class="memberMG">
+					<span>회원관리</span>
+				</div>
+				<div class="qnaMG">
+					<span>문의관리</span>
+				</div>
+			</div>
+		<br>
+	</div>
+</body>
+</html>

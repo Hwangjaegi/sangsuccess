@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head><meta charset="UTF-8">
+<title>상상마당 아카데미</title>
+<style>
+.section_wrap_grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.section_wrap_grid > div {
+    width: calc(25% - 10px); /* 4개씩 한 줄로 정렬되게끔 */
+    margin-bottom: 20px;
+    position: relative; /* 상대 위치 지정 */
+}
+
+.section_wrap_grid img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+.p_link {
+    text-decoration: none;
+	color: #A3A3A3;
+	font-size: 14px;
+	padding: 10px;
+}
+.p_link_active {
+    text-decoration: none;
+	font-weight: bold;
+	color: black;
+	font-size: 14px;
+	padding: 10px;
+}
+.comment a{
+ 	display: flex;
+ 	color: #0000ff;
+ 	text-decoration: none;
+}
+.view_count a{
+	text-decoration: none;
+	color: black;
+}
+.view_count{
+	display: flex;
+}
+.alike_btn:hover{
+	cursor: pointer;
+}
+.text-body a{
+	text-decoration: none;
+	color: black;
+}
+#bottomSearch .form-control{
+	border: none;
+	border-radius: 0;
+}
+#bottomSearch{
+	border-bottom: 1px solid black;
+}
+.btn-block-right a{
+	background: white;
+	color:blue;
+	border: 1px solid blue;
+	padding:  9px 20px;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: bolder;
+	border-radius: 0;
+}
+.btn-block-right a:hover{
+	background: blue;
+	color:white;
+	border: 1px solid blue;
+	transition: color 0.5s ease;
+}
+</style>
+</head><body>
+<div layout:fragment="content">	
+	 <div class="section" style="background-color:#0000ff;">
+		<div class="widget padding" data-height="80" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:80px;"></div>
+		</div>
+		<div class="text-table">
+			<div class="section_wrap">
+				<h6 style="text-align:center; line-height:2;">
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing: -1px;">
+					<span style="font-size:36px;"><strong><span style="color:rgb(255,255,255)">취미에 진심인_편</span></strong></span><br>
+					취미에 진심인 사람들의 이야기를 모았습니다</span><br>
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing:-1px;"></span>
+				</h6>
+			</div>
+		</div>
+		<div class="widget padding" data-height="88" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:88px; "></div>
+		</div>
+	</div>
+	<div class="container" style="margin-top: 80px;">
+      <div>
+		<div class="widget img container" style="display: flex; margin-top: 20px;">
+			<div class="img box img_wrap">
+				<img alt="" th:src="@{'/images/attend/at_hobby.png'}" class="org_image"
+				style="visibility: visible; display: block; width: auto; height: 640px; margin-top: 0%; margin-left: -0.0336436px;">
+				<div class="hover _image hover_img" style="position: absolute;width: 100%; height: 100%;  background-size: cover; background-repeat: no-repeat; background-position: 50% 50%;"></div>
+			</div>
+			<div class="text_wrap " style="height: 600px; margin-top: 35px; margin-left: 15px;">
+				<div class="text-table holder container" style="line-height: 1;">
+					<p><span style="font-size: 16px; color: rgb(0,0,255);">#취미웹진, #취미응원프로젝트
+					#랜선취미공유 #디깅 #세상의모든취미 #크리에이터</span></p>
+					<div style="line-height: 0.5;">
+					<p><br></p>
+					<p><strong>글을 읽고 댓글을 남겨주신 분 중</strong></p>
+					<p><strong>세 분에게는 백화점 상품권 5만원을 드립니다.</strong></p>
+					<p><br></p>
+					<p><span style="color:rgb(0,0,255);"><strong>[댓글 이벤트 참여 방법]</strong></span></p>
+					<p><span style="color:rgb(0,0,255);"><br></span></p>
+					<p><span style="color:rgb(0,0,255);">1.&nbsp; &nbsp; &nbsp; 아카데미 홈페이지 회원가입</span></p>
+					<p><span style="color:rgb(0,0,255);">2.&nbsp; &nbsp; &nbsp; &#60;취미에 진심인_편&#62; 게시물 전문 읽기</span></p>
+					<p><span style="color:rgb(0,0,255);">3.&nbsp; &nbsp; &nbsp; 마음에 드는 게시물에 댓글 남기기!</span></p>
+					<p><span style="color:rgb(0,0,255);">&nbsp; &nbsp; &nbsp; &nbsp; (사진도 같이 올리면 선정 확률 up)</span></p><p><br></p>
+					<p><span style="color:rgb(0,0,255);">*주의사항 : 꼭 홈페이지 회원가입 후 댓글을 남겨주셔야</span></p>
+					<p><span style="color:rgb(0,0,255);">이벤트 참여가 가능합니다.</span></p>
+					<p><br></p>
+					<p><strong>이벤트 기간 &nbsp; &nbsp; &nbsp; &nbsp;~ 2022년 12월 5일(월) 오후3시까지</strong></p>
+					<p>선정 발표일 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2022년 12월 5일(월)</p>
+					<p>혜택 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 백화점 모바일 상품권 5만원 권</p>
+					<p>선정 인원 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 3명 &nbsp; &nbsp; &nbsp; &nbsp;</p>
+					<p><br></p>
+					<p>댓글에 진심인 여러분의 많은 참여를 바랍니다!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+			<br>
+			<!-- 취미모음 -->
+	 <div class="widget_data" style="margin-top: 80px;">
+				<div class="text_title_wrap">
+					<div class="text_wrap">
+						<div class="text-table">
+							<p style="margin-bottom: 0;"><strong><span style="color: rgb(0, 0, 255); font-size: 20px;">✨ 이 주의 취미인 모음 ✨</span></strong></p>
+						</div>
+					</div>
+					<div class="line_box holder">
+						<hr style="border-top-width: 2px; border-color: #0000ff; opacity: 1; margin-top: 2px;">
+					</div>
+				</div>
+				<div class="">
+					<div class="section_wrap_grid">
+						<th:block th:each="attend, status : ${list_attend}">
+							<div>
+							<div class="card_img">
+								<a th:href="@{/attend/hobbypage_detail(at_no=${attend.at_no})}">
+								<img alt="hobbyErr" th:src="@{'/images/attend/'+${attend.at_image}}"
+								 style="width: 280px;"></a>
+							</div>
+							<div class="card_title" style="margin-top: 20px;">
+								<span th:text=${attend.at_title}></span>								
+							</div>
+							<br>
+							<div class="card_count">
+								<div style="display: flex;">
+									<div class="alike_btn" style="margin-right: 15px;">
+									<a th:onclick="toggleHeart([[${attend.at_no}]])" style="display: flex;">
+									<img th:id="'heartImage'+${attend.at_no}" alt="" th:src="@{/images/btn/blue-heart.png}" style="width: 15px; height: auto; margin-right: 5px;">
+									<span th:id="'prod_detail_wish_count_'+${attend.at_no}"style="color: #0000ff; font-size: 13px;">[[${attend.at_good_count}]]</span>
+									</a></div>
+									<div id="session_id" style="display: none;">[[${id}]]</div>
+									<script type="text/javascript">
+										 function toggleHeart(at_no) {
+											 	var id = document.getElementById('session_id').textContent;
+										        var heartImage = document.getElementById('heartImage'+at_no);
+										        var wishCount = document.getElementById('prod_detail_wish_count_'+at_no);
+										            if (heartImage) {
+												        if (heartImage.src.includes('blue-heart.png')) {
+												            heartImage.src = '/images/btn/full-heart.png';
+												            wishCount.textContent = parseInt(wishCount.textContent) + 1;
+					
+												            // plus_heart 서버로 정보 전송
+												            var plusHeartXhr = new XMLHttpRequest();
+												            plusHeartXhr.open('POST', '/attend/plus_heart', true);
+												            plusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+												            plusHeartXhr.send('at_no=' + encodeURIComponent(at_no)+ '&id=' + encodeURIComponent(id));
+												        } else {
+												            heartImage.src = '/images/btn/blue-heart.png';
+												            wishCount.textContent = parseInt(wishCount.textContent) - 1;
+					
+												            // minus_heart 서버로 정보 전송
+												            var minusHeartXhr = new XMLHttpRequest();
+												            minusHeartXhr.open('POST', '/attend/minus_heart', true);
+												            minusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+												            minusHeartXhr.send('at_no=' + encodeURIComponent(at_no)+ '&id=' + encodeURIComponent(id));
+												        }
+										            }
+										        }							
+									</script>
+									<div class="comment">						
+									<a th:href="@{/attend/hobbypage_detail(at_no=${attend.at_no})}">
+									<img alt="" th:src="@{'/images/btn/speech-bubble.png'}" style="width: 15px; height:15px; margin-right: 5px;">
+									<span style="font-size: 13px;">[[${attend.at_repl_count}]]</span>
+									</a></div>
+								</div>
+								<br>
+								<div class="view_count">
+									<a th:href="@{/attend/hobbypage_detail(at_no=${attend.at_no})}">
+									<span style="font-size: 13px;">조회</span>
+									<span style="font-size: 13px;">[[${attend.at_view_count}]]</span>
+									</a>
+								</div>
+							</div>
+							</div>
+						</th:block>
+					</div>
+				</div>
+			</div>
+				<!-- 자율투고란 -->
+				<div class="" style="margin-top: 80px;">
+					<div class="text_title_wrap">
+						<div class="text_wrap">
+							<div class="text-table">
+								<p style="margin-bottom: 0;"><strong><span style="color: rgb(0, 0, 255); font-size: 20px;">📌 자율 투고란 ✍️&nbsp;</span></strong></p>
+							</div>
+						</div>
+						<div class="line_box holder">
+							<hr style="border-top-width: 2px; border-color: #0000ff; opacity: 1; margin-top: 2px;">
+						</div>
+					</div>
+					<div class="" style="margin-top: 50px;">
+						<div class="scroll_position">
+							<div class="list-style blog">
+								<div th:each="write : ${list_write}">
+									<div class="list" style="padding-top: 10px; padding-bottom: 10px;">
+										<div class="blog-body">
+											<div class="text-body" style="font-size: 15px;">
+												<p><strong><a th:href="@{/attend/writing_detail(w_no=${write.w_no})}">
+												[[${write.w_title}]]</a></strong></p><br>
+												<div class="text"><span th:utext="${write.w_content}"></span></div>
+											</div>
+										</div>
+										<div class="blog-head" style="display: flex; margin-top: 30px;">
+											<i class="profile-thumb" style="width: 50px; height: 50px; position: relative; overflow: hidden; border-radius: 50%;">
+												<img alt="프로필사진" th:src="@{'/upload/'+${write.image}}"
+												style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%;">
+											</i>
+											<div class="board-block" style="font-size: 13px; margin-left: 10px;">
+												<div class="write"><span class="no-padding-x">[[${write.name}]]</span></div>
+												<div style="display: flex; color: #636363;">
+													<div class="date-block" style="margin-right: 20px;">
+														<span class="date">[[${write.w_date}]]</span>
+													</div>											
+													<div class="like_btn">
+														<a th:onclick="w_toggleHeart([[${write.w_no}]])" class="comment_num btn" style="font-size: 13px;">
+															<img th:id="'w_heartImage'+${write.w_no}" alt="" th:src="@{/images/btn/bin-heart.png}"
+															style="width: 15px; margin-right: 5px;">
+															<span>좋아요</span>
+															<span th:id="'w_prod_detail_wish_count_'+${write.w_no}">[[${write.w_good_count}]]</span>
+														</a>
+													</div>
+												</div>
+												<div id="session_id" style="display: none;">[[${id}]]</div>
+												<script type="text/javascript">												
+												 function w_toggleHeart(w_no) {
+														var id = document.getElementById('session_id').textContent;
+												        var heartImage = document.getElementById('w_heartImage'+w_no);
+												        var wishCount = document.getElementById('w_prod_detail_wish_count_'+w_no);
+												            if (heartImage) {
+														        if (heartImage.src.includes('bin-heart.png')) {
+														            heartImage.src = '/images/btn/full-heart.png';
+														            wishCount.textContent = parseInt(wishCount.textContent) + 1;
+							
+														            // plus_heart 서버로 정보 전송
+														            var plusHeartXhr = new XMLHttpRequest();
+														            plusHeartXhr.open('POST', '/attend/w_plus_heart', true);
+														            plusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+														            plusHeartXhr.send('w_no=' + encodeURIComponent(w_no) +'&id=' + encodeURIComponent(id));
+														        } else {
+														            heartImage.src = '/images/btn/bin-heart.png';
+														            wishCount.textContent = parseInt(wishCount.textContent) - 1;
+							
+														            // minus_heart 서버로 정보 전송
+														            var minusHeartXhr = new XMLHttpRequest();
+														            minusHeartXhr.open('POST', '/attend/w_minus_heart', true);
+														            minusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+														            minusHeartXhr.send('w_no=' + encodeURIComponent(w_no) +'&id=' + encodeURIComponent(id));
+														        }
+												            }
+												        }						
+											</script>
+											</div>
+										</div>
+										<div class="line_bar">
+											<hr>
+										</div>
+									</div>									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+					<!-- 검색, 글쓰기, 페이징 -->
+					<div class="search_pagging">
+						<div class="search_writing" style="display: flex; justify-content: space-between;">
+						<div class="tools inline-bloced hidden-xs" style="margin: 0 auto; margin-bottom: 50px;" >
+							<div class="tools" style="align-content: center; justify-content: center; width: 250px;">
+								<form action="/attend/hobbypage"
+								id="bottomSearch" class="input-group bottom_search_form" method="get"
+								style="align-content: center; justify-content: center;">
+									<input type="hidden" name="keyword_type" value="all">
+									<input class="form-control" type="text" placeholder="Search" name="keyword" title="search" id="search">	
+									<a href="" class="ico-search" onclick="" style="margin-left: 5px;">
+										<i class="icon-magnifier vertical-middle" aria-hidden="true" onclick="search()">
+											<img th:src="@{'/images/btn/search.png'}" style="width: 20px;">
+										</i>										
+									</a>
+									<script type="text/javascript">
+										function search() {
+										    document.getElementById("search").submit();
+										}
+									</script>					
+								</form>
+							</div>
+						</div>
+						<div class="btn-block-right" style="float: right; ">
+							<a class="btn btn-primary btn-sm float_r" role="button"
+							th:href="@{'/attend/writing'}">글쓰기</a>
+						</div>
+						</div>
+					<!-- paging -->
+					<div class="paging">
+					    <ul class="pagination justify-content-center">
+					       <!--  앞에 보여줄 것이 있다(이전) -->
+					        <th:block th:if="${pb.startPage > pb.pagePerBlock}">
+					            <li><a class="p_link" th:href="@{/attend/hobbypage(pageNum=${pb.startPage - 1}, keyword=${keyword})}">
+					                	<img th:src="@{/images/btn/paging_1.png}" style="width: 13px; height: 13px; margin-right: 5px;">
+					                </a>
+					            </li>
+					        </th:block>
+					        <th:block th:unless="${pb.startPage > pb.pagePerBlock}">
+					            <li><img th:src="@{/images/btn/paging_1.png}" style="width: 13px; height: 13px; cursor: not-allowed; margin-right: 5px;"></li>
+					        </th:block>
+					        <th:block th:each="i : ${#numbers.sequence(pb.startPage, pb.endPage)}">
+					            <th:block th:if="${total > 0}">
+					                <th:block th:if="${pb.currentPage == i}">
+					                    <li><a class="p_link_active" th:href="@{/attend/hobbypage(pageNum=${i}, keyword=${keyword})}">[[${i}]]</a></li>
+					                </th:block>
+					                <th:block th:if="${pb.currentPage != i}">
+					                    <li><a class="p_link" th:href="@{/attend/hobbypage(pageNum=${i}, keyword=${keyword})}">[[${i}]]</a></li>
+					                </th:block>
+					            </th:block>
+					        </th:block>
+					        <!-- 뒤에 보여줄 것이 남아 있다(다음) -->
+					        <th:block th:if="${pb.endPage < pb.totalPage}">
+					            <li><a class="p_link" th:href="@{/attend/hobbypage(pageNum=${pb.endPage + 1}, keyword=${keyword})}">
+					                    <img th:src="@{/images/btn/paging_2.png}" style="width: 13px; height: 13px; margin-left: 5px;">
+					                </a>
+					            </li>
+					        </th:block>
+					        <th:block th:unless="${pb.endPage < pb.totalPage}">
+					            <li><img th:src="@{/images/btn/paging_2.png}" style="width: 13px; height: 13px; cursor: not-allowed; margin-left: 5px;"></li>
+					        </th:block>
+					    </ul>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+</body>
+</html>

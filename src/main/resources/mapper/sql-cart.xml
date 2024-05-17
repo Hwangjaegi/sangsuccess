@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.CartMapper">
+	<!-- 장바구니 목록 조회 -->
+	<select id="cart_list" parameterType="string" resultType="cart">
+		select * from cart where id = #{id}
+	</select>
+	
+	<select id="cartList" resultType="cart" parameterType="map">
+		select * from academy where a_no in (
+			select a_no from cart)
+	</select>
+	<select id="select" parameterType="cart" resultType="cart">
+		select * 
+		from cart where id=#{id} 
+			and a_no=#{a_no}
+	</select>
+	
+	<!-- cart에담긴 a_no로 아카데미정보가져오기 -->
+	<select id="selectCartAcademy" parameterType="integer" resultType="academy">
+		select * from academy where a_no = #{a_no}
+	</select>
+	
+	<!-- id를통해 cart정보 가져오기 -->
+	<select id="selectCartID" parameterType="string" resultType="cart">
+		select * from cart where id = #{id}
+	</select>
+	
+	<!-- 장바구니 추가 -->
+	<insert id="addCart" parameterType="cart">
+			merge into cart c <!-- 듀얼 테이블 세팅 -->
+			using (select #{a_no} as a_no, #{id} as id from dual) d
+				on (c.a_no = d.a_no and c.id = d.id) <!--  조건 -->
+	    when matched then <!-- 같은 상품이 있으면 -->
+	        update set c_count = c.c_count + #{c_count}
+	    when not matched then <!-- 같은 상품이 없으면 -->
+	        insert (c_no, a_no, id, c_count)
+	        	values (c_no_seq.nextval, d.a_no, d.id, #{c_count})
+	</insert>
+	<update id="update" parameterType="cart">
+		update	cart 
+		set		c_count = #{c_count}
+		where 	a_no = #{a_no}
+	</update>
+	
+	<!-- 장바구니 상품개수 up -->
+	<update id="updateCountUp" parameterType="integer">
+		update cart set c_count = c_count+1 where a_no = #{a_no}
+	</update>
+	
+	<!-- 장바구니 상품개수 down -->
+	<update id="updateCountDown" parameterType="integer">
+		update cart set c_count = c_count-1 where a_no = #{a_no}
+	</update>
+	
+	<delete id="deleteCart" parameterType="map">
+		delete from cart where a_no = #{a_no} and id = #{id}
+	</delete>
+	
+</mapper>

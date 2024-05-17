@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript"	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<title>Insert title here</title>
+<style type="text/css">
+	.buy_academyList{
+		width: 700px;
+		height: auto;
+	}
+	.buy_info, .buy_method, .checkBox{
+		width: 480px;
+		height: auto;
+	}
+	.member_info{
+		width: 700px;
+		height: auto;
+		clear: both;
+	}
+
+	.coupon{
+		width: 700px;
+		height: auto;
+	}
+	.checkBox{
+		width: 480px;
+		height: 200px;
+	}
+	#agreement{
+		width: 18px;
+		height: 18px;
+		margin-right: 10px;
+	}
+	.margin_Box{
+		margin: 20px;
+	}
+	.margin_Box span{
+		position: relative;
+		top: 20px;
+		font-size: 20px;
+	}
+	#card , #transfer{
+		width: 18px; 
+		height: 18px;
+		margin-right: 10px;
+	}
+	.buy_method span{
+		margin-right: 20px;
+	}
+	#card:hover , #transfer:hover , .buy_method label:hover { 
+		cursor: pointer;
+	}
+	.buy_Btn{
+		position:relative;
+		top: 50px;
+		width: 100%;
+		height: 70px;
+		background: blue;
+		color:white;
+		border: 1px solid blue;
+		font-size: 25px;
+	}
+	.couponBtn{
+		background: white; 
+		border: 1px solid blue; 
+		color:blue; 
+		width: 20%; 
+		padding: 5px; 
+		border-radius: 10px;
+		text-decoration: none;
+	}
+	.couponBtn:hover , .codeBtn:hover{
+		background: blue;
+		color:white;
+		cursor: pointer;
+	}
+	.codeBtn{
+		background: white; 
+		border: 1px solid blue; 
+		color:blue; 
+		width: 20%; 
+		padding: 5px; 
+		border-radius: 10px;
+		text-decoration: none;
+	}
+
+</style>
+<script type="text/javascript">
+let IMP = window.IMP;
+IMP.init("imp83676838");   /* imp~ : 가맹점 식별코드*/
+	$(function(){
+		$(".buy_Btn").click(function(){	
+			let check = confirm("결제하시겠습니까?");
+			if(check){ //confirm 확인시
+			
+			let card = $("#card:checked").val();
+			let transfer = $("#transfer:checked").val();
+			let agreement = $("#agreement").prop('checked');
+			let TotalPrice = $("#TotalPrice").attr("data-total");
+			let cartList = $('#cartList').attr("data-cartList");
+
+			
+			let dataA_no = [];	//2개이상의 주문시 a_no를 받기위해 배열생성
+			$(".dataA_no").each(function(){
+				dataA_no.push($(this).attr("data-a_no"));
+			});
+
+			
+			if(TotalPrice == undefined || TotalPrice == 0){
+				alert("총금액 0원");
+				let JsonData = encodeURIComponent(JSON.stringify(dataA_no)); // 배열을 JSON 문자열로 변환하여 인코딩
+				location.href="buyComplete?payment="+transfer+"&TotalPrice="+TotalPrice+"&a_no="+JsonData+"&cartList="+cartList;	
+				return false;
+			}
+			
+			//체크사항 체크 여부
+			if(card == undefined && transfer == undefined){
+				alert("결제수단을 선택해주세요");
+				return false;
+			
+			}
+			if(agreement == false){
+				alert("구매조건에 동의 후 구매해주세요");
+				return false;
+			}
+
+		
+			if(card != undefined){ //카드결제시
+				alert("카드지롱");
+				IMP.request_pay({
+					pg: "html5_inicis.INIpayTest", 
+					pay_method: 'card',
+					merchant_uid: 'merchant_' + new Date().getTime(),
+			
+					name: "상상마당점",
+					amount: TotalPrice,
+					buyer_email: "zzx9603@naver.com",  /*필수 항목이라 "" 로 남겨둠*/
+					buyer_name: "황재기",
+				}, function(rsp) {
+					console.log(rsp);
+					
+					 //결제 성공 시
+					if (rsp.success) {
+						var msg = '결제가 완료되었습니다.';
+						console.log("결제성공 ");
+			
+						$.ajax({
+							type: "GET",
+							url: 'bookingPay',
+							data: {
+								amount: bookMoney,
+								imp_uid: rsp.imp_uid,
+								merchant_uid: rsp.merchant_uid
+							}
+						});
+					} else {
+						var msg = '결제에 실패하였습니다.';
+						msg += '에러내용 : ' + rsp.error_msg;
+					}
+					alert(msg);
+				});
+				
+			// 계좌이체시 2개이상의 a_no를 서버로 전달할때 a_no를 배열에담은dataA_no를 JSON으로 변환하여 서버로전달
+			}else if(transfer != undefined){ 
+				let JsonData = encodeURIComponent(JSON.stringify(dataA_no)); // 배열을 JSON 문자열로 변환하여 인코딩
+				location.href="/buyComplete?payment="+transfer+"&TotalPrice="+TotalPrice+"&a_no="+JsonData;
+				alert(JsonData);
+			}
+		}else return false;	// confirm 취소시
+		
+		});
+	});
+</script>
+</head>
+<body>
+<div layout:fragment="content" style="width: 1200px; margin: 0 auto;">
+		<input type="hidden" id="cartList" th:data-cartList="${cartList}">
+		<div class="section">
+			<div class="widget padding" data-height="80"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 80px;"></div>
+			</div>
+			<div class="text-table">
+				<div class="section_wrap">
+					<h6 style="text-align: center; line-height: 2;">
+						<span
+							style="color: blue; font-size: 24px; letter-spacing: -1px;">
+							<span style="font-size: 36px;"><strong><span
+									style="color: blue;">결제하기</span></strong></span><br>
+							아카데미를 구매해보세요!
+						</span>
+					</h6>
+				</div>
+			</div>
+			<div class="widget padding" data-height="88">
+				<div style="width: 100%; min-height: 1px; height: 88px;"></div>
+			</div>
+		</div>
+		<br>
+		<div style="display: flex; flex-wrap: wrap;">
+			<div class="buy_academyList">
+				<div class="margin_Box">
+			    <h4><b>신청 강의 정보</b></h4><br>
+			    <div th:if="${academylist} == null"> 강의정보가 없습니다</div>
+			    <div th:if="${academylist} != null"> 
+			        <div class="dataA_no" th:each="academy : ${academylist}" th:data-a_no="${academy.a_no}">
+			            <div style="display: flex; align-items: center;  margin-bottom: 10px;">
+			                <img style="width: 100px;" alt="academyImg" th:src="@{'/images/academy/' + ${academy.image}}">
+			                <div style="position: relative; top:-25px; left: 10px;">
+			                    <span>[[${academy.title}]]</span><br>
+			                    <span>[[${academy.schedule}]]</span><br>
+			                    <span><b th:text="${#numbers.formatInteger(academy.price,0,'COMMA')+'원'}">[[${academy.price}]]원 [카트수량 * price로 교체]</b></span><br>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			    </div>
+			</div>
+			<div class="buy_info">
+				<div class="margin_Box">
+					<h4><b>주문 요약</b></h4>
+					<span>수강료</span> <span style="float: right;">
+						<b id="TotalPrice" th:data-total="${TotalPrice}" th:text="${#numbers.formatInteger(TotalPrice,0,'COMMA')+'원'}">[[${TotalPrice}]]원</b></span>
+					<hr style="position: relative; top: 20px;">
+					<span><b>총 주문금액</b></span> <span style="float: right;">
+						<b style="color:blue;" th:text="${#numbers.formatInteger(TotalPrice,0,'COMMA')+'원'}">[[${TotalPrice}]]원</b></span>
+				</div>
+			</div>
+			<div class="member_info">
+				<div class="margin_Box">
+					<h4><b>주문자 정보</b></h4>
+					<div>
+						<span>이름 : [[${member.name}]]</span><br>
+						<span>TEL : [[${member.tel}]]</span><br>
+						<span>EMAIL : [[${member.email}]]</span>
+					</div>
+				</div>
+			</div>
+			<div class="buy_method">
+				<div class="margin_Box">
+				<h4><b>결제 수단</b></h4>
+				<span><input type="radio" name="payment" value="card" id="card" checked="checked"><label for="card">신용카드</label></span>
+				<span><input type="radio" name="payment" value="transfer" id="transfer"><label for="transfer">계좌이체</label></span>
+				</div>
+			</div>
+			<div class="coupon">
+				<!-- 쿠폰미구현하겠습니다 , 공간배치위에 사용 -->
+			</div>
+			<div class="checkBox">
+				<div class="margin_Box">
+					<h4><b>동의</b></h4>
+					<span><input type="checkbox" name="agreement" id="agreement" value="1" required="required" checked="checked"> <label for="agreement">구매조건 확인 및 결제진행에 동의</label></span><p>
+					<button class="buy_Btn">결제하기</button>
+				</div>
+			</div>
+		</div>
+</div>
+</body>
+</html>

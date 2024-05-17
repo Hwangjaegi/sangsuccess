@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript"	src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<title>Insert title here</title>
+<style type="text/css">
+	.transferBox{
+		width: 1200px;
+		height: auto;
+		margin: 0 auto;
+		text-align: center;
+	}
+	.cardBox{
+		width: 1200px;
+		height: auto;
+		margin: 0 auto;
+		text-align: center;
+	}
+	.mypageBtn{
+		background: blue; 
+		color: white; 
+		padding:10px; 
+		text-decoration: none;	
+	}
+
+	.paddingBox{
+		padding: 40px;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" style="width: 1200px; margin: 0 auto;">
+		<div id="getTotalPrice" th:data-TotalPrice="${TotalPrice}"></div>
+		<div class="section">
+			<div class="widget padding" data-height="80"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 80px;"></div>
+			</div>
+			<div class="text-table">
+				<div class="section_wrap">
+					<h6 style="text-align: center; line-height: 2;">
+						<span style="color: blue; font-size: 24px; letter-spacing: -1px;">
+							<span style="font-size: 36px;">
+								<strong>
+									<span style="color: blue;">주문이 완료되었습니다!</span>
+								</strong>
+							</span><br> 
+							<span th:if="${payment}==transfer">계좌이체</span>
+							<span th:if="${payment}==undefined">카드결제[완료]</span>
+						</span>
+					</h6>
+					<div class="transferBox" th:if="${payment}==transfer">
+						<p>
+						<span style="font-size: 30px;"><b>주문내역은 마이페이지에서 확인 가능합니다.</b></span>
+						<table class="table table-hover" style="border: 1px solid black; width: 500px; margin: 50px auto;" >
+							<tr><th>계좌번호</th><td>신한은행[상상마당] : 110-112-123456</td></tr>
+							<tr><th>금액</th><td th:text="${#numbers.formatInteger(TotalPrice,0,'COMMA')+'원'}"></td></tr>
+						</table>
+						<a class="mypageBtn" href="/mypage">마이페이지</a>
+						<div class="paddingBox"></div>
+					</div>
+					<div class="cardBox" th:if="${payment}==undefined">
+						<p>
+						<span style="font-size: 30px;"><b>주문내역은 마이페이지에서 확인 가능합니다.</b></span>
+						<table class="table table-hover" style="border: 1px solid black; width: 500px; margin: 50px auto;" >
+							<tr><th>금액</th><td>[[${TotalPrice}]]원</td></tr>
+						</table>
+						<a class="mypageBtn" href="/mypage">마이페이지</a>
+						<div class="paddingBox"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

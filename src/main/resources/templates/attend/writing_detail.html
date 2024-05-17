@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head><meta charset="UTF-8">
+<title>[[${write.w_title}]] : 상상마당 아카데미</title>
+<style>
+.section_wrap_grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.section_wrap_grid > div {
+    width: calc(25% - 10px); /* 4개씩 한 줄로 정렬되게끔 */
+    margin-bottom: 20px;
+    position: relative; /* 상대 위치 지정 */
+}
+
+.section_wrap_grid img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+.board_name a{
+	text-decoration: none;
+	color: #636363;
+}
+.board_name a:hover{
+	color: black;
+}
+.p_link {
+    text-decoration: none;
+	color: #A3A3A3;
+	font-size: 14px;
+	padding: 10px;
+}
+.p_link_active {
+    text-decoration: none;
+	font-weight: bold;
+	color: black;
+	font-size: 14px;
+	padding: 10px;
+}
+.comment a{
+ 	display: flex;
+ 	color: #0000ff;
+ 	text-decoration: none;
+}
+.view_count a{
+	text-decoration: none;
+	color: black;
+}
+.view_count{
+	display: flex;
+}
+.alike_btn:hover{
+	cursor: pointer;
+}
+.text-body a{
+	text-decoration: none;
+	color: black;
+}
+#bottomSearch .form-control{
+	border: none;
+	border-bottom: 1px solid black;
+	border-radius: 0;
+}
+/* 댓글 */
+.reply_btn:focus,
+.reply_text:focus{
+	outline: none;
+}
+.reply_btn {
+	width: 150px; 
+	height: 42px; 
+	border: 1px solid rgba(128, 128, 128, 0.2); 
+	border-radius: 3px;
+}
+.reply_text {
+	width: 100%; 
+	height: 90px; 
+	border: 1px solid rgba(128, 128, 128, 0.2); 
+	border-radius: 3px;
+}
+.reply_insert{
+	background: white;
+	border: 1px solid #0000ff;
+	padding: 8px 42px;
+	font-size: 15px;
+	color: #0000ff;
+	cursor: pointer;
+	float: right;
+}
+.reply_list {
+	background: white;
+	border: 1px solid #0000ff;
+	padding: 8px 42px;
+	font-size: 15px;
+	color: #0000ff;
+	cursor: pointer;
+}
+.reply_insert:hover,
+.reply_list:hover {
+	background: #0000ff;
+	color: white;
+}
+/* 목록 */
+
+.UpDownBtn a{
+	text-decoration: none;
+	color: black;
+	font-size:15px;
+	margin-left: 10px;
+	
+} 
+.write_menu img:hover{
+	cursor: pointer;
+}
+#WriteListBtn{
+	background: white;
+	color:blue;
+	border: 1px solid blue;
+	padding:  10px 20px;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: bolder;
+}
+#WriteListBtn:hover{
+	background: blue;
+	color:white;
+	border: 1px solid blue;
+	transition: color 0.5s ease;
+}
+.writingBox a{
+	background: white;
+	color:blue;
+	border: 1px solid blue;
+	padding:  9px 20px;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: bolder;
+	border-radius: 0;
+}
+.writingBox a:hover{
+	background: blue;
+	color:white;
+	border: 1px solid blue;
+	transition: color 0.5s ease;
+}
+.update, .delete{
+	margin-right: 15px;	
+}
+.update a, .delete a{
+	text-decoration: none;
+	color: #636363;
+}
+.update a:hover, .delete a:hover{
+	color: black;
+}
+</style>
+<script type="text/javascript">
+$(function(){
+	$(".nextNo").click(function(){
+		let w_no = this.getAttribute("data-w_no");
+		w_no = parseInt(w_no,10);
+		w_no++;
+		location.href="/attend/writing_detail?w_no=" +w_no;
+	});
+	
+	$(".beforeNo").click(function(){
+		let w_no = this.getAttribute("data-w_no");
+		w_no = parseInt(w_no,10);
+		w_no--;
+		location.href="/attend/writing_detail?w_no=" +w_no;
+	});
+	$(".write_menu img").click(function(){
+			$(this).next("a").click();
+	});
+});
+</script>
+</head><body>
+<div layout:fragment="content">	
+	 <div class="section" style="background-color:#0000ff;">
+		<div class="widget padding" data-height="80" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:80px;"></div>
+		</div>
+		<div class="text-table">
+			<div class="section_wrap">
+				<h6 style="text-align:center; line-height:2;">
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing: -1px;">
+					<span style="font-size:36px;"><strong><span style="color:rgb(255,255,255)">취미에 진심인_편</span></strong></span><br>
+					취미에 진심인 사람들의 이야기를 모았습니다</span><br>
+					<span style="color:rgb(255,255,255); font-size:24px; letter-spacing:-1px;"></span>
+				</h6>
+			</div>
+		</div>
+		<div class="widget padding" data-height="88" style="margin-top:px; margin-bottom:px;">
+			<div style="width:100%; min-height:1px; height:88px; "></div>
+		</div>
+	</div>
+	<div class="container" style="margin-top: 80px;">
+      <div>
+		<div class="widget img container" style="display: flex; margin-top: 20px;">
+			<div class="img box img_wrap">
+				<img alt="" th:src="@{'/images/attend/at_hobby.png'}" class="org_image"
+				style="visibility: visible; display: block; width: auto; height: 640px; margin-top: 0%; margin-left: -0.0336436px;">
+				<div class="hover _image hover_img" style="position: absolute;width: 100%; height: 100%;  background-size: cover; background-repeat: no-repeat; background-position: 50% 50%;"></div>
+			</div>
+			<div class="text_wrap " style="height: 600px; margin-top: 35px; margin-left: 15px;">
+				<div class="text-table holder container" style="line-height: 1;">
+					<p><span style="font-size: 16px; color: rgb(0,0,255);">#취미웹진, #취미응원프로젝트
+					#랜선취미공유 #디깅 #세상의모든취미 #크리에이터</span></p>
+					<div style="line-height: 0.5;">
+					<p><br></p>
+					<p><strong>글을 읽고 댓글을 남겨주신 분 중</strong></p>
+					<p><strong>세 분에게는 백화점 상품권 5만원을 드립니다.</strong></p>
+					<p><br></p>
+					<p><span style="color:rgb(0,0,255);"><strong>[댓글 이벤트 참여 방법]</strong></span></p>
+					<p><span style="color:rgb(0,0,255);"><br></span></p>
+					<p><span style="color:rgb(0,0,255);">1.&nbsp; &nbsp; &nbsp; 아카데미 홈페이지 회원가입</span></p>
+					<p><span style="color:rgb(0,0,255);">2.&nbsp; &nbsp; &nbsp; &#60;취미에 진심인_편&#62; 게시물 전문 읽기</span></p>
+					<p><span style="color:rgb(0,0,255);">3.&nbsp; &nbsp; &nbsp; 마음에 드는 게시물에 댓글 남기기!</span></p>
+					<p><span style="color:rgb(0,0,255);">&nbsp; &nbsp; &nbsp; &nbsp; (사진도 같이 올리면 선정 확률 up)</span></p><p><br></p>
+					<p><span style="color:rgb(0,0,255);">*주의사항 : 꼭 홈페이지 회원가입 후 댓글을 남겨주셔야</span></p>
+					<p><span style="color:rgb(0,0,255);">이벤트 참여가 가능합니다.</span></p>
+					<p><br></p>
+					<p><strong>이벤트 기간 &nbsp; &nbsp; &nbsp; &nbsp;~ 2022년 12월 5일(월) 오후3시까지</strong></p>
+					<p>선정 발표일 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2022년 12월 5일(월)</p>
+					<p>혜택 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 백화점 모바일 상품권 5만원 권</p>
+					<p>선정 인원 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 3명 &nbsp; &nbsp; &nbsp; &nbsp;</p>
+					<p><br></p>
+					<p>댓글에 진심인 여러분의 많은 참여를 바랍니다!</p>
+					</div>
+				</div>
+			</div>
+		</div>
+			<br>
+			<!-- 취미모음 -->
+	 <div class="widget_data" style="margin-top: 80px;">
+				<div class="text_title_wrap">
+					<div class="text_wrap">
+						<div class="text-table">
+							<p style="margin-bottom: 0;"><strong><span style="color: rgb(0, 0, 255); font-size: 20px;">✨ 이 주의 취미인 모음 ✨</span></strong></p>
+						</div>
+					</div>
+					<div class="line_box holder">
+						<hr style="border-top-width: 2px; border-color: #0000ff; opacity: 1; margin-top: 2px;">
+					</div>
+				</div>
+				<div class="">
+					<div class="section_wrap_grid">
+						<th:block th:each="attend, status : ${list_attend}">
+							<div>
+							<div class="card_img">
+								<a th:href="@{/attend/hobbypage_detail(at_no=${attend.at_no})}">
+								<img alt="hobbyErr" th:src="@{'/images/attend/'+${attend.at_image}}"
+								 style="width: 280px;"></a>
+							</div>
+							<div class="card_title" style="margin-top: 20px;">
+								<span th:text=${attend.at_title}></span>								
+							</div>
+							<br>
+							<div class="card_count">
+								<div style="display: flex;">
+									<div class="alike_btn" style="margin-right: 15px;">
+									<a th:onclick="toggleHeart([[${attend.at_no}]])" style="display: flex;">
+									<img th:id="'heartImage'+${attend.at_no}" alt="" th:src="@{/images/btn/blue-heart.png}" style="width: 15px; height: auto; margin-right: 5px;">
+									<span th:id="'prod_detail_wish_count_'+${attend.at_no}"style="color: #0000ff; font-size: 13px;">[[${attend.at_good_count}]]</span>
+									</a></div>
+									<div id="session_id" style="display: none;">[[${id}]]</div>
+									<script type="text/javascript">
+										 function toggleHeart(at_no) {
+											 	var id = document.getElementById('session_id').textContent;
+										        var heartImage = document.getElementById('heartImage'+at_no);
+										        var wishCount = document.getElementById('prod_detail_wish_count_'+at_no);
+										            if (heartImage) {
+												        if (heartImage.src.includes('blue-heart.png')) {
+												            heartImage.src = '/images/btn/full-heart.png';
+												            wishCount.textContent = parseInt(wishCount.textContent) + 1;
+					
+												            // plus_heart 서버로 정보 전송
+												            var plusHeartXhr = new XMLHttpRequest();
+												            plusHeartXhr.open('POST', '/attend/plus_heart', true);
+												            plusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+												            plusHeartXhr.send('at_no=' + encodeURIComponent(at_no)+ '&id=' + encodeURIComponent(id));
+												        } else {
+												            heartImage.src = '/images/btn/blue-heart.png';
+												            wishCount.textContent = parseInt(wishCount.textContent) - 1;
+					
+												            // minus_heart 서버로 정보 전송
+												            var minusHeartXhr = new XMLHttpRequest();
+												            minusHeartXhr.open('POST', '/attend/minus_heart', true);
+												            minusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+												            minusHeartXhr.send('at_no=' + encodeURIComponent(at_no)+ '&id=' + encodeURIComponent(id));
+												        }
+										            }
+										        }							
+									</script>
+									<div class="comment">						
+									<a th:href="@{/attend/hobbypage_detail(at_no=${attend.at_no})}">
+									<img alt="" th:src="@{'/images/btn/speech-bubble.png'}" style="width: 15px; height:15px; margin-right: 5px;">
+									<span style="font-size: 13px;">[[${attend.at_repl_count}]]</span>
+									</a></div>
+								</div>
+								<br>
+								<div class="view_count">
+								<a th:href="@{/attend/hobbypage_detail(at_no=${attend.at_no})}">
+								<span style="font-size: 13px;">조회</span>
+								<span style="font-size: 13px;">[[${attend.at_view_count}]]</span>
+								</a></div>
+							</div>
+							</div>
+						</th:block>
+					</div>
+				</div>
+			</div>
+				<!-- 자율투고란 -->
+				<div class="" style="margin-top: 80px;">
+					<div class="text_title_wrap">
+						<div class="text_wrap">
+							<div class="text-table">
+								<p style="margin-bottom: 0;"><strong><span style="color: rgb(0, 0, 255); font-size: 20px;">📌 자율 투고란 ✍️&nbsp;</span></strong></p>
+							</div>
+						</div>
+						<div class="line_box holder">
+							<hr style="border-top-width: 2px; border-color: #0000ff; opacity: 1; margin-top: 2px;">
+						</div>
+					</div>
+					<!--본문내용-->
+					<div class="board_view">
+						<!-- 상단 이름,등록일,조회수 -->
+						<div class="board_title" style="margin-top: 30px;">
+							<span class="tit" style="font-size: 22px;">[[${write.w_title}]]</span>
+						</div><br>
+						<div class="left" style="display: flex; margin-bottom: 20px;">							
+							<div class="mark" style="width: 50px; height: 50px; position: relative; overflow: hidden; border-radius: 50%;">
+								<img alt="사용자사진" th:src="@{'/upload/'+${member.image}}"
+								style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%;">
+							</div>
+							<div style="margin-left: 15px;">
+								<div class="author">
+									<div class="writer" style="font-size: 15px;">[[${member.name}]]</div>
+								</div>
+								<div style="display: flex; font-size: 14px; font-weight: 100;">
+									<div class="board_name" style="margin-right: 15px;">
+										<a th:href="@{/attend/hobbypage}">취미에 진심인_편 선정작</a>
+									</div>
+									<div class="date" style="margin-right: 15px; color: #636363;">[[${write.w_date}]]</div>
+									<div class="update" th:if="${write.id eq id}">
+										<a th:href="@{'/attend/writing_update?w_no='+${write.w_no}}">수정</a>
+									</div>
+									<div class="delete" th:if="${write.id eq id}">
+										<a href="#" onclick="deletePage()">삭제</a>
+									</div>
+									<script th:inline="javascript"> 									
+									    function deletePage() {	
+									    	var w_no ='[[${write.w_no}]]';
+		   									
+									        if (confirm("해당 글을 삭제하시겠습니까?")) {	
+									            $.ajax({
+									                type: "POST",
+									                url: "/delete_page",
+									               	data: { w_no: w_no }, 
+									               	success: function(response) { 
+									                    alert("성공적으로 삭제되었습니다.");
+									                    window.location.href = "/attend/hobbypage";
+									                },
+									                error: function(xhr, status, error) {
+									                    console.error("서버 요청 실패:", error); // 콘솔에 오류 메시지 표시
+									                    alert("페이지 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+									                }
+									            });
+									        }
+									    }
+									</script>									
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="board_txt_area">
+							<div class="comment_body">
+								<p><span th:utext="${write.w_content}"></span></p>
+								<p>&nbsp;</p>
+							</div>
+						</div>
+						<!-- 간격 padding -->
+						<div id="padding" style="width: 100%; min-height: 1px; height: 100px;"></div>
+						<div class="comment_section" id="comment_area">
+						<!-- 댓글영역 시작. 좋아요수, 댓글수, 공유하기 -->
+							<div class="comment_block">
+								<div class="btn-group-wrap" style="display: flex; justify-content: space-between;">
+									<div class="btn-group">
+									<div class="btn-group btn-group-comment">
+										<a th:onclick="w_toggleHeart([[${write.w_no}]])" class="comment_num btn">
+											<img class="w_heartImage" alt="" th:if="${w_save == null}" th:src="@{/images/btn/bin-heart.png}" style="width: 20px;">
+											<img class="w_heartImage" alt="" th:if="${w_save != null}" th:src="@{/images/btn/full-heart.png}" style="width: 20px;">
+											<span th:id="'w_prod_detail_wish_count_'+${write.w_no}">[[${write.w_good_count}]]</span>
+										</a>
+										<div id="session_id" style="display: none;">[[${id}]]</div>
+										<script type="text/javascript">
+										 function w_toggleHeart(w_no) {
+												var id = document.getElementById('session_id').textContent;
+												 var heartImages = document.getElementsByClassName('w_heartImage');
+										        var wishCount = document.getElementById('w_prod_detail_wish_count_'+w_no);
+										        for (var i = 0; i < heartImages.length; i++) {
+										            var heartImage = heartImages[i];
+										            if (heartImage) {
+												        if (heartImage.src.includes('bin-heart.png')) {
+												            heartImage.src = '/images/btn/full-heart.png';
+												            wishCount.textContent = parseInt(wishCount.textContent) + 1;
+					
+												            // plus_heart 서버로 정보 전송
+												            var plusHeartXhr = new XMLHttpRequest();
+												            plusHeartXhr.open('POST', '/attend/w_plus_heart', true);
+												            plusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+												            plusHeartXhr.send('w_no=' + encodeURIComponent(w_no) + '&id=' + encodeURIComponent(id));
+												        } else {
+												            heartImage.src = '/images/btn/bin-heart.png';
+												            wishCount.textContent = parseInt(wishCount.textContent) - 1;
+					
+												            // minus_heart 서버로 정보 전송
+												            var minusHeartXhr = new XMLHttpRequest();
+												            minusHeartXhr.open('POST', '/attend/w_minus_heart', true);
+												            minusHeartXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+												            minusHeartXhr.send('w_no=' + encodeURIComponent(w_no) + '&id=' + encodeURIComponent(id));
+												        }
+										            }
+										        }
+										 }
+									</script>						
+									</div>
+									<div class="_btn-group _btn-comment" style="margin-left: 3px; align-content: center;">
+										<div class="comment_num">
+											<img alt="댓글" th:src="@{'/images/btn/speech-black.png'}"
+												style="width: 20px;">
+											<span>[[${write.w_repl_count}]]</span>
+										</div>
+									</div>
+									</div>
+								</div>
+							</div>
+							<!-- 댓글 시작 -->
+							<div class="comment_section" id="comment_area">						
+								<div style="padding: 0 15px;">
+								<!-- 댓글 목록 -->
+								<div id="rListDisp"></div>
+								<!-- 댓글 입력 -->
+									<form action="/attend/w_rInsert" name="frm1" id="frm1" method="post">
+										<p>
+											<input type="hidden" name="w_bno" th:value="${write.w_no}">
+											<input type="text" name="w_replier" placeholder="이름" class="reply_btn" required="required">
+											<input type="button" value="작성" id="w_rInsert" class="reply_insert">
+										</p>
+										<p>
+											<textarea rows="1" name="w_replytext" class="reply_text" placeholder="댓글을 남겨주세요" required="required"></textarea>
+										</p>
+									</form>
+									<div id="padding" style="width: 100%; min-height: 1px; height: 30px;"></div>
+								</div>						
+							<script type="text/javascript">
+								$('#rListDisp').load('/attend/w_replyList/w_bno/[[${write.w_no}]]');
+								$('#w_rInsert').click(function() {
+									let sendData = $('#frm1').serialize();
+									$.post('/attend/w_rInsert', sendData, function(data){
+										alert("댓글이 입력되었습니다");
+										frm1.w_replytext.value="";
+										$('#rListDisp').html(data);
+									});
+								});
+							</script>
+							</div>
+						</div>
+						<!-- 다음목록보여주기 -->
+						<div class="comment_section">
+							<!--이전/다음목록-->
+							<div class="write_menu">
+								<div class="UpDownBtn" th:if="${nextTitle} != 'false'">
+									<hr>
+									<img alt="upArrow" th:src="@{/images/staff/upArrow.png}">							
+									<a href="#" class="nextNo" th:data-w_no="${write.w_no}">[[${nextTitle}]]</a><p>
+									<hr>
+								</div>
+								<div class="UpDownBtn" th:if="${beforeTitle} != 'false'">							
+									<img alt="downArrow" th:src="@{/images/staff/downArrow.png}">
+									<a href="#" class="beforeNo" th:data-w_no="${write.w_no}">[[${beforeTitle}]]</a><br>
+									<hr>
+								</div>						
+							</div>
+							<div class="btn_wrap" style="display: flex; justify-content: space-between;">
+								<div class="menuBox">
+									<a th:href="@{/attend/hobbypage}" id="WriteListBtn">목록</a>
+								</div>
+								<div class="writingBox">
+									<a class="btn btn-primary btn-sm" th:href="@{/attend/writing}" role="button">글쓰기</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>					
+			</div>
+		</div>
+</div>
+</body>
+</html>

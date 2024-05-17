@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:insert="~{/header.html::header}"></th:block>
+<meta charset="UTF-8">
+<title>아카데미수정</title>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script	src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+<!-- include summernote css/js-->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<script	src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+
+<style type="text/css">
+	@font-face {
+		font-family: 'Pretendard-Regular';
+		src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+		font-weight: 400;
+		font-style: normal;
+	}
+	* {
+		font-family: 'Pretendard-Regular';
+	}
+	.submit_btn {
+		text-decoration: none;
+		background: #0000ff;
+		border: 1px solid #0000ff;
+		padding: 10px 40px;
+		font-size: 15px;
+		color: white;
+		cursor: pointer;
+	}
+	.submit_btn:hover {
+		background: white;
+		border: 1px solid #0000ff;
+		color: #0000ff;
+	}
+	.updateCancleBtn {
+		text-decoration: none;
+		background: white;
+		border: 1px solid #0000ff;
+		padding: 10px 40px;
+		font-size: 15px;
+		color: #0000ff;
+		cursor: pointer;
+		margin-right: 10px;
+	}
+	.updateCancleBtn:hover {
+		background: #0000ff;
+		border: 1px solid #0000ff;
+		color: white;
+	}
+	.note-editor .note-editing-area hr {
+	        border-top: 3px solid #000; /* 수평선의 두께와 색상을 조절할 수 있습니다. */
+	    }
+	.form-control {
+		margin-bottom: 20px;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		$('.updateCancleBtn').click(function(){
+			let check = confirm("취소 하시겠습니까?");
+			if(check) location.href="/listAcademy";
+			else return false;
+		});
+	});
+</script>
+</head>
+<body>
+	<div class="section" style="background-color: #0000ff;">
+			<div class="widget padding" data-height="80"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 80px;"></div>
+			</div>
+			<div class="text-table">
+				<div class="section_wrap">
+					<h6 style="text-align: center; line-height: 2;">
+						<span
+							style="color: rgb(255, 255, 255); font-size: 24px; letter-spacing: -1px;">
+							<span style="font-size: 36px;"><strong>
+							<span style="color: rgb(255, 255, 255)">아카데미 수정</span></strong></span><br>
+						</span>
+					</h6>
+				</div>
+			</div>
+			<div class="widget padding" data-height="88"
+				style="margin-top: px; margin-bottom: px;">
+				<div style="width: 100%; min-height: 1px; height: 88px;"></div>
+			</div>
+	</div>
+	<div id="padding" style="width: 100%; min-height: 1px; height: 30px;"></div>
+	<div class="container" style="font-size: 16px;">
+		<form th:action="@{/admin/academyUpdateAction(pageNum=${pageNum})}" enctype="multipart/form-data" method="post">
+			<input type="hidden" name="a_no" th:value="${academy.a_no}">
+			제목<input class="form-control" type="text" name="title" required="required" autofocus="autofocus" th:value="${academy.title}">
+			가격<input class="form-control" type="number" name="price" required="required" th:value="${academy.price}">
+			인트로<input class="form-control" type="text" name="intro" required="required" th:value="${academy.intro}">
+			태그<input class="form-control" type="text" name="tag" required="required" th:value="${academy.tag}">
+			일정<input class="form-control" type="text" name="schedule" required="required" th:value="${academy.schedule}">
+			강사명<input class="form-control" type="text" name="a_name" required="required" th:value="${academy.a_name}">
+			강의장소<input class="form-control" type="text" name="place" required="required" th:value="${academy.place}">
+			강의최대정원<input class="form-control" type="text" name="inwon" required="required" th:value="${academy.inwon}">
+			강의회차<input class="form-control" type="text" name="turn" required="required" th:value="${academy.turn}">
+			강의접수<input class="form-control" type="text" name="request" required="required" th:value="${academy.request}">
+			<span th:if="${academy.onoff} == 'y' or ${academy.onoff} == 'Y'">온/오프 강의 : <b style="color: blue;">현재(온라인)</b></span>
+			<span th:if="${academy.onoff} == 'n' or ${academy.onoff} == 'N'">온/오프 강의 : <b style="color: blue;">현재(오프라인)</b></span>
+			<select class="form-control" name="onoff" required="required">
+				<option value="Y">온라인
+				<option value="N">오프라인
+			</select>
+			수량<input class="form-control" type="number" name="count" required="required" th:value="${academy.count}">
+			섬네일이미지 : [[${academy.image}]]
+			<input class="form-control" type="file" name="file">
+			<span th:if="${academy.status} =='y' or ${academy.status} == 'Y'">모집중-대기접수중 : <b style="color: blue;">현재(모집중)</b></span>
+			<span th:if="${academy.status} =='n' or ${academy.status} == 'N'">모집중-대기접수중 : <b style="color: blue;">현재(대기접수중)</b></span>
+			<select class="form-control" name="status" th:value="${academy.status}">
+				<option value="Y">모집중
+				<option value="N">대기접수중
+			</select>
+			카테고리선택
+			<select class="form-control" name="ct_no" th:value="${academy.ct_no}">
+				<option value="1">free
+				<option value="2">hobby
+				<option value="3">write
+				<option value="4">book
+				<option value="5">design
+				<option value="6">media
+				<option value="7">photo
+				<option value="8">event
+				<option value="9">notice
+				<option value="10">interview
+				<option value="11">news
+			</select>
+			<textarea id="summernote" name="content" th:value="${academy.content}" th:data-content="${academy.content}"></textarea>
+			<div id="padding" style="width: 100%; min-height: 1px; height: 30px;"></div>
+			<div style="text-align: center; display: flex; justify-content: center;">
+				<a class="updateCancleBtn" style="text-decoration: none;">취소</a>
+				<button class="submit_btn">작성</button>
+			</div>
+		</form>
+		<div id="padding" style="width: 100%; min-height: 1px; height: 50px;"></div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			let content = $('#summernote').attr("data-content");
+			$('#summernote').summernote({
+				  height: 788,                 // 에디터 높이
+				  focus: false,                  // 에디터 로딩후 포커스를 맞출지 여부
+				  lang: "ko-KR",					// 한글 설정
+		          disableResizeEditor: true,	// 크기 조절 기능 삭제
+		          toolbar: [
+		            ['fontname', ['fontname']],
+		            ['fontsize', ['fontsize']],
+		            ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+		            ['color', ['forecolor','color']],
+		            ['table', ['table']],
+		            ['para', ['ul', 'ol', 'paragraph']],
+		            ['height', ['height']],
+		            ['insert',['picture','link','video','hr']],
+		            ['view', ['fullscreen', 'help']]
+		          ],
+		        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
+		        fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+		        callbacks : {
+		        	onImageUpload : function(files, editor, welEditable){
+		        		for(let i=0; i<files.length; i++){
+		        			sendFile(files[i],this);
+		        		}
+		        	},
+		        	onImageDelete : function($target,editor,$editable){
+						if (confirm("이미지를 삭제하시겠습니까?")){
+							let deletedImageUrl = $target
+							.attr('src')
+							.split('/')
+							.pop()
+							deleteSummernoteImageFile(deletedImageUrl)
+						}
+					}
+		        }
+			});
+			// Summernote에 글 내용 추가하는 코드
+			$("#summernote").summernote('code', content);
+
+		});
+		
+		function sendFile(file, editor) {
+		    // FormData 객체 생성
+		    let form_data = new FormData();
+		    // 파일 추가
+		    form_data.append('file', file);
+
+		    // 서버에 AJAX 요청
+		    $.ajax({
+		        data: form_data,
+		        type: 'POST',
+		        url: '/static/images/academy/',
+		        cache: false,
+		        contentType: false,
+		        enctype: 'multipart/form-data',
+		        processData: false,
+		        success: function (url) {
+		        	alert(url)
+		            // 이미지를 에디터에 삽입
+		            $(editor).summernote('insertImage', url, function ($image) {
+		                // 이미지 스타일 설정 (옵션)
+		                $image.css('width', '25%');
+		            });
+		        },
+		        error: function (xhr, status, error) {
+		            // 오류 처리
+		            alert('이미지 업로드 중 오류가 발생했습니다.');
+		        }
+		    });
+		}
+		
+		function deleteSummernoteImageFile(imageName){
+			data = new FormData()
+			data.append('file',imageName)
+			$.ajax({
+				data :data,
+				type : 'POST',
+				url : 'deleteSummernoteImageFile',
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+			});
+		}
+		// 사용자 정의 버튼 클릭 시 호출되는 함수
+	    function addHorizontalRule() {
+	        // 수평선의 두께를 선택하는 값을 받아옵니다.
+	        let thickness = prompt("수평선의 두께를 입력하세요 (px):");
+	        // 선택된 두께로 수평선을 삽입합니다.
+	        $('#summernote').summernote('editor.insertHorizontalRule', { style: 'border-top:' + thickness + 'px solid black' });
+	    }
+		
+		</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+
+<meta charset="UTF-8">
+<title>[[${staff.st_title}]] 강사님 상상마당</title>
+<style type="text/css">
+.staffBox{
+	margin-top:100px;
+
+}
+.staff_intro{
+	text-align: center;
+}
+.staff_Line{
+	width: 50px; 
+	height: 2px; 
+	background: black; 
+	margin: 30px auto;
+}
+.staff_image{
+	text-align: center;
+	margin: 50px auto;
+}
+.staff_image>img{
+	width: 650px;
+	height: 650px;
+}
+.staff_content{
+	width: 900px;
+	margin: 50px auto;
+}
+.staff_content b{
+	font-size: 30px;
+	color: black;
+}
+.staff_menu{
+	width: 900px;
+	margin: 50px auto;
+}
+.UpDownBtn a{
+	text-decoration: none;
+	color: gray;
+	font-size:15px;
+	margin-left: 10px;
+	
+} 
+.staff_menu img:hover{
+	cursor: pointer;
+}
+.menuBox{
+	width: 900px;
+	margin: 20px auto;
+}
+#StaffListBtn{
+	background: white;
+	color:blue;
+	border: 1px solid blue;
+	padding: 10px;
+	text-decoration: none;
+	width: 100px;
+}
+#StaffListBtn:hover{
+	background: blue;
+	color:white;
+	border: 1px solid blue;
+
+}
+.padding{
+	width: 900px;
+	margin: 0 auto;
+	padding: 100px;
+}
+
+</style>
+
+<script type="text/javascript">
+$(function(){
+	$(".nextNo").click(function(){
+		let st_no = this.getAttribute("data-st_no");
+		st_no = parseInt(st_no,10);
+		st_no++;
+		location.href="staff_Detail?st_no=" +st_no;
+	});
+	
+	$(".beforeNo").click(function(){
+		let st_no = this.getAttribute("data-st_no");
+		st_no = parseInt(st_no,10);
+		st_no--;
+		location.href="staff_Detail?st_no=" +st_no;
+	});
+	
+	$(".staff_menu img").click(function(){
+		$(this).next("a").click();
+	});
+});
+
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="staffBox">
+			<div class="staff_intro">
+				<h4>강사소개</h4>
+				<div class="staff_Line"></div>
+				<h2>[[${staff.st_title}]] 강사님</h2>
+			</div>
+			
+			<div class="staff_image">
+				<img alt="없댜" th:src="@{'/upload/staff/' + ${staff.st_image}}">
+			</div>
+			
+			<div class="staff_content">
+				<p><span><b>[[${staff.st_title}]]([[${staff.st_name}]])</b> | [[${staff.st_type}]]</span></p>
+				<p>
+				<p><span th:utext="${staff.st_content}"></span></p>
+			</div>
+			
+			<div class="staff_menu">
+				<div class="UpDownBtn" th:if="${beforeStaff} != 'false'">
+					
+					<img alt="upArrow" th:src="@{/images/staff/upArrow.png}">
+					<a href="#" class="beforeNo"th:attr="data-st_no=${staff.st_no}">[[${beforeStaff}]] 강사</a><br>
+				</div>
+				<div class="UpDownBtn" th:if="${nextStaff} != 'false'">
+					<hr>
+					<img alt="downArrow" th:src="@{/images/staff/downArrow.png}">
+					<a href="#" class="nextNo" th:attr="data-st_no=${staff.st_no}">[[${nextStaff}]] 강사</a><p>
+				</div>
+			</div>
+			<div class="menuBox">
+				<a th:href="@{/staff/staff}" id="StaffListBtn">목록</a>
+			</div>
+			<div class="padding"></div>
+		</div>	
+	</div>							
+</body>
+</html>

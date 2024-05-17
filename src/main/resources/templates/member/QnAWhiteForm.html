@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:insert="~{/header.html::header}"></th:block>
+    <meta charset="UTF-8">
+    <title>1:1 문의작성</title>
+    <!-- include libraries(jQuery, bootstrap) -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+
+    <!-- include summernote css/js-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+<script type="text/javascript">
+	let check = () =>{
+		alert("답변 작성 완료!");
+	}
+</script>
+</head>
+<body style=" margin: 0 auto;">
+<span th:if="${qnaItem} == null" style="font-size: 40px;">1:1 문의작성</span>	
+<span th:if="${qnaItem != null && answer == 'false'}" style="font-size: 40px;">[[${qnaItem.q_no}]]번 문의 수정</span>
+<span th:if="${qnaItem != null && answer == 'true'}" style="font-size: 40px;">[[${qnaItem.q_no}]]번 문의 답변</span>
+
+<!-- 수정아닐경우 -->
+<form th:if="${qnaItem} == null" action="QnAWhite">
+	<div style="position: relative; float: right; top: -50px;">
+		<a style="background: white; color:black; border:1px solid gray; padding: 10px;">취소</a>
+		<button style="background: blue; color: white; padding: 7px;">작성</button>
+	</div>
+	<hr>
+	<input class="form-control" type="text" name="q_title" required="required" autofocus="autofocus" placeholder="제목을 입력해주세요">
+	<textarea id="summernote" name="q_content"></textarea>
+</form>
+
+<!-- 수정일경우 -->
+<form th:if="${qnaItem != null && answer == 'false'}" action="QnAUpdate">
+	<input type="hidden" name="q_no" th:value="${qnaItem.q_no}">
+	
+	<div style="position: relative; float: right; top: -50px;">
+		<a style="background: white; color:black; border:1px solid gray; padding: 10px;">취소</a>
+		<button style="background: blue; color: white; padding: 7px;">작성</button>
+	</div>
+	<hr>
+	<input th:if="${qnaItem} != null" class="form-control" type="text" name="q_title" required="required" autofocus="autofocus" th:value="${qnaItem.q_title}">
+	<textarea th:if="${qnaItem} != null" id="summernote" name="q_content">[[${qnaItem.q_content}]]</textarea>
+</form>
+<!-- 답변일경우 -->
+<form th:if="${qnaItem != null && answer == 'true'}" action="QnAUpdate" onsubmit="check()">
+	<input type="hidden" name="q_no" th:value="${qnaItem.q_no}">
+	
+	<div style="position: relative; float: right; top: -50px;">
+		<a style="background: white; color:black; border:1px solid gray; padding: 10px;">취소</a>
+		<button style="background: blue; color: white; padding: 7px;">작성</button>
+	</div>
+	<hr>
+	<input th:if="${qnaItem} != null" class="form-control" type="text" name="q_title" required="required" autofocus="autofocus" th:value="${qnaItem.q_title}">
+	<textarea th:if="${qnaItem} != null" id="summernote" name="q_content">[[${qnaItem.q_content}]] <b style="color: blue;">답변 : </b></textarea>
+</form>
+
+<script>
+    // 메인화면 페이지 로드 함수
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            placeholder: '내용을 작성하세요',
+            height: 400,
+            maxHeight: 400
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.sang.mapper.HeartsaveMapper">
+	<!-- 취미 추가 -->
+	<insert id="save_atinsert" parameterType="heartsave">
+	    <selectKey keyProperty="hs_no" resultType="Integer" order="BEFORE">
+	        select nvl(max(hs_no),0)+1 hs_no from heartsave
+	    </selectKey>
+	    insert into heartsave (hs_no, at_no, id) values (#{hs_no}, #{at_no}, #{id})
+	</insert>
+	<!-- 취미 삭제 -->
+	<delete id="save_atdelete">
+		delete from heartsave where at_no = #{at_no} and id = #{id} 
+	</delete>
+	<select id="findAt_noAndId" parameterType="heartsave" resultType="heartsave">
+		select * from heartsave where at_no = #{at_no} and id = #{id}
+	</select>
+	
+	<!-- 글쓰기 추가 -->
+	<insert id="save_winsert" parameterType="heartsave">
+	    <selectKey keyProperty="hs_no" resultType="integer" order="BEFORE">
+	        select nvl(max(hs_no),0)+1 hs_no from heartsave
+	    </selectKey>
+	    insert into heartsave (hs_no, w_no, id) values (#{hs_no}, #{w_no}, #{id})
+	</insert>
+	<!-- 글쓰기 삭제 -->
+	<delete id="save_wdelete">
+		delete from heartsave where w_no = #{w_no} and id = #{id} 
+	</delete>
+	<select id="findW_noAndId" parameterType="heartsave" resultType="heartsave">
+		select * from heartsave where w_no = #{w_no} and id = #{id}
+	</select>
+	
+	<select id="list_save" resultType="heartsave">
+		select * from heartsave 
+	</select>
+</mapper>

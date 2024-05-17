@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<header th:fragment="headerFragment">
+<link rel="stylesheet" th:href="@{/css/header.css}">
+<style type="text/css">
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+* {
+	font-family: 'Pretendard-Regular';
+}
+/* 로그인 모달 css */
+#modal_login {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	position: absolute;
+	left: 50%; /* 부모 요소의 가로 중앙에 위치하기 위해 left를 50%로 설정 */
+	top: calc(50%); /* 부모 요소의 세로 중앙에 위치하기 위해 top을 50%로 설정 */
+	transform: translate(-50%, -50%); /* 위치를 조정하여 정확히 가운데로 이동 */
+}
+.login_keepBox label{
+	cursor: pointer;
+}
+.login_keepBox{
+	float: left; 
+	display: flex; 
+	align-items: center;
+}
+#modal_join {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	position: absolute;
+	left: 50%;
+	top: calc(50%);
+	transform: translate(-50%, -50%);
+}
+#joinBtn{
+	font-size: 20px; 
+	text-decoration: none; 
+	color: black; 
+	border: 1px solid gray; 
+	padding: 10px; 
+	width: 90%; 
+	position: relative; 
+	top: 50px; 
+	text-align: center;
+}
+#joinBtn:hover{
+	cursor: pointer;
+	transform:scale(1.1);
+	transition:transform 0.1s ;
+}
+.kakao_loginImg:hover{
+	cursor: pointer;
+	transform:scale(1.1);
+	transition:transform 0.1s ;
+}
+
+
+#modal_agree {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	position: absolute;
+	left: 50%;
+	top: calc(50%);
+	transform: translate(-50%, -50%);
+}
+
+#modal_find {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	position: absolute;
+	left: 50%;
+	top: calc(50%);
+	transform: translate(-50%, -50%);
+}
+
+#modal_input {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	position: absolute;
+	left: 50%;
+	top: calc(50%);
+	transform: translate(-50%, -50%);
+}
+
+#modal_login h2 {
+	margin: 0;
+}
+
+#modal_login button {
+	display: inline-block;
+	width: 100px;
+	margin-left: calc(100% - 100px - 10px);
+}
+
+/* 모달 폭,마진 등 */
+#modal_login .modal_content {
+	width: 400px;
+	height: auto;
+	margin: 50px auto;
+	padding: 20px 10px;
+	background: #fff;
+	border: 2px solid #666;
+	text-align: center;
+}
+
+#modal_join .modal_joinContent {
+	width: 400px;
+	height: auto;
+	margin: 50px auto;
+	padding: 20px 10px;
+	background: #fff;
+	border: 2px solid #666;
+	text-align: center;
+}
+
+#modal_agree .modal_agreeMent {
+	width: 400px;
+	height: auto;
+	margin: 50px auto;
+	padding: 20px 10px;
+	background: #fff;
+	border: 2px solid #666;
+}
+
+#modal_find .modal_findID {
+	width: 400px;
+	height: auto;
+	margin: 50px auto;
+	padding: 20px 10px;
+	background: #fff;
+	border: 2px solid #666;
+}
+
+#modal_input .modal_inputForm {
+	width: 400px;
+	height: auto;
+	margin: 50px auto;
+	padding: 20px 10px;
+	background: #fff;
+	border: 2px solid #666;
+}
+
+/* 로그인버튼 클릭시 백그라운드 그레이,투명도 */
+#modal_login .modal_layer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#modal_join .modal_joinLayer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#modal_agree .modal_agreeMentLayer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+.agreeCheck label{
+	cursor: pointer;
+}
+
+#modal_find .modal_findIDLayer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#modal_input .modal_inputLayer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+#modal_join_btn:hover {
+	cursor: pointer;
+}
+
+#modal_find_btn{
+	cursor: pointer;
+}
+
+#modal_close_btn {
+	width: 10px;
+	position: relative;
+	left: 130px;
+	bottom: 30px;
+}
+
+#modal_close_btn2 {
+	width: 10px;
+	position: relative;
+	left: 130px;
+	bottom: 30px;
+}
+
+#modal_close_btn3 {
+	width: 10px;
+	position: relative;
+	left: 130px;
+	bottom: 30px;
+}
+
+#modal_close_btn4 {
+	width: 10px;
+	position: relative;
+	left: 110px;
+	bottom: 30px;
+}
+
+#modal_close_btn5 {
+	width: 10px;
+	position: relative;
+	left: 130px;
+	bottom: 30px;
+}
+
+#modal_close_btn:hover {
+	cursor: pointer;
+}
+
+#modal_close_btn2:hover {
+	cursor: pointer;
+}
+
+#modal_close_btn3:hover {
+	cursor: pointer;
+}
+
+#modal_close_btn4:hover {
+	cursor: pointer;
+}
+
+#modal_close_btn5:hover {
+	cursor: pointer;
+}
+
+/* findIDPage */
+#findIDPage {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	margin-top: 10px;
+	z-index: 1;
+}
+
+#findPasswordPage {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	margin-top: 10px;
+	z-index: 1;
+}
+
+/* check박스 좌측정열 */
+div input[type="checkbox"] {
+	display: block;
+	float: left;
+	clear: left;
+	margin-top: 8px;
+}
+
+
+#text {
+	text-align: left;
+}
+
+.fileupload_profile_img {
+	display: flex;
+	justify-content: center; /* 수평 중앙 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
+}
+/* 로그인 모달 css 끝 */
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+    let isDropdownOpen = false;
+    $('.menu > li.in > a').click(function() {
+        toggleDropdown();
+    });
+
+    function toggleDropdown() {
+        isDropdownOpen = !isDropdownOpen;
+        if (isDropdownOpen) {
+            $('.menu > li.in > .depth_1').css('display', 'block');
+        } else {
+            $('.menu > li.in > .depth_1').css('display', 'none');
+        }
+    }
+    
+    // 전화번호 입력 필드에 입력될 때마다 자동으로 형식을 지정하는 함수
+    function formatPhoneNumber() {
+        let input = document.getElementById('tel');
+        let inputValue = input.value.replace(/\D/g, ''); // 숫자 이외의 문자는 제거
+        let formattedValue = '';
+
+        // 입력된 값이 11자리 이상이면 더이상 추가하지 않음
+        if (inputValue.length >= 11) {
+            formattedValue = inputValue.substr(0, 3) + '-' + inputValue.substr(3, 4) + '-' + inputValue.substr(7, 4);
+        } else if (inputValue.length >= 7) {
+            formattedValue = inputValue.substr(0, 3) + '-' + inputValue.substr(3, 4) + '-' + inputValue.substr(7);
+        } else if (inputValue.length >= 3) {
+            formattedValue = inputValue.substr(0, 3) + '-' + inputValue.substr(3);
+        } else {
+            formattedValue = inputValue;
+        }
+
+        input.value = formattedValue;
+    }
+
+    // 전화번호 입력 필드의 값이 변경될 때마다 formatPhoneNumber 함수 호출
+    document.getElementById('tel').addEventListener('input', formatPhoneNumber);
+    
+ 	// 전화번호 입력 필드에 입력될 때마다 자동으로 형식을 지정하는 함수
+    function formatPhoneNumber2() {
+        let input = document.getElementById('joinTel');
+        let inputValue = input.value.replace(/\D/g, ''); // 숫자 이외의 문자는 제거
+        let formattedValue = '';
+
+        // 입력된 값이 11자리 이상이면 더이상 추가하지 않음
+        if (inputValue.length >= 11) {
+            formattedValue = inputValue.substr(0, 3) + '-' + inputValue.substr(3, 4) + '-' + inputValue.substr(7, 4);
+        } else if (inputValue.length >= 7) {
+            formattedValue = inputValue.substr(0, 3) + '-' + inputValue.substr(3, 4) + '-' + inputValue.substr(7);
+        } else if (inputValue.length >= 3) {
+            formattedValue = inputValue.substr(0, 3) + '-' + inputValue.substr(3);
+        } else {
+            formattedValue = inputValue;
+        }
+
+        input.value = formattedValue;
+    }
+ // 전화번호 입력 필드의 값이 변경될 때마다 formatPhoneNumber 함수 호출
+    document.getElementById('joinTel').addEventListener('input', formatPhoneNumber2);
+});
+
+//	검색 model
+	function submitForm() {
+	    document.getElementById("submitForm").submit();
+	}
+	$(document).ready(function() {
+	    // modal open
+	    $('#search').click(function () {
+	        $('.modal_search').show();
+	        $('html, body').css('overflow', 'hidden');
+	        $('input[name=search]').val('');
+	    });
+	    // modal close
+	    $('.search_close').on('click', function() {
+	        $('.modal_search').hide();
+	        $('html, body').css('overflow', 'auto');
+	    });
+	});
+</script>
+		<div class="menu-bar">
+			<div class="container" style="display: flex;" >
+				<div class="container1">
+					<ul class="menu">
+						<li class="h_1">소개
+							<ul class="depth_1">
+								<li><a href="/staff/agency">기관 소개</a></li>
+								<li><a href="/staff/staff">강사 소개</a></li>
+								<li><a href="/staff/map">오시는 길</a></li>
+							</ul></li>
+						<li class="h_2">프로그램
+							<ul class="depth_1">
+								<li><a href="/academy/academyList_Free">무료특강</a></li>
+								<li><a href="/academy/academyList_Hobby">취미</a></li>
+								<li><a href="/academy/academyList_Write">글쓰기</a></li>
+								<li><a href="/academy/academyList_Book">그림책</a></li>
+								<li><a href="/academy/academyList_Design">디자인</a></li>
+								<li><a href="/academy/academyList_Media">미디어</a></li>
+								<li><a href="/academy/academyList_Photo">사진</a></li>
+							</ul></li>
+						<li class="h_3">소식
+							<ul class="depth_1">
+								<li><a href="/artist/artist_list">아티스트</a></li>
+								<li><a href="/review/review_list">수강후기</a></li>
+							</ul></li>
+						<li class="h_4">참여
+							<ul class="depth_1">
+								<li><a href="/attend/tentext">열 줄 소설 공모전</a></li>
+								<li><a href="/attend/hobbypage">취미에 진심인_편</a></li>
+								<li><a href="/attend/gather">문화예술 강사 모집</a></li>
+							</ul></li>
+						<li class="h_5">알림
+							<ul class="depth_1">
+								<li><a href="/notice/notice_list">공지</a></li>
+								<li><a href="/inquiry/inquiry">문의</a></li>
+							</ul></li>
+					</ul>
+				</div>
+	
+				<div class="container2">
+				<a th:if="${kakao==null}" href="/"><img th:src="@{/images/main/sang_logo.png}"></a>
+				<a th:if="${kakao!=null}" th:href="@{/kakaomain(userID=${kakao.userID},
+					nickName=${kakao.nickName},profile_image=${kakao.profile_image},
+					thumbnail_image=${kakao.thumbnail_image})}">
+					<img th:src="@{/images/main/sang_logo.png}"></a>
+				</div>
+				<div class="container3">
+					<ul class="menu2">
+						<li><a><img id="search" th:src="@{/images/main/search.png}" style="width: 20px; cursor: pointer;"></a></li>
+						<!-- 일반 로그인시 -->
+						<li class="h_txt" th:if="${kakao} == null">
+							<a th:if="${id} != 'admin'" th:href="@{/mypage}">MY PAGE</a>
+							<a th:if="${id} == 'admin'" th:href="@{/admin/admin}">ADMIN</a>
+						</li>		
+						<!-- 카카오 로그인시 --> 
+						<li class="h_txt" th:if="${kakao} != null">
+							<a th:href="@{/kakaoMypage(userID=${kakao.userID},
+							nickName=${kakao.nickName},profile_image=${kakao.profile_image},
+							thumbnail_image=${kakao.thumbnail_image})}">MY PAGE[kakao]</a>
+						</li>		
+						<li class="h_txt"><a href="/cartList">CART</a></li>								
+						<li th:if="${id} == null" class="h_txt"><a href="#" id="modal_open_btn">LOGIN</a></li>
+						<li th:if="${id} != null" class="h_txt"><a href="/logout">LOGOUT</a></li>										
+					</ul>
+				</div>
+			</div>
+		</div>
+	<!-- search Modal -->
+		<div class="modal_search">
+			<img class="search_close" th:src="@{/images/main/close_modal.png}" style="width: 90px; padding: 20px;">
+			<div class="search_container">
+				<div class="input_area">
+					<form action="/search">
+						<input type="text" name="keyword" placeholder="검색" autofocus="autofocus">
+						<input type="image" th:src="@{/images/main/search.png}" onclick="submitForm()" style="width: 25px;">
+						<div style="border-bottom: 2px solid #BBBBBB; margin: 0 auto;"></div>
+					</form>				
+				</div>
+			</div>
+		</div>
+	<!-- 로그인 Modal -->
+		<div id="modal_login">
+			<div class="modal_content">
+				<label class="text-primary" style="font-size: 30px;">로그인</label><img
+					id="modal_close_btn" alt="X버튼" th:src="@{/images/main/close.png}">
+				<form action="/login" method="post" name="frm">
+					<input class="form-control" type="text" name="id"
+						required="required" autofocus="autofocus" placeholder="아이디"
+						style="width: 100%;">
+					<input class="form-control" type="password" name="password"
+						required="required" placeholder="암호" style="width: 100%;"><br> 
+					<span class="login_keepBox"> 
+						<input type="checkbox" name="loginKeep" value="1" id="login_keep" checked="checked" style="margin-bottom: 10px;">
+						<label for="login_keep">로그인 상태유지</label>
+					</span> 
+					<input class="form-control" type="submit" value="로그인"
+						style="width: 100%;">
+				</form>
+				<div>
+					<span style="float: left; margin-left: 20px;">
+						<label id="modal_join_btn">회원가입</label>
+					</span> 
+					<span style="float: right; margin-right: 20px;"> 
+						<label id="modal_find_btn">아이디 · 비밀번호 찾기</label>
+					</span>
+				</div>
+				<hr style="margin-top: 100px;">
+				<a th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=f2136f7403cde7c52a6e8763913c69b6&redirect_uri=http://localhost/kakaoCallBack&response_type=code}">
+					<img class="kakao_loginImg" src="/images/main/kakao_login.png">
+				</a>
+			</div>
+
+			<div class="modal_layer"></div>
+		</div>
+
+		<!-- 회원가입 Modal -->
+		<div id="modal_join">
+			<div class="modal_joinContent">
+				<span style="font-size: 25px; font-weight: bold;">회원가입</span>
+				<img id="modal_close_btn2" alt="" th:src="@{/images/main/close.png}"> 
+					<label id="joinBtn">ID/PW 회원가입</label>
+				<hr style="margin-top: 100px;">
+				<a th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=f2136f7403cde7c52a6e8763913c69b6&redirect_uri=http://localhost:/main&response_type=code}">
+					<img src="/images/main/kakao_login.png" class="kakao_loginImg">
+				</a>
+			</div>
+			<div class="modal_joinLayer"></div>
+		</div>
+
+		<!-- 약관동의 Modal -->
+		<div id="modal_agree">
+			<div class="modal_agreeMent">
+				<div style="font-size: 25px; font-weight: bold; text-align: center;">
+					약관동의 <img id="modal_close_btn3" alt=""
+						th:src="@{/images/main/close.png}">
+				</div>
+				<p>
+				
+				<div class="agreeCheck">
+					<div>
+						<input type="checkbox" id="chkAll">
+						<label for="chkAll" style="float: left;">이용약관, 개인정보 수집 및 이용에 모두 동의합니다.</label>
+					</div>
+					<p>
+					
+					<div>
+						<input type="checkbox" id="chkTerms">
+						<label for="chkTerms">이용약관 동의</label>
+						<span style="color: red;"> (필수)</span>
+					</div>
+					<p>
+						<th:block th:insert="~{member/terms.html}"></th:block>
+						<!-- terms.html : 약관동의 BOX -->
+					
+					<div>
+						<input type="checkbox" id="chkPrivacy">
+						<label for="chkPrivacy">개인정보 	수집 및 이용동의</label><span style="color: red;"> (필수)</span>
+					</div>
+					<p>
+						<th:block th:insert="~{member/terms2.html}"></th:block>
+						<!-- terms2.html : 약관동의 BOX -->
+					
+					<div>
+						<input type="checkbox" id="chkAge">
+						<label for="chkAge">만 14세 이상입니다.</label><span style="color: red;"> (필수)</span>
+					</div>
+					<p>
+				
+				</div>
+				<div style="width: 90%; margin: 0 auto; text-align: center;">
+					<a class="btn btn-danger" th:href="loginForm">취소</a> 
+					<a class="btn btn-success" id="joinBtn2">가입하기</a>
+				</div>
+			</div>
+			<div class="modal_agreeMentLayer"></div>
+		</div>
+		
+		<!-- 회원가입 정보입력 -->
+		<div id="modal_input">
+			<div class="modal_inputForm">
+				<div
+					style="font-size: 25px; font-weight: bold; text-align: center; margin-left: 15px;">
+					회원가입<img id="modal_close_btn5" alt="" th:src="@{/images/main/close.png}">
+				</div>
+
+				<form action="join" name="joinForm" method="post"
+					enctype="multipart/form-data" onsubmit="return passChk()">
+					<div id="fileupload_profile_img" class="fileupload_profile_img"
+						accept="image/*">
+						<input type="file" name="file" id="fileInput"
+							style="display: none;"> 
+						<img id="previewImage" src="" alt="Preview"
+							style="display: none; width: 100px; height: 100px; border-radius: 50%;">
+					</div>
+					<!-- 이미지추가하여 id부여 -->
+					<div style="position: relative; left: 200px; bottom: 30px;">
+						<button type="button" id="uploadButton"
+							style="background: white; border-radius: 50%;">
+							<i class="bi bi-camera"></i>
+						</button>
+					</div>
+					<span>계정</span> 
+					<input class="form-control" type="text" name="id"
+						required="required" autofocus="autofocus" placeholder="아이디">
+					<span>이메일</span>
+					<input class="form-control" type="email" name="email"
+						required="required" placeholder="이메일"> 
+					<span>암호 및 암호확인</span>
+					<input class="form-control" type="password" name="password"
+						required="required" placeholder="비밀번호"> 
+					<input class="form-control" type="password" name="password2"
+						required="required" placeholder="비밀번호확인">
+					<span>이름</span>
+					<input class="form-control" type="text" name="name"
+						required="required" placeholder="이름을(를) 입력하세요"> 
+					<span>연락처</span>
+					<input class="form-control" type="tel" name="tel" id="tel"
+						required="required" placeholder="연락처를 입력하세요"> 
+					<input class="form-control"
+						style="background: blue; color: white; margin-top: 20px;"
+						type="submit" value="가입하기">
+				</form>
+			</div>
+			<div class="modal_inputLayer"></div>
+		</div>
+		
+		<!-- 아이디/비밀번호 찾기 -->
+		<div id="modal_find">
+			<div class="modal_findID">
+				<div style="font-size: 25px; font-weight: bold; text-align: center;">
+					<b id="find_txt">아이디찾기</b> <img id="modal_close_btn4" alt=""
+						th:src="@{/images/main/close.png}">
+				</div>
+				<p>
+				
+				<hr>
+				<div style="width: 100%; margin: 0 auto; text-align: center;">
+					<span>계정을 찾을 방법을 선택해주세요</span>
+				</div>
+				<div style="text-align: center;">
+					<button id="findID" style="background: #ffffff; color: blue;">아이디 찾기</button>
+					<button id="findPassword" style="background: #ffffff; color: blue;">비밀번호 찾기</button>
+					<div id="findIDPage">
+						<th:block th:insert="~{member/findIDPage}"></th:block>
+					</div>
+					<div id="findPasswordPage">
+						<th:block th:insert="~{member/findPasswordPage}"></th:block>
+					</div>
+				</div>
+			</div>
+			<div class="modal_findIDLayer"></div>
+		</div>
+
+
+<!-- 자바 스크립트 -->
+		<script>
+			document.getElementById("modal_open_btn").onclick = function() {
+				document.getElementById("modal_login").style.display = "block";
+				document.getElementById("find_ID_Box").style.display = "block"; /* insert된 문장에있는 id */
+				document.getElementById("find_PW_Form").style.display = "block"; /*  ""  */
+
+			}
+
+			document.getElementById("modal_close_btn").onclick = function() {
+				document.getElementById("modal_login").style.display = "none";
+			}
+			document.getElementById("modal_close_btn2").onclick = function() {
+				document.getElementById("modal_join").style.display = "none";
+			}
+			document.getElementById("modal_close_btn3").onclick = function() {
+				document.getElementById("modal_agree").style.display = "none";
+			}
+			document.getElementById("modal_close_btn4").onclick = function() {
+				document.getElementById("modal_find").style.display = "none";
+				document.getElementById("find_ID_Box").style.display = "none";
+				document.getElementById("find_ID_Email").style.display = "none";
+				document.getElementById("find_ID_Email_replacePass").style.display = "none";
+				document.getElementById("complete_Send").style.display = "none";
+				document.getElementById("complete_Send2").style.display = "none";
+				document.getElementById("fail_Send").style.display = "none";
+				document.getElementById("find_ID_NameToTel").style.display = "none";
+				document.getElementById("find_ID_NameToTel").style.display = "none";
+				document.getElementById("find_PW_Form").style.display = "none";
+				document.getElementById("find_PassBox").style.display = "none";
+				document.getElementById("find_ID_Email_replacePass2").style.display = "none";
+			}
+			document.getElementById("modal_close_btn5").onclick = function() {
+				document.getElementById("modal_input").style.display = "none";
+			}
+			document.getElementById("modal_join_btn").onclick = function() {
+				document.getElementById("modal_login").style.display = "none";
+				document.getElementById("modal_join").style.display = "block";
+			}
+			document.getElementById("modal_find_btn").onclick = function() {
+				document.getElementById("modal_login").style.display = "none";
+				document.getElementById("modal_find").style.display = "block";
+			}
+			document.getElementById("joinBtn").onclick = function() {
+				document.getElementById("modal_join").style.display = "none";
+				document.getElementById("modal_agree").style.display = "block";
+			}
+			document.getElementById("joinBtn2").onclick = function() {
+				let chkTerms = document.getElementById("chkTerms").checked;
+				let chkPrivacy = document.getElementById("chkPrivacy").checked;
+				let chkAge = document.getElementById("chkAge").checked;
+				if (!chkTerms || !chkPrivacy || !chkAge) {
+					alert("모든 필수 항목에 동의해야 가입 할 수 있습니다");
+					return; // 실행취소
+				}
+				document.getElementById("modal_agree").style.display = "none";
+				document.getElementById("modal_input").style.display = "block";
+			}
+			document.getElementById("findID").onclick = function() {
+				document.getElementById("findIDPage").style.display = "block";
+				document.getElementById("findPasswordPage").style.display = "none";
+				document.getElementById("findID").style.background = "green" /* 아이디찾기 버튼클릭시 백그라운드색깔 */
+				document.getElementById("findPassword").style.background = "white"
+					document.getElementById("find_txt").innerText = "아이디찾기";
+			}
+			document.getElementById("findPassword").onclick = function() {
+				document.getElementById("findPasswordPage").style.display = "block";
+				document.getElementById("findIDPage").style.display = "none";
+				document.getElementById("complete_Send2").style.display = "none";
+				document.getElementById("fail_Send2").style.display = "none";
+				document.getElementById("findID").style.background = "white"/* 비밀번호찾기 버튼클릭시 백그라운드색깔 */
+				document.getElementById("findPassword").style.background = "green"
+				document.getElementById("find_txt").innerText = "비밀번호찾기";
+			}
+
+			/* 모두동의 체크 시 전체체크 */
+			window.onload = function() {
+				// 첫 번째 체크박스 요소를 가져옴
+				var firstCheckbox = document
+						.querySelector('.modal_agreeMent input[type="checkbox"]');
+
+				// 첫 번째 체크박스의 변경 이벤트를 감지
+				firstCheckbox
+						.addEventListener(
+								'change',
+								function() {
+									// 첫 번째 체크박스가 체크되어 있는 경우
+									if (firstCheckbox.checked) {
+										// 모든 체크박스를 선택함
+										var checkboxes = document
+												.querySelectorAll('.modal_agreeMent input[type="checkbox"]');
+										checkboxes.forEach(function(checkbox) {
+											checkbox.checked = true;
+										});
+									} else {
+										// 첫 번째 체크박스가 체크되어 있지 않은 경우
+										// 모든 체크박스의 체크를 해제함
+										var checkboxes = document
+												.querySelectorAll('.modal_agreeMent input[type="checkbox"]');
+										checkboxes.forEach(function(checkbox) {
+											checkbox.checked = false;
+										});
+									}
+								});
+
+				// 가입 시 기본이미지
+				var imgElement = document.getElementById('previewImage');
+				imgElement.src = '/images/main/defaultImg.png'; // 이미지 URL을 설정하여 이미지를 미리보기에 표시
+				imgElement.style.display = 'block'; // 이미지 표시
+
+			};
+
+			// 파일 선택 시 미리보기 및 업로드
+			document.getElementById('fileInput').addEventListener('change',	function() {
+						var file = this.files[0]; // 선택한 파일 가져오기
+
+						if (file) {
+							var reader = new FileReader(); // FileReader 객체 생성
+
+							// 파일 읽기가 완료되었을 때의 이벤트 처리
+							reader.onload = function(e) {
+								var imgElement = document.getElementById('previewImage');
+								imgElement.src = e.target.result; // 이미지 미리보기에 데이터 설정
+								imgElement.style.display = 'block'; // 이미지 미리보기 표시
+							};
+
+							// 파일을 읽어서 데이터 URL로 설정
+							reader.readAsDataURL(file);
+						}
+					});
+
+			/* 이미지 업로드버튼 */
+			document.getElementById('uploadButton').addEventListener('click',function() {
+						document.getElementById('fileInput').click(); // 파일 선택 창 열기
+					});
+
+			/* 패스워드검사 */
+			function passChk() {
+				if (joinForm.password.value != joinForm.password2.value) {
+					alert("암호와 암호확인이 다릅니다");
+					joinForm.password.value = "";
+					joinForm.password2.value = "";
+					joinForm.password.focus();
+					return false;
+				} else
+					true;
+			}
+		</script>
+	</header>
+</body>
+</html>

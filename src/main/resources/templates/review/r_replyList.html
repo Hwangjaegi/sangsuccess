@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:insert="~{/header.html::header}"></th:block>
+<head>
+<meta charset="UTF-8">
+<title>상상마당 아카데미｜공지</title>
+<style type="text/css">
+	.btn {
+		cursor: pointer;
+		padding-right: 10px;
+	}
+</style>
+<script type="text/javascript">
+	function rUpdate(r_bno, r_rno) {
+		let txt = $('#reply_'+r_rno).text();
+		$('#reply_'+r_rno).html(
+				"<textarea row=3 class='form-control' id='rt'>"
+				+txt+"</textarea>");
+		$('#btn_'+r_rno).html(
+				"<div style='display:flex'><div onclick='up("+r_bno+","+r_rno+")'class='btn'>확인</div>"+
+				"<div onclick='lst("+r_bno+")' class='btn'>취소</div></div>")
+	}
+	function up(r_bno, r_rno) {
+		let sendData = "r_replytext="+$('#rt').val()+"&r_bno="+r_bno+"&r_rno="+r_rno;
+		$.post("/r_rUpdate", sendData, function(data){
+			alert("댓글이 수정 되었습니다");
+			$('#r_rListDisp').html(data);
+		});
+	}
+	function lst(r_bno) {
+		$('#r_rListDisp').load('/review/r_replyList/r_bno/'+r_bno);
+	}
+	function rDelete(r_bno, r_rno) {
+		let sendData = "r_bno="+r_bno+"&r_rno="+r_rno;
+		$.post("/r_rDelete", sendData, function(data) {
+			alert("댓글이 삭제되었습니다");
+			$('#r_rListDisp').html(data);
+		});
+	}
+</script>
+</head>
+<body>
+	<div th:if="${#lists.size(r_list) > 0}">
+    	<div th:each="r : ${r_list}">
+			<th:block th:if="${r.r_del} == 'y'"><p>삭제된 댓글입니다</p></th:block>
+			<th:block th:if="${r.r_del} != 'y'">
+				<div style="display: flex; font-size: 13px; padding-bottom: 5px;">
+					<div style="padding-right: 10px;">[[${r.r_replier}]]</div>
+					<div th:text="${#dates.format(r.r_updatedate, 'yyyy-MM-dd HH:mm')}"></div>
+				</div>
+				<div th:id="|reply_${r.r_rno}|">[[${r.r_replytext}]]</div>
+				<div th:if="${r.r_replier == id && id != null}" style="display: flex; float: right;">
+					<div th:if="${r.r_replier == id && id != null}" th:id="|btn_${r.r_rno}|">
+						<div th:onclick="rUpdate([[${r.r_bno}]],[[${r.r_rno}]])" class="btn">수정</div>
+					</div>
+					<div th:onclick="rDelete([[${r.r_bno}]],[[${r.r_rno}]])" class="btn">삭제</div>
+				</div><br>
+				<hr>
+			</th:block>
+		</div>
+	</div>
+	<div th:if="${#lists.size(r_list) == 0}"></div>
+	<div id="padding" style="width: 100%; min-height: 1px; height: 25px;"></div>
+</body>
+</html>

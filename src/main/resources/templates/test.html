@@ -1,0 +1,43 @@
+<!DOCTYPE html><html  xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8">
+<title>Insert title here</title>
+<link th:href="@{/css/owl.carousel.min.css}">
+<link th:href="@{/css/owl.theme.default.css}">
+<script type="text/javascript" th:src="@{/js/jquery.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" th:src="@{/js/owl.carousel.js}"></script>
+<script type="text/javascript" th:src="@{/js/owl.autoplay.js}"></script>
+<script type="text/javascript" th:src="@{/js/owl.navigation.js}"></script>
+<script type="text/javascript">
+	$(function() {
+		alert("1");
+		$('.owl-carousel').owlCarousel({
+			items:2, margin:10 , loop:false,  autoplay:true,
+			autoplayTimeout:3000, navText:['이전', '다음'],
+			autoplayHoverPause:true
+		})
+		alert("2")
+	})
+</script>
+</head>
+<body>
+<div id="wrapper">
+	<div class="owl-carousel owl-theme">
+		<div class="item">
+			<img alt="1" src="images/album-af.jpg">
+		</div>
+		<div class="item">
+			<img alt="2" src="images/album-ag.jpg">
+		</div>
+		<div class="item">
+			<img alt="3" src="images/album-bb.jpg">
+		</div>
+		<div class="item">
+			<img alt="4" src="images/album-bk.jpg">
+		</div>
+		<div class="item">
+			<img alt="5" src="images/album-hc.jpg">
+		</div>
+	</div>
+</div>
+</body>
+</html>
